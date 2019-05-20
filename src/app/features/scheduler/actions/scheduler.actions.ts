@@ -2,23 +2,33 @@ import { Action } from '@ngrx/store';
 import { PlayerEntity } from '../reducers/player.reducer';
 import { SchedulerSettings } from '../reducers/scheduler.reducer';
 
+const emptySchedulerSettings = {
+  schedulerType: undefined,
+  nbrOfPlayers: undefined,
+  nbrOfCourts: undefined,
+  nbrOfPlayersPerCourt: undefined,
+  randomizeOrder: undefined,
+  useNamesForMatches: undefined
+};
+
 let myId = 10;
 export const ADD_PLAYER = '[schedulerFeature] add  player';
 export class PlayerAdded implements Action {
   readonly type = ADD_PLAYER;
   payload: PlayerEntity;
-  constructor(playerId: number, isPlayerAvailable: boolean, isByeAvailable: boolean,
+  constructor(playerId: number, playerName: string, isPlayerAvailable: boolean, isByeAvailable: boolean,
               byeRound: number, playedAgainst: {}, courtsPlayed: {}) {
     this.payload = {
       playerId,
-    isPlayerAvailable,
-    isByeAvailable,
-    byeRound,
-    playedAgainst,
-    courtsPlayed,
-    id: myId++
+      playerName,
+      isPlayerAvailable,
+      isByeAvailable,
+      byeRound,
+      playedAgainst,
+      courtsPlayed,
+      id: myId++
     };
-   }
+  }
 }
 
 export const REMOVE_ALL_PLAYER = '[schedulerFeature] removeAll  player';
@@ -27,84 +37,124 @@ export class PlayerRemoveAll implements Action {
   // payload: PlayerEntity;
   constructor() {
     // this.payload = {};
-   }
+  }
 }
 
 export const UPDATE_SCHEDULER_TYPE = '[schedulerFeature] update  schedulerType';
 export class SchedulerTypeUpdated implements Action {
-  readonly type =  UPDATE_SCHEDULER_TYPE;
+  readonly type = UPDATE_SCHEDULER_TYPE;
   payload: SchedulerSettings;
   constructor(schedulerType: string) {
-    this.payload = {
-      schedulerType,
-      nbrOfPlayers: 0,
-      nbrOfCourts: 0,
-      nbrOfPlayersPerCourt: 0,
-      randomizeOrder: false
-    };
-   }
+    this.payload = emptySchedulerSettings;
+    this.payload.schedulerType = schedulerType;
+    // {
+    //   schedulerType,
+    //   nbrOfPlayers: undefined,
+    //   nbrOfCourts: undefined,
+    //   nbrOfPlayersPerCourt: undefined,
+    //   randomizeOrder: undefined,
+    //   useNamesForMatches: undefined
+    // };
+  }
 }
 
 export const UPDATE_NBR_OF_PLAYERS = '[schedulerFeature] update  nbrOfPlayers';
 export class NbrOfPlayersUpdated implements Action {
-  readonly type =  UPDATE_NBR_OF_PLAYERS;
+  readonly type = UPDATE_NBR_OF_PLAYERS;
   payload: SchedulerSettings;
   constructor(nbrOfPlayers: number) {
-    this.payload = {
-      schedulerType: '',
-      nbrOfPlayers,
-      nbrOfCourts: 0,
-      nbrOfPlayersPerCourt: 0,
-      randomizeOrder: false
-    };
-   }
+    this.payload = emptySchedulerSettings;
+    this.payload.nbrOfPlayers = nbrOfPlayers;
+    // this.payload = {
+    //   schedulerType: undefined,
+    //   nbrOfPlayers,
+    //   nbrOfCourts: undefined,
+    //   nbrOfPlayersPerCourt: undefined,
+    //   randomizeOrder: undefined,
+    //   useNamesForMatches: undefined
+    // };
+  }
 }
 
 export const UPDATE_NBR_OF_COURTS = '[schedulerFeature] update  nbrOfCourts';
 export class NbrOfCourtsUpdated implements Action {
-  readonly type =  UPDATE_NBR_OF_COURTS;
+  readonly type = UPDATE_NBR_OF_COURTS;
   payload: SchedulerSettings;
   constructor(nbrOfCourts: number) {
-    this.payload = {
-      schedulerType: '',
-      nbrOfPlayers: 0,
-      nbrOfCourts,
-      nbrOfPlayersPerCourt: 0,
-      randomizeOrder: false
-    };
-   }
+    this.payload = emptySchedulerSettings;
+    this.payload.nbrOfCourts = nbrOfCourts;
+    // this.payload = {
+    //   schedulerType: undefined,
+    //   nbrOfPlayers: undefined,
+    //   nbrOfCourts,
+    //   nbrOfPlayersPerCourt: undefined,
+    //   randomizeOrder: undefined,
+    //   useNamesForMatches: undefined
+    // };
+  }
 }
 
 export const UPDATE_NBR_OF_PLAYERS_PER_COURT = '[schedulerFeature] update  nbrOfPlayersPerCourt';
 export class NbrOfPlayersPerCourtUpdated implements Action {
-  readonly type =  UPDATE_NBR_OF_PLAYERS_PER_COURT;
+  readonly type = UPDATE_NBR_OF_PLAYERS_PER_COURT;
   payload: SchedulerSettings;
   constructor(nbrOfPlayersPerCourt: number) {
-    this.payload = {
-      schedulerType: '',
-      nbrOfPlayers: 0,
-      nbrOfCourts: 0,
-      nbrOfPlayersPerCourt,
-      randomizeOrder: false
-    };
-   }
+    this.payload = emptySchedulerSettings;
+    this.payload.nbrOfPlayersPerCourt = nbrOfPlayersPerCourt;
+    // this.payload = {
+    //   schedulerType: undefined,
+    //   nbrOfPlayers: undefined,
+    //   nbrOfCourts: undefined,
+    //   nbrOfPlayersPerCourt,
+    //   randomizeOrder: undefined,
+    //   useNamesForMatches: undefined
+    // };
+  }
 }
 
 export const UPDATE_RANDOMIZE_ORDER = '[schedulerFeature] update  randomizeOrder';
 export class RandomizeOrderUpdated implements Action {
-  readonly type =  UPDATE_RANDOMIZE_ORDER;
+  readonly type = UPDATE_RANDOMIZE_ORDER;
   payload: SchedulerSettings;
   constructor(randomizeOrder: boolean) {
-    this.payload = {
-      schedulerType: '',
-      nbrOfPlayers: 0,
-      nbrOfCourts: 0,
-      nbrOfPlayersPerCourt: 0,
-      randomizeOrder
-    };
-   }
+    this.payload = emptySchedulerSettings;
+    this.payload.randomizeOrder = randomizeOrder;
+    // this.payload = {
+    //   schedulerType: undefined,
+    //   nbrOfPlayers: undefined,
+    //   nbrOfCourts: undefined,
+    //   nbrOfPlayersPerCourt: undefined,
+    //   randomizeOrder,
+    //   useNamesForMatches: undefined
+    // };
+  }
 }
 
+export const UPDATE_USE_NAMES_FOR_MATCHES = '[schedulerFeature] update  useNamesForMatches';
+export class UseNamesForMatchesUpdated implements Action {
+  readonly type = UPDATE_USE_NAMES_FOR_MATCHES;
+  payload: SchedulerSettings;
+  constructor(useNamesForMatches: boolean) {
+    this.payload = emptySchedulerSettings;
+    this.payload.useNamesForMatches = useNamesForMatches;
+    // this.payload = {
+    //   schedulerType: undefined,
+    //   nbrOfPlayers: undefined,
+    //   nbrOfCourts: undefined,
+    //   nbrOfPlayersPerCourt: undefined,
+    //   randomizeOrder: undefined,
+    //   useNamesForMatches
+    // };
+  }
+}
 
 // Discriminated Union Type  http://www.typescriptlang.org/docs/handbook/advanced-types.html
-export type All = PlayerAdded | PlayerRemoveAll | SchedulerTypeUpdated | NbrOfPlayersUpdated | NbrOfCourtsUpdated | NbrOfPlayersPerCourtUpdated| RandomizeOrderUpdated;
+export type All =
+PlayerAdded
+| PlayerRemoveAll
+| SchedulerTypeUpdated
+| NbrOfPlayersUpdated
+| NbrOfCourtsUpdated
+| NbrOfPlayersPerCourtUpdated
+| RandomizeOrderUpdated
+| UseNamesForMatchesUpdated;

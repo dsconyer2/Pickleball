@@ -45,6 +45,11 @@
             [(ngModel)]="seRandomizeOrder" #randomizeOrder="ngModel">
           <span>Randomize order</span>
         </div>
+        <div class="input-group-text">
+          <input type="checkbox" aria-label="Use names for matches" name="useNamesForMatches" id="useNamesForMatches" ngModel
+            [(ngModel)]="seUseNamesForMatches" #useNamesForMatches="ngModel">
+          <span>Use names for matches</span>
+        </div>
       </div>
     </div>
     <button type="submit" class="btn btn-primary" (click)="submit()">Start</button>

@@ -1,4 +1,5 @@
 import * as actions from '../actions/scheduler.actions';
+import { tassign } from 'tassign';
 
 export interface SchedulerSettings {
   schedulerType: string;
@@ -6,6 +7,7 @@ export interface SchedulerSettings {
   nbrOfCourts: number;
   nbrOfPlayersPerCourt: number;
   randomizeOrder: boolean;
+  useNamesForMatches: boolean;
 }
 
 export interface State {
@@ -14,6 +16,7 @@ export interface State {
   nbrOfCourts: number;
   nbrOfPlayersPerCourt: number;
   randomizeOrder: boolean;
+  useNamesForMatches: boolean;
 }
 
 const initialState: State = {
@@ -21,56 +24,24 @@ const initialState: State = {
   nbrOfPlayers: 0,
   nbrOfCourts: 0,
   nbrOfPlayersPerCourt: 0,
-  randomizeOrder: true
+  randomizeOrder: true,
+  useNamesForMatches: false
 };
 
 export function reducer(state: State = initialState, action: actions.All): State {
   switch (action.type) {
     case actions.UPDATE_SCHEDULER_TYPE:
-      return {
-        schedulerType: action.payload.schedulerType,
-        nbrOfPlayers: state.nbrOfPlayers,
-        nbrOfCourts: state.nbrOfCourts,
-        nbrOfPlayersPerCourt: state.nbrOfPlayersPerCourt,
-        randomizeOrder: state.randomizeOrder
-
-      };
+        return tassign(state, {schedulerType: action.payload.schedulerType});
       case actions.UPDATE_NBR_OF_PLAYERS:
-      return {
-        schedulerType: state.schedulerType,
-        nbrOfPlayers: action.payload.nbrOfPlayers,
-        nbrOfCourts: state.nbrOfCourts,
-        nbrOfPlayersPerCourt: state.nbrOfPlayersPerCourt,
-        randomizeOrder: state.randomizeOrder
-
-      };
+          return tassign(state, {nbrOfPlayers: action.payload.nbrOfPlayers});
       case actions.UPDATE_NBR_OF_COURTS:
-      return {
-        schedulerType: state.schedulerType,
-        nbrOfPlayers: state.nbrOfPlayers,
-        nbrOfCourts: action.payload.nbrOfCourts,
-        nbrOfPlayersPerCourt: state.nbrOfPlayersPerCourt,
-        randomizeOrder: state.randomizeOrder
-
-      };
+          return tassign(state, {nbrOfCourts: action.payload.nbrOfCourts});
       case actions.UPDATE_NBR_OF_PLAYERS_PER_COURT:
-      return {
-        schedulerType: state.schedulerType,
-        nbrOfPlayers: state.nbrOfPlayers,
-        nbrOfCourts: state.nbrOfCourts,
-        nbrOfPlayersPerCourt: action.payload.nbrOfPlayersPerCourt,
-        randomizeOrder: state.randomizeOrder
-
-      };
+          return tassign(state, {nbrOfPlayersPerCourt: action.payload.nbrOfPlayersPerCourt});
       case actions.UPDATE_RANDOMIZE_ORDER:
-      return {
-        schedulerType: state.schedulerType,
-        nbrOfPlayers: state.nbrOfPlayers,
-        nbrOfCourts: state.nbrOfCourts,
-        nbrOfPlayersPerCourt: state.nbrOfPlayersPerCourt,
-        randomizeOrder: action.payload.randomizeOrder
-
-      };
+          return tassign(state, {randomizeOrder: action.payload.randomizeOrder});
+      case actions.UPDATE_USE_NAMES_FOR_MATCHES:
+          return tassign(state, {useNamesForMatches: action.payload.useNamesForMatches});
     default: {
       return state;
     }

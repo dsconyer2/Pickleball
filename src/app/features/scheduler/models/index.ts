@@ -1,5 +1,6 @@
 export interface Player {
     playerId: number;
+    playerName: string;
     isPlayerAvailable: boolean;
     isByeAvailable: boolean;
     byeRound: number;
@@ -13,6 +14,7 @@ export interface SchedulerSettings {
   nbrOfCourts: number;
   nbrOfPlayersPerCourt: number;
   randomizeOrder: boolean;
+  useNamesForMatches: boolean;
 }
 
 export interface MatchPriorityEntry {

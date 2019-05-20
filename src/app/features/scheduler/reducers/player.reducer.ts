@@ -3,6 +3,7 @@ import * as actions from '../actions/scheduler.actions';
 export interface PlayerEntity {
   id: number;
   playerId: number;
+  playerName: string;
   isPlayerAvailable: boolean;
   isByeAvailable: boolean;
   byeRound: number;
@@ -15,8 +16,8 @@ export interface State extends EntityState<PlayerEntity> { }
 // const initialState: State = {
 //   ids: ['1', '2'],
 //   entities: {
-//     1: { id: 1, playerId: 1, isPlayerAvailable: true, isByeAvailable: true, byeRound: 0 },
-//     2: { id: 2, playerId: 2, isPlayerAvailable: true, isByeAvailable: true, byeRound: 0 }
+//     1: { id: 1, playerId: 1, playerName: 'Daryl', isPlayerAvailable: true, isByeAvailable: true, byeRound: 0 },
+//     2: { id: 2, playerId: 2, playerName: 'Rose', isPlayerAvailable: true, isByeAvailable: true, byeRound: 0 }
 //   }
 // };
 const initialState: State = {

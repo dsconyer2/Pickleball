@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { NbrOfCourtsUpdated, NbrOfPlayersPerCourtUpdated, NbrOfPlayersUpdated, PlayerAdded, PlayerRemoveAll, RandomizeOrderUpdated, SchedulerTypeUpdated } from '../../actions/scheduler.actions';
+import { NbrOfCourtsUpdated, NbrOfPlayersPerCourtUpdated, NbrOfPlayersUpdated, PlayerAdded, PlayerRemoveAll, RandomizeOrderUpdated, SchedulerTypeUpdated, UseNamesForMatchesUpdated } from '../../actions/scheduler.actions';
 import { SchedulerState } from '../../reducers';
 import { Group, GroupPlayer } from 'src/app/features/player-contact/models';
 import { Observable, Subscription } from 'rxjs';
@@ -23,6 +23,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
   seCourts: number;
   sePlayersPerCourt: number;
   seRandomizeOrder = false;
+  seUseNamesForMatches = false;
   seLoadFromGroup = false;
   selectedGroup: Group;
 
@@ -50,12 +51,12 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
 
       // load players
       players.players.forEach((aPlayer) => {
-        this.store.dispatch(new PlayerAdded(aPlayer.playerContactId, true, true, 0, {}, {}));
+        this.store.dispatch(new PlayerAdded(aPlayer.playerContactId, aPlayer.name, true, true, 0, {}, {}));
       });
       this.sePlayers = players.players.length;
     } else {
       for (let index = 0; index < this.sePlayers; index++) {
-        this.store.dispatch(new PlayerAdded(index + 1, true, true, 0, {}, {}));
+        this.store.dispatch(new PlayerAdded(index + 1, (index + 1).toString(), true, true, 0, {}, {}));
       }
     }
   }
@@ -75,6 +76,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
     this.store.dispatch(new NbrOfCourtsUpdated(this.seCourts));
     this.store.dispatch(new NbrOfPlayersPerCourtUpdated(this.sePlayersPerCourt));
     this.store.dispatch(new RandomizeOrderUpdated(this.seRandomizeOrder));
+    this.store.dispatch(new UseNamesForMatchesUpdated(this.seUseNamesForMatches));
 
     this.router.navigate(['/scheduleTournament']);
   }
