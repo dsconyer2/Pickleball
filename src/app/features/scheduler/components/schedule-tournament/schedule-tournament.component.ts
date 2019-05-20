@@ -177,7 +177,7 @@ export class ScheduleTournamentComponent implements OnInit {
     // console.log('Bye indexes');
     // console.table(this.byeIndexes);
 
-    for (let rounds = 1; rounds < this.nbrOfPlayers + 1; rounds++) {
+    for (let rounds = 1; rounds < this.nbrOfPlayers; rounds++) {
       // Set the bye indexes for even number of players
       this.setByeIndexesForEvenNumberOfPlayers();
       // Gather data for the round.

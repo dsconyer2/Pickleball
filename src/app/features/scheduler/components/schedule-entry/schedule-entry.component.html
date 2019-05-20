@@ -13,10 +13,25 @@
         </label>
       </div>
     </div>
-    <h5>Number of Players</h5>
-    <input type="number" class="form-control" name="nbrOfPlayersInput" ngModel [(ngModel)]="sePlayers"
-      #nbrOfPlayersInput="ngModel" autofocus>
-    <br>
+    <div>
+      <h5>Number of Players</h5>
+      <div class="input-group-text">
+        <input type="checkbox" aria-label="Load from Group" name="loadFromGroup" id="loadFromGroup" ngModel
+          [(ngModel)]="seLoadFromGroup" #loadFromGroup="ngModel">
+        <span>Load from Group</span>
+      </div>
+      <div *ngIf="seLoadFromGroup">
+        <select name="groupToLoad" id="groupToLoad" [(ngModel)]="selectedGroup">
+          <option *ngFor="let group of groups$ | async" [ngValue]="group">{{group.name}}</option>
+        </select>
+        <br><br>
+      </div>
+      <div *ngIf="!seLoadFromGroup">
+        <input type="number" class="form-control" name="nbrOfPlayersInput" ngModel
+          [(ngModel)]="sePlayers" #nbrOfPlayersInput="ngModel" autofocus>
+        <br>
+      </div>
+    </div>
     <div *ngIf="seType === 'King'">
       <h5>Number of Courts</h5>
       <input class="form-control" type="number" name="nbrOfCourtsInput" id="nbrOfCourtsInput" ngModel
@@ -24,14 +39,14 @@
       <br>
     </div>
     <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <div class="input-group-text">
-            <input type="checkbox" aria-label="Randomize order" name="randomizeOrder" id="randomizeOrder"
-            ngModel [(ngModel)]="seRandomizeOrder" #randomizeOrder="ngModel">
-            <span>Randomize order</span>
-          </div>
+      <div class="input-group-prepend">
+        <div class="input-group-text">
+          <input type="checkbox" aria-label="Randomize order" name="randomizeOrder" id="randomizeOrder" ngModel
+            [(ngModel)]="seRandomizeOrder" #randomizeOrder="ngModel">
+          <span>Randomize order</span>
         </div>
       </div>
+    </div>
     <button type="submit" class="btn btn-primary" (click)="submit()">Start</button>
   </div>
 </form>

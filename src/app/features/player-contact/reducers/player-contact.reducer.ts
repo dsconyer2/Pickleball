@@ -9,10 +9,12 @@ export interface PlayerContactEntity {
 export interface State extends EntityState<PlayerContactEntity> { }
 
 const initialState: State = {
-  ids: ['1', '2'],
+  ids: ['1', '2', '3', '4'],
   entities: {
-    1: { id: 1, playerContactId: 1, name: 'Daryl Sconyers'},
-    2: { id: 2, playerContactId: 2, name: 'Rose Sconyers'}
+    1: { id: 1, playerContactId: 10, name: 'Daryl Sconyers'},
+    2: { id: 2, playerContactId: 20, name: 'Rose Sconyers'},
+    3: { id: 3, playerContactId: 30, name: 'Amanda Sconyers'},
+    4: { id: 4, playerContactId: 40, name: 'Eric Sconyers'}
   }
 };
 // const initialState: State = {

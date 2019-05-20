@@ -26,14 +26,14 @@ export class GroupManagerComponent implements OnInit {
     this.lastGroupPlayer$ = this.store.select(selectHighestGroupPlayerId);
   }
 
-  addGroup(groupName:string, id:any) { 
-    
+  addGroup(groupName: string, id: any) {
+
     this.highestId = 0;
-    this.lastGroup$.forEach(aGroup => this.highestId = Math.max(this.highestId, aGroup.groupId))
+    this.lastGroup$.forEach(aGroup => this.highestId = Math.max(this.highestId, aGroup.groupId));
     const groupId = this.highestId + 1;
 
     this.highestId = 0;
-    this.lastGroupPlayer$.forEach(aGroupPlayer => this.highestId = Math.max(this.highestId, aGroupPlayer.groupPlayerId))
+    this.lastGroupPlayer$.forEach(aGroupPlayer => this.highestId = Math.max(this.highestId, aGroupPlayer.groupPlayerId));
     const playerId = this.highestId + 1;
     const enabledPlayerId = this.highestId + 2;
 
