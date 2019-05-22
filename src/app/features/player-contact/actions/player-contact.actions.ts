@@ -26,4 +26,20 @@ export class PlayerContactRemoved implements Action {
    }
 }
 
-export type All = PlayerContactAdded | PlayerContactRemoved;
+export const LOAD_PLAYER_CONTACTS = '[playerContactFeature] load  playerContacts';
+export class PlayerContactsLoad implements Action {
+  readonly type = LOAD_PLAYER_CONTACTS;
+  constructor() {}
+}
+
+export const LOAD_PLAYER_CONTACTS_SUCCESS = '[playerContactFeature] load  playerContacts succeeded';
+export class LoadedPlayerContactsSuccessfully implements Action {
+  readonly type = LOAD_PLAYER_CONTACTS_SUCCESS;
+  constructor(public payload: PlayerContactEntity[]) {}
+}
+
+export type All =
+PlayerContactAdded
+| PlayerContactRemoved
+| PlayerContactsLoad
+| LoadedPlayerContactsSuccessfully;

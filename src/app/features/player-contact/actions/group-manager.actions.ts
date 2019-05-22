@@ -8,10 +8,10 @@ export class GroupAdded implements Action {
   constructor(groupId: number, name: string, playerIds: number, enabledPlayerIds: number) {
     this.payload = {
       id: groupId,
-      groupId: groupId,
-      name: name,
-      playerIds: playerIds,
-      enabledPlayerIds: enabledPlayerIds
+      groupId,
+      name,
+      playerIds,
+      enabledPlayerIds
     };
    }
 }
@@ -23,10 +23,25 @@ export class GroupRemoved implements Action {
   constructor(groupId: number) {
     this.payload = {
       id: groupId,
-      groupId: groupId
+      groupId
     };
    }
 }
 
+export const LOAD_GROUPS = '[groupFeature] load  groups';
+export class GroupsLoad implements Action {
+  readonly type = LOAD_GROUPS;
+  constructor() {}
+}
 
-export type All = GroupAdded | GroupRemoved;
+export const LOAD_GROUPS_SUCCESS = '[groupFeature] load  groups succeeded';
+export class GroupsLoadedSuccessfully implements Action {
+  readonly type = LOAD_GROUPS_SUCCESS;
+  constructor(public payload: GroupEntity[]) {}
+}
+
+export type All =
+GroupAdded
+| GroupRemoved
+| GroupsLoad
+| GroupsLoadedSuccessfully;

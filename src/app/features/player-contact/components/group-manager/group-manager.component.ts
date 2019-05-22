@@ -4,7 +4,7 @@ import { Group, GroupPlayer } from '../../models';
 import { Store } from '@ngrx/store';
 import { selectGroupEntities, PlayerContactState, selectHighestGroupId, selectHighestGroupPlayerId } from '../../reducers';
 import { GroupAdded } from '../../actions/group-manager.actions';
-import { GroupPlayerCreated } from '../../actions/group-player-actions';
+import { GroupPlayerCreated } from '../../actions/group-player.actions';
 
 @Component({
   selector: 'app-group-manager',

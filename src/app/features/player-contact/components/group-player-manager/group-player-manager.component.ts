@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Group, PlayerContact, GroupPlayer } from '../../models';
 import { Store } from '@ngrx/store';
 import { selectGroupEntities, PlayerContactState, selectPlayerContactEntities, selectGroupPlayerEntities } from '../../reducers';
-import { GroupPlayerAdded, GroupPlayerRemoved } from '../../actions/group-player-actions';
+import { GroupPlayerAdded, GroupPlayerRemoved } from '../../actions/group-player.actions';
 
 @Component({
   selector: 'app-group-player-manager',
@@ -27,11 +27,11 @@ export class GroupPlayerManagerComponent implements OnInit {
   }
 
   updatePlayers() {
-    this.store.select(selectGroupPlayerEntities).forEach(entities => 
+    this.store.select(selectGroupPlayerEntities).forEach(entities =>
       entities.forEach(
       aGroupPlayer => {
-      if (aGroupPlayer.groupPlayerId === this.selectedGroup.playerIds) {this.groupPlayers = aGroupPlayer};
-      if (aGroupPlayer.groupPlayerId === this.selectedGroup.enabledPlayerIds) {this.enabledGroupPlayers = aGroupPlayer};
+      if (aGroupPlayer.groupPlayerId === this.selectedGroup.playerIds) { this.groupPlayers = aGroupPlayer; }
+      if (aGroupPlayer.groupPlayerId === this.selectedGroup.enabledPlayerIds) { this.enabledGroupPlayers = aGroupPlayer; }
     }));
   }
 
@@ -41,10 +41,10 @@ export class GroupPlayerManagerComponent implements OnInit {
 
   enablePlayerClass(player: PlayerContact) {
     if (this.enabledGroupPlayers.players.find(aPlayer => aPlayer === player)) {
-      return "fa fa-minus-square fa-2x";
+      return 'fa fa-minus-square fa-2x';
       // return "fa fa-check-square-o fa-2x";
     } else {
-      return "fa fa-plus-square fa-2x";
+      return 'fa fa-plus-square fa-2x';
       // return "fa fa-square-o fa-2x";
     }
   }
@@ -58,26 +58,27 @@ export class GroupPlayerManagerComponent implements OnInit {
   }
 
   enablePlayer(player: PlayerContact) {
-    let players = this.enabledGroupPlayers.players.slice();
+    const players = this.enabledGroupPlayers.players.slice();
     players.push(player);
     this.store.dispatch(new GroupPlayerAdded(this.enabledGroupPlayers.groupPlayerId, players));
   }
 
   disablePlayer(player: PlayerContact) {
-    let players = this.enabledGroupPlayers.players.filter(aPlayer => aPlayer !== player);
+    const players = this.enabledGroupPlayers.players.filter(aPlayer => aPlayer !== player);
     this.store.dispatch(new GroupPlayerRemoved(this.enabledGroupPlayers.groupPlayerId, players));
   }
 
   addPlayer(player: PlayerContact) {
-    let players = this.groupPlayers.players.slice();
+    const players = this.groupPlayers.players.slice();
     players.push(player);
     this.store.dispatch(new GroupPlayerAdded(this.groupPlayers.groupPlayerId, players));
   }
 
   removePlayer(player: PlayerContact) {
-    let players = this.groupPlayers.players.filter(aPlayer => aPlayer !== player);
+    this.disablePlayer(player);
+    const players = this.groupPlayers.players.filter(aPlayer => aPlayer !== player);
     this.store.dispatch(new GroupPlayerRemoved(this.groupPlayers.groupPlayerId, players));
   }
 
- 
+
 }

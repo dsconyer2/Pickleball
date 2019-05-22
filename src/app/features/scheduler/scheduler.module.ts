@@ -9,6 +9,7 @@ import { ScheduleTournamentComponent } from './components/schedule-tournament/sc
 import { SchedulerEffects } from './effects/scheduler.effects';
 import { reducers } from './reducers';
 import { SchedulerComponent } from './scheduler.component';
+import { AppStartUpEffects } from './effects/app-startup.effects';
 
 @NgModule({
   declarations: [SchedulerComponent, ScheduleEntryComponent, ScheduleTournamentComponent],
@@ -17,7 +18,7 @@ import { SchedulerComponent } from './scheduler.component';
     HttpClientModule,
     FormsModule,
     StoreModule.forFeature('schedulerFeature', reducers),
-    EffectsModule.forFeature([SchedulerEffects])
+    EffectsModule.forFeature([SchedulerEffects, AppStartUpEffects])
   ],
   exports: [SchedulerComponent]
 })

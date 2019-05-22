@@ -12,7 +12,7 @@ export class GroupPlayerCreated implements Action {
       id: groupPlayerId,
       groupPlayerId,
       players: []
-      
+
     };
    }
 }
@@ -36,7 +36,7 @@ export class GroupPlayerAdded implements Action {
   constructor(groupPlayerId: number, players: PlayerContact[]) {
     this.payload = {
       id: groupPlayerId,
-      changes: {players: players}
+      changes: {players}
     };
    }
 }
@@ -48,9 +48,27 @@ export class GroupPlayerRemoved implements Action {
   constructor(groupPlayerId: number, players: PlayerContact[]) {
     this.payload = {
       id: groupPlayerId,
-      changes: {players: players}
+      changes: {players}
     };
    }
 }
 
-export type All = GroupPlayerCreated | GroupPlayerDeleted | GroupPlayerAdded | GroupPlayerRemoved;
+export const LOAD_GROUP_PLAYERS = '[groupFeature] load  groupPlayers';
+export class GroupPlayersLoad implements Action {
+  readonly type = LOAD_GROUP_PLAYERS;
+  constructor() {}
+}
+
+export const LOAD_GROUP_PLAYERS_SUCCESS = '[groupFeature] load  groupPlayers succeeded';
+export class GroupPlayersLoadedSuccessfully implements Action {
+  readonly type = LOAD_GROUP_PLAYERS_SUCCESS;
+  constructor(public payload: GroupPlayerEntity[]) {}
+}
+
+export type All =
+GroupPlayerCreated
+| GroupPlayerDeleted
+| GroupPlayerAdded
+| GroupPlayerRemoved
+| GroupPlayersLoad
+| GroupPlayersLoadedSuccessfully;

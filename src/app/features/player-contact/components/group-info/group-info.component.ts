@@ -3,7 +3,7 @@ import { Group } from '../../models';
 import { PlayerContactState } from '../../reducers';
 import { Store } from '@ngrx/store';
 import { GroupRemoved } from '../../actions/group-manager.actions';
-import { GroupPlayerDeleted } from '../../actions/group-player-actions';
+import { GroupPlayerDeleted } from '../../actions/group-player.actions';
 
 @Component({
   selector: 'app-group-info',

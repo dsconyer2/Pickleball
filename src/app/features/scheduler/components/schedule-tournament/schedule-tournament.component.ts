@@ -288,7 +288,11 @@ export class ScheduleTournamentComponent implements OnInit {
   updateByeLabels(aRound: RoundData) {
     let byeLabel = ' ';
     aRound.byes.forEach(aByePlayer => {
-      byeLabel += (aByePlayer.playerId + ', ');
+      if (this.useNamesForMatches) {
+        byeLabel += (aByePlayer.playerName + ', ');
+      } else {
+        byeLabel += (aByePlayer.playerId + ', ');
+      }
     });
     byeLabel = byeLabel.slice(0, byeLabel.length - 2);
     aRound.byeLabel = byeLabel;

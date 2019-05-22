@@ -8,6 +8,11 @@ import { ContactInfoComponent } from './components/contact-info/contact-info.com
 import { GroupManagerComponent } from './components/group-manager/group-manager.component';
 import { GroupPlayerManagerComponent } from './components/group-player-manager/group-player-manager.component';
 import { GroupInfoComponent } from './components/group-info/group-info.component';
+import { GroupManagerEffects } from './effects/group-manager.effects';
+import { GroupPlayerEffects } from './effects/group-player.effects';
+import { PlayerContactEffects } from './effects/player-contact.effects';
+import { EffectsModule } from '@ngrx/effects';
+import { AppStartUpEffects } from './effects/app-startup.effects';
 
 @NgModule({
   declarations: [PlayerContactComponent, ContactInfoComponent, GroupManagerComponent, GroupPlayerManagerComponent, GroupInfoComponent],
@@ -15,6 +20,7 @@ import { GroupInfoComponent } from './components/group-info/group-info.component
     CommonModule,
     FormsModule,
     StoreModule.forFeature('playerContactFeature', reducers),
+    EffectsModule.forFeature([GroupManagerEffects, GroupPlayerEffects, PlayerContactEffects, AppStartUpEffects])
   ],
   exports: [PlayerContactComponent]
 })

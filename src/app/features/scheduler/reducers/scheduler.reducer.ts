@@ -42,6 +42,15 @@ export function reducer(state: State = initialState, action: actions.All): State
           return tassign(state, {randomizeOrder: action.payload.randomizeOrder});
       case actions.UPDATE_USE_NAMES_FOR_MATCHES:
           return tassign(state, {useNamesForMatches: action.payload.useNamesForMatches});
+      case actions.LOAD_SCHEDULER_SETTINGS_SUCCESS:
+          return tassign(state, {
+            schedulerType: action.payload.schedulerType,
+            nbrOfPlayers: action.payload.nbrOfPlayers,
+            nbrOfCourts: action.payload.nbrOfCourts,
+            nbrOfPlayersPerCourt: action.payload.nbrOfPlayersPerCourt,
+            randomizeOrder: action.payload.randomizeOrder,
+            useNamesForMatches: action.payload.useNamesForMatches
+          });
     default: {
       return state;
     }

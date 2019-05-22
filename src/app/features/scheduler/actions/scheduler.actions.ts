@@ -47,14 +47,6 @@ export class SchedulerTypeUpdated implements Action {
   constructor(schedulerType: string) {
     this.payload = emptySchedulerSettings;
     this.payload.schedulerType = schedulerType;
-    // {
-    //   schedulerType,
-    //   nbrOfPlayers: undefined,
-    //   nbrOfCourts: undefined,
-    //   nbrOfPlayersPerCourt: undefined,
-    //   randomizeOrder: undefined,
-    //   useNamesForMatches: undefined
-    // };
   }
 }
 
@@ -65,14 +57,6 @@ export class NbrOfPlayersUpdated implements Action {
   constructor(nbrOfPlayers: number) {
     this.payload = emptySchedulerSettings;
     this.payload.nbrOfPlayers = nbrOfPlayers;
-    // this.payload = {
-    //   schedulerType: undefined,
-    //   nbrOfPlayers,
-    //   nbrOfCourts: undefined,
-    //   nbrOfPlayersPerCourt: undefined,
-    //   randomizeOrder: undefined,
-    //   useNamesForMatches: undefined
-    // };
   }
 }
 
@@ -83,14 +67,6 @@ export class NbrOfCourtsUpdated implements Action {
   constructor(nbrOfCourts: number) {
     this.payload = emptySchedulerSettings;
     this.payload.nbrOfCourts = nbrOfCourts;
-    // this.payload = {
-    //   schedulerType: undefined,
-    //   nbrOfPlayers: undefined,
-    //   nbrOfCourts,
-    //   nbrOfPlayersPerCourt: undefined,
-    //   randomizeOrder: undefined,
-    //   useNamesForMatches: undefined
-    // };
   }
 }
 
@@ -101,14 +77,6 @@ export class NbrOfPlayersPerCourtUpdated implements Action {
   constructor(nbrOfPlayersPerCourt: number) {
     this.payload = emptySchedulerSettings;
     this.payload.nbrOfPlayersPerCourt = nbrOfPlayersPerCourt;
-    // this.payload = {
-    //   schedulerType: undefined,
-    //   nbrOfPlayers: undefined,
-    //   nbrOfCourts: undefined,
-    //   nbrOfPlayersPerCourt,
-    //   randomizeOrder: undefined,
-    //   useNamesForMatches: undefined
-    // };
   }
 }
 
@@ -119,14 +87,6 @@ export class RandomizeOrderUpdated implements Action {
   constructor(randomizeOrder: boolean) {
     this.payload = emptySchedulerSettings;
     this.payload.randomizeOrder = randomizeOrder;
-    // this.payload = {
-    //   schedulerType: undefined,
-    //   nbrOfPlayers: undefined,
-    //   nbrOfCourts: undefined,
-    //   nbrOfPlayersPerCourt: undefined,
-    //   randomizeOrder,
-    //   useNamesForMatches: undefined
-    // };
   }
 }
 
@@ -137,15 +97,19 @@ export class UseNamesForMatchesUpdated implements Action {
   constructor(useNamesForMatches: boolean) {
     this.payload = emptySchedulerSettings;
     this.payload.useNamesForMatches = useNamesForMatches;
-    // this.payload = {
-    //   schedulerType: undefined,
-    //   nbrOfPlayers: undefined,
-    //   nbrOfCourts: undefined,
-    //   nbrOfPlayersPerCourt: undefined,
-    //   randomizeOrder: undefined,
-    //   useNamesForMatches
-    // };
   }
+}
+
+export const LOAD_SCHEDULER_SETTINGS = '[schedulerFeature] load  schedulerSettings';
+export class SchedulerSettingsLoad implements Action {
+  readonly type = LOAD_SCHEDULER_SETTINGS;
+  constructor() {}
+}
+
+export const LOAD_SCHEDULER_SETTINGS_SUCCESS = '[schedulerFeature] load  schedulerSettings succeeded';
+export class SchedulerSettingsLoadedSuccessfully implements Action {
+  readonly type = LOAD_SCHEDULER_SETTINGS_SUCCESS;
+  constructor(public payload: SchedulerSettings) {}
 }
 
 // Discriminated Union Type  http://www.typescriptlang.org/docs/handbook/advanced-types.html
@@ -157,4 +121,6 @@ PlayerAdded
 | NbrOfCourtsUpdated
 | NbrOfPlayersPerCourtUpdated
 | RandomizeOrderUpdated
-| UseNamesForMatchesUpdated;
+| UseNamesForMatchesUpdated
+| SchedulerSettingsLoad
+| SchedulerSettingsLoadedSuccessfully;
