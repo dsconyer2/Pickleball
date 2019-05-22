@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { PlayerEntity } from '../reducers/player.reducer';
 import { SchedulerSettings } from '../reducers/scheduler.reducer';
+import { Group } from '../../player-contact/models';
 
 const emptySchedulerSettings = {
   schedulerType: undefined,
@@ -8,7 +9,9 @@ const emptySchedulerSettings = {
   nbrOfCourts: undefined,
   nbrOfPlayersPerCourt: undefined,
   randomizeOrder: undefined,
-  useNamesForMatches: undefined
+  useNamesForMatches: undefined,
+  loadFromGroup: false,
+  selectedGroup: undefined
 };
 
 let myId = 10;
@@ -100,6 +103,26 @@ export class UseNamesForMatchesUpdated implements Action {
   }
 }
 
+export const UPDATE_LOAD_FROM_GROUP = '[schedulerFeature] update  loadFromGroup';
+export class LoadFromGroupUpdated implements Action {
+  readonly type = UPDATE_LOAD_FROM_GROUP;
+  payload: SchedulerSettings;
+  constructor(loadFromGroup: boolean) {
+    this.payload = emptySchedulerSettings;
+    this.payload.loadFromGroup = loadFromGroup;
+  }
+}
+
+export const UPDATE_SELECTED_GROUP = '[schedulerFeature] update  selectedGroup';
+export class SelectedGroupUpdated implements Action {
+  readonly type = UPDATE_SELECTED_GROUP;
+  payload: SchedulerSettings;
+  constructor(selectedGroup: Group) {
+    this.payload = emptySchedulerSettings;
+    this.payload.selectedGroup = selectedGroup;
+  }
+}
+
 export const LOAD_SCHEDULER_SETTINGS = '[schedulerFeature] load  schedulerSettings';
 export class SchedulerSettingsLoad implements Action {
   readonly type = LOAD_SCHEDULER_SETTINGS;
@@ -122,5 +145,7 @@ PlayerAdded
 | NbrOfPlayersPerCourtUpdated
 | RandomizeOrderUpdated
 | UseNamesForMatchesUpdated
+| LoadFromGroupUpdated
+| SelectedGroupUpdated
 | SchedulerSettingsLoad
 | SchedulerSettingsLoadedSuccessfully;

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PlayerEntity } from './reducers/player.reducer';
 import { SchedulerSettings } from './reducers/scheduler.reducer';
+import { Group } from '../player-contact/models';
 
 @Injectable()
 export class SchedulerDataService {
@@ -8,9 +9,12 @@ export class SchedulerDataService {
   playerKey = 'pickleballPlayers';
   schedulerTypeKey = 'pickleballSchedulerType';
   schedulerNbrOfPlayersKey = 'pickleballNbrOfPlayers';
+  schedulerNbrOfCourtsKey = 'pickleballNbrOfCourts';
   schedulerNbrOfPlayersPerCourtKey = 'pickleballNbrOfPlayersPerCourt';
   schedulerRandomizeOrderKey = 'pickleballRandomizeOrder';
   schedulerUseNamesForMatchesKey = 'pickleballUseNamesForMatches';
+  schedulerLoadFromGroupKey = 'pickleballLoadFromGroup';
+  schedulerSelectedGroupKey = 'pickleballSelectedGroup';
 
   constructor() { }
 
@@ -24,7 +28,7 @@ export class SchedulerDataService {
     localStorage.removeItem(this.playerKey);
   }
 
-  updateSchedulerSetting(settingKey: string, settingValue: string | number | boolean) {
+  updateSchedulerSetting(settingKey: string, settingValue: string | number | boolean | Group) {
     localStorage.setItem(settingKey, JSON.stringify(settingValue));
   }
 
@@ -33,6 +37,8 @@ export class SchedulerDataService {
         localStorage.getItem(this.schedulerTypeKey) ? JSON.parse(localStorage.getItem(this.schedulerTypeKey)) : undefined;
     const localSchedulerNbrOfPlayers: number =
         localStorage.getItem(this.schedulerNbrOfPlayersKey) ? JSON.parse(localStorage.getItem(this.schedulerNbrOfPlayersKey)) : undefined;
+    const localSchedulerNbrOfCourts: number =
+        localStorage.getItem(this.schedulerNbrOfCourtsKey) ? JSON.parse(localStorage.getItem(this.schedulerNbrOfCourtsKey)) : undefined;
     const localSchedulerNbrOfPlayersPerCourt: number =
         localStorage.getItem(this.schedulerNbrOfPlayersPerCourtKey)
         ? JSON.parse(localStorage.getItem(this.schedulerNbrOfPlayersPerCourtKey)) : undefined;
@@ -42,13 +48,21 @@ export class SchedulerDataService {
     const localSchedulerUseNamesForMatches: boolean =
         localStorage.getItem(this.schedulerUseNamesForMatchesKey)
         ? JSON.parse(localStorage.getItem(this.schedulerUseNamesForMatchesKey)) : undefined;
+    const localSchedulerLoadFromGroup: boolean =
+        localStorage.getItem(this.schedulerLoadFromGroupKey)
+        ? JSON.parse(localStorage.getItem(this.schedulerLoadFromGroupKey)) : undefined;
+    const localSchedulerSelectedGroup: Group =
+        localStorage.getItem(this.schedulerSelectedGroupKey)
+        ? JSON.parse(localStorage.getItem(this.schedulerSelectedGroupKey)) : undefined;
     return {
       schedulerType: localSchedulerType,
       nbrOfPlayers: localSchedulerNbrOfPlayers,
-      nbrOfCourts: undefined,
+      nbrOfCourts: localSchedulerNbrOfCourts,
       nbrOfPlayersPerCourt: localSchedulerNbrOfPlayersPerCourt,
       randomizeOrder: localSchedulerRandomizeOrder,
-      useNamesForMatches: localSchedulerUseNamesForMatches
+      useNamesForMatches: localSchedulerUseNamesForMatches,
+      loadFromGroup: localSchedulerLoadFromGroup,
+      selectedGroup: localSchedulerSelectedGroup
     };
   }
 

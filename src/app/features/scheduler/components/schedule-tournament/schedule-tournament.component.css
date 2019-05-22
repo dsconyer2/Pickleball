@@ -1,6 +1,6 @@
 
 /* tr:nth-child(even) {background-color: #f2f2f2;} */
-tr:nth-child(even) {
+tr:nth-child(odd) {
   color: rgb(48, 51, 224);
   background-color: #adb5bd;
 }
@@ -12,4 +12,6 @@ font-size: 1.7rem;
   font-weight: 700;
   line-height: 1.5;
 }
-
+td {
+  border: thick solid black;
+}

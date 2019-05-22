@@ -1,3 +1,5 @@
+import { Group } from '../../player-contact/models';
+
 export interface Player {
     playerId: number;
     playerName: string;
@@ -15,6 +17,8 @@ export interface SchedulerSettings {
   nbrOfPlayersPerCourt: number;
   randomizeOrder: boolean;
   useNamesForMatches: boolean;
+  loadFromGroup: boolean;
+  selectedGroup: Group;
 }
 
 export interface MatchPriorityEntry {

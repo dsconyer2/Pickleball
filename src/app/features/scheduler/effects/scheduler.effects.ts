@@ -35,6 +35,13 @@ export class SchedulerEffects {
           tap(a => this.service.updateSchedulerSetting('pickleballNbrOfPlayers', a.payload.nbrOfPlayers))
       );
 
+      @Effect({ dispatch: false }) updateNbrOfCourts$ = this.actions$
+      .pipe(
+          ofType(actions.UPDATE_NBR_OF_COURTS),
+          map(a => a as actions.NbrOfCourtsUpdated),
+          tap(a => this.service.updateSchedulerSetting('pickleballNbrOfCourts', a.payload.nbrOfCourts))
+      );
+
       @Effect({ dispatch: false }) updateNbrOfPlayersPerCourt$ = this.actions$
       .pipe(
           ofType(actions.UPDATE_NBR_OF_PLAYERS_PER_COURT),
@@ -54,6 +61,20 @@ export class SchedulerEffects {
           ofType(actions.UPDATE_USE_NAMES_FOR_MATCHES),
           map(a => a as actions.UseNamesForMatchesUpdated),
           tap(a => this.service.updateSchedulerSetting('pickleballUseNamesForMatches', a.payload.useNamesForMatches))
+      );
+
+      @Effect({ dispatch: false }) updateLoadFromGroup$ = this.actions$
+      .pipe(
+          ofType(actions.UPDATE_LOAD_FROM_GROUP),
+          map(a => a as actions.LoadFromGroupUpdated),
+          tap(a => this.service.updateSchedulerSetting('pickleballLoadFromGroup', a.payload.loadFromGroup))
+      );
+
+      @Effect({ dispatch: false }) updateSelectedGroup$ = this.actions$
+      .pipe(
+          ofType(actions.UPDATE_SELECTED_GROUP),
+          map(a => a as actions.SelectedGroupUpdated),
+          tap(a => this.service.updateSchedulerSetting('pickleballSelectedGroup', a.payload.selectedGroup))
       );
 
       @Effect() schedulerSettingsLoad$ = this.actions$

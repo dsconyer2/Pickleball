@@ -21,7 +21,7 @@
         <span>Load from Group</span>
       </div>
       <div *ngIf="seLoadFromGroup">
-        <select name="groupToLoad" id="groupToLoad" [(ngModel)]="selectedGroup">
+        <select name="groupToLoad" id="groupToLoad" [(ngModel)]="seSelectedGroup">
           <option *ngFor="let group of groups$ | async" [ngValue]="group">{{group.name}}</option>
         </select>
         <br><br>

@@ -1,5 +1,6 @@
 import * as actions from '../actions/scheduler.actions';
 import { tassign } from 'tassign';
+import { Group } from '../../player-contact/models';
 
 export interface SchedulerSettings {
   schedulerType: string;
@@ -8,6 +9,8 @@ export interface SchedulerSettings {
   nbrOfPlayersPerCourt: number;
   randomizeOrder: boolean;
   useNamesForMatches: boolean;
+  loadFromGroup: boolean;
+  selectedGroup: Group;
 }
 
 export interface State {
@@ -17,6 +20,8 @@ export interface State {
   nbrOfPlayersPerCourt: number;
   randomizeOrder: boolean;
   useNamesForMatches: boolean;
+  loadFromGroup: boolean;
+  selectedGroup: Group;
 }
 
 const initialState: State = {
@@ -24,8 +29,10 @@ const initialState: State = {
   nbrOfPlayers: 0,
   nbrOfCourts: 0,
   nbrOfPlayersPerCourt: 0,
-  randomizeOrder: true,
-  useNamesForMatches: false
+  randomizeOrder: false,
+  useNamesForMatches: false,
+  loadFromGroup: false,
+  selectedGroup: undefined
 };
 
 export function reducer(state: State = initialState, action: actions.All): State {
@@ -42,6 +49,10 @@ export function reducer(state: State = initialState, action: actions.All): State
           return tassign(state, {randomizeOrder: action.payload.randomizeOrder});
       case actions.UPDATE_USE_NAMES_FOR_MATCHES:
           return tassign(state, {useNamesForMatches: action.payload.useNamesForMatches});
+      case actions.UPDATE_LOAD_FROM_GROUP:
+          return tassign(state, {loadFromGroup: action.payload.loadFromGroup});
+      case actions.UPDATE_SELECTED_GROUP:
+          return tassign(state, {selectedGroup: action.payload.selectedGroup});
       case actions.LOAD_SCHEDULER_SETTINGS_SUCCESS:
           return tassign(state, {
             schedulerType: action.payload.schedulerType,
@@ -49,7 +60,9 @@ export function reducer(state: State = initialState, action: actions.All): State
             nbrOfCourts: action.payload.nbrOfCourts,
             nbrOfPlayersPerCourt: action.payload.nbrOfPlayersPerCourt,
             randomizeOrder: action.payload.randomizeOrder,
-            useNamesForMatches: action.payload.useNamesForMatches
+            useNamesForMatches: action.payload.useNamesForMatches,
+            loadFromGroup: action.payload.loadFromGroup,
+            selectedGroup: action.payload.selectedGroup
           });
     default: {
       return state;
