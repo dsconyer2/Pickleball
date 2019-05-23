@@ -90,7 +90,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
     if (this.seLoadFromGroup) {
       // get selectedGroup.
       // this.groups.find(aGroup => aGroup.groupId === this.selectedGroup.groupId)
-      const players = this.groupPlayers.find(gp => gp.groupPlayerId === this.seSelectedGroup.playerIds);
+      const players = this.groupPlayers.find(gp => gp.groupPlayerId === this.seSelectedGroup.enabledPlayerIds);
 
       // load players
       players.players.forEach((aPlayer) => {

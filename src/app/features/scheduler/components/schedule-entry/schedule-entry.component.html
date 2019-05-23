@@ -22,7 +22,7 @@
       </div>
       <div *ngIf="seLoadFromGroup">
         <select name="groupToLoad" id="groupToLoad" [(ngModel)]="seSelectedGroup">
-          <option *ngFor="let group of groups$ | async" [ngValue]="group">{{group.name}}</option>
+          <option *ngFor="let group of groups$ | async" value={{seSelectedGroup}} [ngValue]="group">{{group.name}}</option>
         </select>
         <br><br>
       </div>
@@ -45,7 +45,7 @@
             [(ngModel)]="seRandomizeOrder" #randomizeOrder="ngModel">
           <span>Randomize order</span>
         </div>
-        <div class="input-group-text">
+        <div class="input-group-text" *ngIf="seLoadFromGroup">
           <input type="checkbox" aria-label="Use names for matches" name="useNamesForMatches" id="useNamesForMatches" ngModel
             [(ngModel)]="seUseNamesForMatches" #useNamesForMatches="ngModel">
           <span>Use names for matches</span>

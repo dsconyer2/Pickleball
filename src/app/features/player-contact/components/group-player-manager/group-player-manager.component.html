@@ -15,7 +15,7 @@
     <div *ngIf="selectedGroup">
       <ul class="contact-list" *ngFor="let gp of (groupPlayers$ | async)">
         <div *ngIf="gp.groupPlayerId === selectedGroup.playerIds">
-          <li *ngFor="let player of gp.players">
+          <li *ngFor="let player of sortedPlayers(gp.players)">
             <div class="contact-container">
               <i class="fa fa-user fa-2x contact-icon"></i>
               <div class="contact-info">

@@ -35,17 +35,19 @@ export class GroupPlayerManagerComponent implements OnInit {
     }));
   }
 
+  sortedPlayers(groupPlayers: PlayerContact[]) {
+    return groupPlayers.sort((a, b) => (a.name > b.name) ? 0:-1);
+  }
+
   groupSelected() {
     this.updatePlayers();
   }
 
   enablePlayerClass(player: PlayerContact) {
     if (this.enabledGroupPlayers.players.find(aPlayer => aPlayer === player)) {
-      return 'fa fa-minus-square fa-2x';
-      // return "fa fa-check-square-o fa-2x";
+      return 'fa fa-star';
     } else {
-      return 'fa fa-plus-square fa-2x';
-      // return "fa fa-square-o fa-2x";
+      return 'fa fa-thumbs-down';
     }
   }
 
@@ -72,6 +74,7 @@ export class GroupPlayerManagerComponent implements OnInit {
     const players = this.groupPlayers.players.slice();
     players.push(player);
     this.store.dispatch(new GroupPlayerAdded(this.groupPlayers.groupPlayerId, players));
+    this.enablePlayer(player);
   }
 
   removePlayer(player: PlayerContact) {
