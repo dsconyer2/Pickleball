@@ -4,6 +4,7 @@ import { SchedulerSettings } from '../reducers/scheduler.reducer';
 import { Group } from '../../player-contact/models';
 
 const emptySchedulerSettings = {
+  schedulerPlayerType: undefined,
   schedulerType: undefined,
   nbrOfPlayers: undefined,
   nbrOfCourts: undefined,
@@ -43,6 +44,15 @@ export class PlayerRemoveAll implements Action {
   }
 }
 
+export const UPDATE_SCHEDULER_PLAYER_TYPE = '[schedulerFeature] update  schedulerPlayerType';
+export class SchedulerPlayerTypeUpdated implements Action {
+  readonly type = UPDATE_SCHEDULER_PLAYER_TYPE;
+  payload: SchedulerSettings;
+  constructor(schedulerPlayerType: string) {
+    this.payload = emptySchedulerSettings;
+    this.payload.schedulerPlayerType = schedulerPlayerType;
+  }
+}
 export const UPDATE_SCHEDULER_TYPE = '[schedulerFeature] update  schedulerType';
 export class SchedulerTypeUpdated implements Action {
   readonly type = UPDATE_SCHEDULER_TYPE;
@@ -139,6 +149,7 @@ export class SchedulerSettingsLoadedSuccessfully implements Action {
 export type All =
 PlayerAdded
 | PlayerRemoveAll
+| SchedulerPlayerTypeUpdated
 | SchedulerTypeUpdated
 | NbrOfPlayersUpdated
 | NbrOfCourtsUpdated

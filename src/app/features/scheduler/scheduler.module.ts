@@ -10,9 +10,10 @@ import { SchedulerEffects } from './effects/scheduler.effects';
 import { reducers } from './reducers';
 import { SchedulerComponent } from './scheduler.component';
 import { AppStartUpEffects } from './effects/app-startup.effects';
+import { ValidNbrOfCourtsDirective } from './directives/valid-nbr-of-courts.directive';
 
 @NgModule({
-  declarations: [SchedulerComponent, ScheduleEntryComponent, ScheduleTournamentComponent],
+  declarations: [SchedulerComponent, ScheduleEntryComponent, ScheduleTournamentComponent, ValidNbrOfCourtsDirective],
   imports: [
     CommonModule,
     HttpClientModule,

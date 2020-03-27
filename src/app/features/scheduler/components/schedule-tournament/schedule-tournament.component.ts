@@ -15,6 +15,7 @@ export class ScheduleTournamentComponent implements OnInit {
   players$: Observable<Player[]>;
   schedulerSettings$: Observable<SchedulerSettings>;
 
+  playerType: string;
   nbrOfPlayers: number;
   nbrOfCourts: number;
   playersPerCourt: number;
@@ -37,6 +38,7 @@ export class ScheduleTournamentComponent implements OnInit {
 
   ngOnInit() {
     this.store.select(selectSchedulerSettings).subscribe((settings: SchedulerSettings) => {
+      this.playerType = settings.schedulerPlayerType;
       this.isScheduleTypeKing = settings.schedulerType === 'King';
       this.nbrOfPlayers = settings.nbrOfPlayers;
       this.nbrOfCourts = settings.nbrOfCourts;
@@ -145,6 +147,7 @@ export class ScheduleTournamentComponent implements OnInit {
   }
 
   processRounds() {
+    // Split the player list into two arrays.
     let indexBreak: number = Math.trunc(this.playerList1.length / 2);
     // console.log('indexBreak = ', indexBreak);
     if (!this.useEvenPlayerLogic) {
@@ -160,6 +163,12 @@ export class ScheduleTournamentComponent implements OnInit {
     //  console.log('Player list 2');
     //  console.table(this.playerList2);
 
+    // Byes are determined differently depending if there are even or odd number of players.
+    // For odd, it is easy.  You just pick the index you want to be the bye player.
+    // For even, you have to determine who has played the most and didn't just sit out.
+    // The logic below is for odd number of players. 
+    // Determine how many bye players there will be.
+    // Divide that by 2 because you divided the player list in half.
     if (this.nbrOfByePlayers > 0) {
       this.byesNeeded = Math.round(this.nbrOfByePlayers / 2);
       if (!this.useEvenPlayerLogic) {
@@ -178,13 +187,15 @@ export class ScheduleTournamentComponent implements OnInit {
     }
     // console.log('Bye indexes');
     // console.table(this.byeIndexes);
-
-    for (let rounds = 1; rounds < this.nbrOfPlayers; rounds++) {
+    const maxNbrOfRounds = this.nbrOfPlayers + this.nbrOfByePlayers;
+    for (let rounds = 1; rounds < maxNbrOfRounds; rounds++) {
       // Set the bye indexes for even number of players
       this.setByeIndexesForEvenNumberOfPlayers();
       // Gather data for the round.
       const thisRound: RoundData = { roundId: rounds, matches: [], byes: [], byeLabel: '' };
+      let matchIndex = 0;
       for (let index = 0; index < indexBreak; index++) {
+        matchIndex++;
         //  console.log('index = ', index);
         if (this.byeIndexes.includes(index)) {
           //  console.log('bye ', this.playerList1[index].playerId);
@@ -195,22 +206,50 @@ export class ScheduleTournamentComponent implements OnInit {
         } else {
           // console.log('match ', this.playerList1[index].playerId);
           if (this.isScheduleTypeKing) {
-            // console.log('Adding King match');
-            // console.table([this.playerList1[index],
-            // this.playerList2[index]]);
-            thisRound.matches.push(
-              {
-                matchId: index,
-                matchLabel: '',
-                team1: [this.playerList1[index],
-                this.playerList2[index]],
-                team2: [],
-                matchPriority: {},
-                courtPriority: {},
-                courtAssigned: 0,
-                opponentsAssigned: false,
-                isPrimary: false
-              });
+            if (this.playersPerCourt === 4) {
+              // console.log('Adding King match');
+              // console.table([this.playerList1[index],
+              // this.playerList2[index]]);
+              thisRound.matches.push(
+                {
+                  matchId: index,
+                  matchLabel: '',
+                  team1: [this.playerList1[index],
+                  this.playerList2[index]],
+                  team2: [],
+                  matchPriority: {},
+                  courtPriority: {},
+                  courtAssigned: 0,
+                  opponentsAssigned: false,
+                  isPrimary: false
+                });
+            } else {
+              thisRound.matches.push(
+                {
+                  matchId: matchIndex,
+                  matchLabel: '',
+                  team1: [this.playerList1[index]],
+                  team2: [],
+                  matchPriority: {},
+                  courtPriority: {},
+                  courtAssigned: 0,
+                  opponentsAssigned: false,
+                  isPrimary: false
+                });
+              matchIndex++;
+              thisRound.matches.push(
+                {
+                  matchId: matchIndex,
+                  matchLabel: '',
+                  team1: [this.playerList2[index]],
+                  team2: [],
+                  matchPriority: {},
+                  courtPriority: {},
+                  courtAssigned: 0,
+                  opponentsAssigned: false,
+                  isPrimary: false
+                });
+            }
           } else {
             let label;
             if (this.useNamesForMatches) {
@@ -255,11 +294,16 @@ export class ScheduleTournamentComponent implements OnInit {
       }
 
       this.playerList2 = newList.concat(this.playerList2);
+      // console.log('Round = ', rounds + 1);
+      // console.log('Player list 1');
+      // console.table(this.playerList1);
+      // console.log('Player list 2');
+      // console.table(this.playerList2);
     }
 
 
   }
-
+  
   removeNonPrimaryMatches(aRound: RoundData) {
     aRound.matches = aRound.matches.filter(m => m.isPrimary);
   }
@@ -380,7 +424,7 @@ export class ScheduleTournamentComponent implements OnInit {
 
   pickOpponents(aRound: RoundData) {
     // console.log('Match Round = ', aRound.roundId);
-    aRound.matches.forEach(aMatch => {
+      aRound.matches.forEach(aMatch => {
       if (!aMatch.opponentsAssigned) {
         const oppMatch = this.getPriorityMatch(aMatch, aRound.matches);
         aMatch.isPrimary = true;
@@ -389,7 +433,7 @@ export class ScheduleTournamentComponent implements OnInit {
         aMatch.team2 = oppMatch.team1;
         oppMatch.team2 = aMatch.team1;
         this.updateMatchPlayedAgainst(aMatch);
-        // console.log('Match id = ', aMatch.matchId);
+        // console.log('Match id = ', aMatch.matchId, 'team1 = ', aMatch.team1);
         // console.table(aMatch.matchPriority);
       }
     });
@@ -531,15 +575,16 @@ export class ScheduleTournamentComponent implements OnInit {
 
     this.playerList1.forEach(aPlayer => {
       console.log('Player info for player ', aPlayer.playerId);
-      console.log('Courts played');
-      for (let courtNbr = 1; courtNbr < this.nbrOfCourts + 1; courtNbr++) {
-        console.log('Court ', courtNbr, ' = ', aPlayer.courtsPlayed[courtNbr]);
-      }
+      // console.log('Courts played');
+      // for (let courtNbr = 1; courtNbr < this.nbrOfCourts + 1; courtNbr++) {
+      //   console.log('Court ', courtNbr, ' = ', aPlayer.courtsPlayed[courtNbr]);
+      // }
       let totalGamesPlayed = 0;
       let maxPlayed = 0;
       let minPlayed = this.nbrOfPlayers * 2;
-      let notPlayed = 0;
+      let notPlayed = [];
       console.log('Opponent info');
+      console.log('Opponents = ', aPlayer.playedAgainst);
       for (let opponentId = 1; opponentId < this.nbrOfPlayers + 1; opponentId++) {
         // console.log('Played Player ', opponentId, ' = ', aPlayer.playedAgainst[opponentId]);
         if (aPlayer.playedAgainst[opponentId]) {
@@ -547,7 +592,7 @@ export class ScheduleTournamentComponent implements OnInit {
           if (maxPlayed < aPlayer.playedAgainst[opponentId]) { maxPlayed = aPlayer.playedAgainst[opponentId]; }
           if (minPlayed > aPlayer.playedAgainst[opponentId]) { minPlayed = aPlayer.playedAgainst[opponentId]; }
         } else {
-          notPlayed++;
+          if (opponentId != aPlayer.playerId) { notPlayed.push(opponentId); }
         }
       }
       console.log('Min played = ', minPlayed);

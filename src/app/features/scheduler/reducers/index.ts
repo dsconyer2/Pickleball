@@ -27,6 +27,7 @@ const { selectAll: selectPlayerEntityArray } = fromPlayerManager.adapter.getSele
 
 // TodoEntity[] => TodoListItem[]
 export const selectPlayerEntities = createSelector(selectPlayerEntityArray, t => t.map(x => x as Player));
+export const selectSchedulerPlayerType = createSelector(selectSchedulerSettings, s => s.schedulerPlayerType);
 export const selectSchedulerType = createSelector(selectSchedulerSettings, s => s.schedulerType);
 export const selectSchedulerNbrOfPlayers = createSelector(selectSchedulerSettings, s => s.nbrOfPlayers);
 export const selectSchedulerNbrOfCourts = createSelector(selectSchedulerSettings, s => s.nbrOfCourts);

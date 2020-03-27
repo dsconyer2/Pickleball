@@ -11,6 +11,7 @@ export interface Player {
 }
 
 export interface SchedulerSettings {
+  schedulerPlayerType: string;
   schedulerType: string;
   nbrOfPlayers: number;
   nbrOfCourts: number;

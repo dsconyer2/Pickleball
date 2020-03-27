@@ -7,6 +7,7 @@ import { Group } from '../player-contact/models';
 export class SchedulerDataService {
 
   playerKey = 'pickleballPlayers';
+  schedulerPlayerTypeKey = 'pickleballSchedulerPlayerType';
   schedulerTypeKey = 'pickleballSchedulerType';
   schedulerNbrOfPlayersKey = 'pickleballNbrOfPlayers';
   schedulerNbrOfCourtsKey = 'pickleballNbrOfCourts';
@@ -33,28 +34,31 @@ export class SchedulerDataService {
   }
 
   loadSchedulerSettings(): SchedulerSettings {
+    const localSchedulerPlayerType: string =
+      localStorage.getItem(this.schedulerPlayerTypeKey) ? JSON.parse(localStorage.getItem(this.schedulerPlayerTypeKey)) : undefined;
     const localSchedulerType: string =
-        localStorage.getItem(this.schedulerTypeKey) ? JSON.parse(localStorage.getItem(this.schedulerTypeKey)) : undefined;
+      localStorage.getItem(this.schedulerTypeKey) ? JSON.parse(localStorage.getItem(this.schedulerTypeKey)) : undefined;
     const localSchedulerNbrOfPlayers: number =
-        localStorage.getItem(this.schedulerNbrOfPlayersKey) ? JSON.parse(localStorage.getItem(this.schedulerNbrOfPlayersKey)) : undefined;
+      localStorage.getItem(this.schedulerNbrOfPlayersKey) ? JSON.parse(localStorage.getItem(this.schedulerNbrOfPlayersKey)) : undefined;
     const localSchedulerNbrOfCourts: number =
-        localStorage.getItem(this.schedulerNbrOfCourtsKey) ? JSON.parse(localStorage.getItem(this.schedulerNbrOfCourtsKey)) : undefined;
+      localStorage.getItem(this.schedulerNbrOfCourtsKey) ? JSON.parse(localStorage.getItem(this.schedulerNbrOfCourtsKey)) : undefined;
     const localSchedulerNbrOfPlayersPerCourt: number =
-        localStorage.getItem(this.schedulerNbrOfPlayersPerCourtKey)
+      localStorage.getItem(this.schedulerNbrOfPlayersPerCourtKey)
         ? JSON.parse(localStorage.getItem(this.schedulerNbrOfPlayersPerCourtKey)) : undefined;
     const localSchedulerRandomizeOrder: boolean =
-        localStorage.getItem(this.schedulerRandomizeOrderKey)
+      localStorage.getItem(this.schedulerRandomizeOrderKey)
         ? JSON.parse(localStorage.getItem(this.schedulerRandomizeOrderKey)) : undefined;
     const localSchedulerUseNamesForMatches: boolean =
-        localStorage.getItem(this.schedulerUseNamesForMatchesKey)
+      localStorage.getItem(this.schedulerUseNamesForMatchesKey)
         ? JSON.parse(localStorage.getItem(this.schedulerUseNamesForMatchesKey)) : undefined;
     const localSchedulerLoadFromGroup: boolean =
-        localStorage.getItem(this.schedulerLoadFromGroupKey)
+      localStorage.getItem(this.schedulerLoadFromGroupKey)
         ? JSON.parse(localStorage.getItem(this.schedulerLoadFromGroupKey)) : undefined;
     const localSchedulerSelectedGroup: Group =
-        localStorage.getItem(this.schedulerSelectedGroupKey)
+      localStorage.getItem(this.schedulerSelectedGroupKey)
         ? JSON.parse(localStorage.getItem(this.schedulerSelectedGroupKey)) : undefined;
     return {
+      schedulerPlayerType: localSchedulerPlayerType,
       schedulerType: localSchedulerType,
       nbrOfPlayers: localSchedulerNbrOfPlayers,
       nbrOfCourts: localSchedulerNbrOfCourts,

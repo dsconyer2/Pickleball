@@ -1,41 +1,78 @@
-<form #form="ngForm">
+<form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+
+  <!-- </form><form #form="ngForm" novalidate> -->
   <div class="col-lg-4 offset-lg-1">
-    <label name="scheduleType" id="scheduleType">Schedule Type</label>
-    <div class="bs-component" style="margin-bottom: 15px;">
-      <div class="btn-group btn-group-toggle" data-toggle="buttons">
-        <label class="btn btn-primary" [class.active]="'King' === seType">
-          <input type="radio" name="options" id="King of the Court" value="King" autocomplete="off"
-            [checked]="'King' === seType" (click)="onClickScheduleType('King')"> King of the Court
-        </label>
-        <label class="btn btn-primary" [class.active]="'Tournament' === seType">
-          <input type="radio" name="options" id="Tournament" value="Tournament" autocomplete="off"
-            [checked]="'Tournament' === seType" (click)="onClickScheduleType('Tournament')"> Tournament
-        </label>
+    <div>
+      <label name="playerType" id="playerType">Player Type</label>
+      <div class="bs-component" style="margin-bottom: 15px;">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-primary" [class.active]="'Individuals for Doubles' === sePlayerType">
+            <input type="radio" name="playerType" id="Individuals for Doubles" value="Individuals for Doubles"
+            ngModel  [(ngModel)]="sePlayerType"
+              autocomplete="off" [checked]="'Individuals for Doubles' === sePlayerType"
+              (click)="onClickPlayerType('Individuals for Doubles')"> Individuals for Doubles
+          </label>
+          <label class="btn btn-primary" [class.active]="'Singles' === sePlayerType">
+            <input type="radio" name="playerType" id="Singles" value="Singles" autocomplete="off"
+            ngModel  [(ngModel)]="sePlayerType"
+              [checked]="'Singles' === sePlayerType" (click)="onClickPlayerType('Singles')"> Singles
+          </label>
+          <label class="btn btn-primary" [class.active]="'Teams' === sePlayerType">
+            <input type="radio" name="playerType" id="Teams" value="Teams" autocomplete="off"
+            ngModel  [(ngModel)]="sePlayerType"
+              [checked]="'Teams' === sePlayerType" (click)="onClickPlayerType('Teams')"> Teams
+          </label>
+        </div>
       </div>
     </div>
     <div>
-      <h5>Number of Players</h5>
-      <div class="input-group-text">
+      <label name="scheduleType" id="scheduleType">Schedule Type</label>
+      <div class="bs-component" style="margin-bottom: 15px;">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+          <label class="btn btn-primary" [class.active]="'King' === seType">
+            <input type="radio" name="scheduleType" id="King of the Court" value="King" autocomplete="off" ngModel  [(ngModel)]="seType"
+              [checked]="'King' === seType" (click)="onClickScheduleType('King')"> King of the Court
+          </label>
+          <label class="btn btn-primary" [class.active]="'Tournament' === seType">
+            <input type="radio" name="scheduleType" id="Tournament" value="Tournament" autocomplete="off" ngModel [(ngModel)]="seType"
+              [checked]="'Tournament' === seType" (click)="onClickScheduleType('Tournament')"> Tournament
+          </label>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h5 *ngIf="sePlayerType !== 'Teams'">Number of Players</h5>
+      <h5 *ngIf="sePlayerType === 'Teams'">Number of Teams</h5>
+      <!-- <div class="input-group-text">
         <input type="checkbox" aria-label="Load from Group" name="loadFromGroup" id="loadFromGroup" ngModel
           [(ngModel)]="seLoadFromGroup" #loadFromGroup="ngModel">
         <span>Load from Group</span>
-      </div>
+      </div> -->
       <div *ngIf="seLoadFromGroup">
         <select name="groupToLoad" id="groupToLoad" [(ngModel)]="seSelectedGroup">
-          <option *ngFor="let group of groups$ | async" value={{seSelectedGroup}} [ngValue]="group">{{group.name}}</option>
+          <option *ngFor="let group of groups$ | async" value={{seSelectedGroup}} [ngValue]="group">{{group.name}}
+          </option>
         </select>
         <br><br>
       </div>
       <div *ngIf="!seLoadFromGroup">
-        <input type="number" class="form-control" name="nbrOfPlayersInput" ngModel
-          [(ngModel)]="sePlayers" #nbrOfPlayersInput="ngModel" autofocus>
+        <input type="number" class="form-control" name="nbrOfPlayersInput" ngModel [(ngModel)]="sePlayers"
+          #nbrOfPlayersInput="ngModel" autofocus required>
+          <div *ngIf="nbrOfPlayersInput.invalid && (nbrOfPlayersInput.dirty || nbrOfPlayersInput.touched)">
+            <div *ngIf="nbrOfPlayersInput?.errors.required">This field is required</div>
+          </div>
         <br>
       </div>
     </div>
     <div *ngIf="seType === 'King'">
       <h5>Number of Courts</h5>
       <input class="form-control" type="number" name="nbrOfCourtsInput" id="nbrOfCourtsInput" ngModel
-        [(ngModel)]="seCourts" #nbrOfCourtsInput="ngModel">
+        [(ngModel)]="seCourts" #nbrOfCourtsInput="ngModel" 
+        [ngClass]="{ 'is-invalid': f.submitted && nbrOfCourtsInput.invalid }" required>
+        <div *ngIf="nbrOfCourtsInput.invalid && (nbrOfCourtsInput.dirty || nbrOfCourtsInput.touched)">
+          <div *ngIf="nbrOfCourtsInput?.errors.required">This field is required</div>
+        </div>
+   
       <br>
     </div>
     <div class="input-group mb-3">
@@ -46,12 +83,12 @@
           <span>Randomize order</span>
         </div>
         <div class="input-group-text" *ngIf="seLoadFromGroup">
-          <input type="checkbox" aria-label="Use names for matches" name="useNamesForMatches" id="useNamesForMatches" ngModel
-            [(ngModel)]="seUseNamesForMatches" #useNamesForMatches="ngModel">
+          <input type="checkbox" aria-label="Use names for matches" name="useNamesForMatches" id="useNamesForMatches"
+            ngModel [(ngModel)]="seUseNamesForMatches" #useNamesForMatches="ngModel">
           <span>Use names for matches</span>
         </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary" (click)="submit()">Start</button>
+    <button type="submit" class="btn btn-primary" (click)="onSubmit(f.form.valid)">Start</button>
   </div>
 </form>
