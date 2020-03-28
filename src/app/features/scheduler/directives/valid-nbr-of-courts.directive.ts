@@ -2,7 +2,7 @@ import { Directive } from '@angular/core';
 import { AbstractControl, NG_VALIDATORS, Validator, ValidationErrors } from '@angular/forms';
 
 @Directive({
-  selector: '[validNbrOfCourts]',
+  selector: '[pbsValidNbrOfCourts]',
   providers: [
     { provide: NG_VALIDATORS, useExisting: ValidNbrOfCourtsDirective, multi: true }
   ]
@@ -23,8 +23,8 @@ export class ValidNbrOfCourtsDirective implements Validator {
     console.log('PlayersPerCourt = ', playersPerCourt);
     console.log('NbrOfCourts = ', control.value.nbrOfCourtsInput);
     console.log('OpeningsForPlayers = ', playerOpenings);
-    let invalidNbrOfCourts = control.value.nbrOfPlayersInput >= playerOpenings;
-    console.log('validNbrOfCourts = ',invalidNbrOfCourts);
+    const invalidNbrOfCourts = control.value.nbrOfPlayersInput >= playerOpenings;
+    console.log('validNbrOfCourts = ', invalidNbrOfCourts);
 
     /* check validation rules */
     if (control.value.scheduleType === 'King') {

@@ -25,7 +25,7 @@ export class SchedulerEffects {
       .pipe(
           ofType(actions.UPDATE_SCHEDULER_PLAYER_TYPE),
           map(a => a as actions.SchedulerPlayerTypeUpdated),
-          tap(a => this.service.updateSchedulerSetting('pickleballSchedulerType', a.payload.schedulerPlayerType))
+          tap(a => this.service.updateSchedulerSetting('pickleballSchedulerPlayerType', a.payload.schedulerPlayerType))
       );
 
       @Effect({ dispatch: false }) updateSchedulerType$ = this.actions$

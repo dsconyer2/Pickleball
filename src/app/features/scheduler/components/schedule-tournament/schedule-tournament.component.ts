@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Match, Player, RoundData, SchedulerSettings } from '../../models';
@@ -34,7 +35,7 @@ export class ScheduleTournamentComponent implements OnInit {
   rounds: RoundData[] = [];
   courtHeaders: string[] = [];
 
-  constructor(private store: Store<SchedulerState>) { }
+  constructor(private store: Store<SchedulerState>, private router: Router) { }
 
   ngOnInit() {
     this.store.select(selectSchedulerSettings).subscribe((settings: SchedulerSettings) => {
@@ -53,7 +54,11 @@ export class ScheduleTournamentComponent implements OnInit {
 
     if (this.randomizeOrder) { this.playerList1.sort(() => 0.5 - Math.random()); }
 
-    this.schedulePLayers();
+    if (this.playerList1.length > 0) {
+      this.schedulePLayers();
+    } else {
+      this.router.navigate(['/scheduler']);
+    }
   }
 
   createByePlayer(playerId: number) {
@@ -166,7 +171,7 @@ export class ScheduleTournamentComponent implements OnInit {
     // Byes are determined differently depending if there are even or odd number of players.
     // For odd, it is easy.  You just pick the index you want to be the bye player.
     // For even, you have to determine who has played the most and didn't just sit out.
-    // The logic below is for odd number of players. 
+    // The logic below is for odd number of players.
     // Determine how many bye players there will be.
     // Divide that by 2 because you divided the player list in half.
     if (this.nbrOfByePlayers > 0) {
@@ -303,7 +308,7 @@ export class ScheduleTournamentComponent implements OnInit {
 
 
   }
-  
+
   removeNonPrimaryMatches(aRound: RoundData) {
     aRound.matches = aRound.matches.filter(m => m.isPrimary);
   }
@@ -424,7 +429,7 @@ export class ScheduleTournamentComponent implements OnInit {
 
   pickOpponents(aRound: RoundData) {
     // console.log('Match Round = ', aRound.roundId);
-      aRound.matches.forEach(aMatch => {
+    aRound.matches.forEach(aMatch => {
       if (!aMatch.opponentsAssigned) {
         const oppMatch = this.getPriorityMatch(aMatch, aRound.matches);
         aMatch.isPrimary = true;
@@ -582,7 +587,7 @@ export class ScheduleTournamentComponent implements OnInit {
       let totalGamesPlayed = 0;
       let maxPlayed = 0;
       let minPlayed = this.nbrOfPlayers * 2;
-      let notPlayed = [];
+      const notPlayed = [];
       console.log('Opponent info');
       console.log('Opponents = ', aPlayer.playedAgainst);
       for (let opponentId = 1; opponentId < this.nbrOfPlayers + 1; opponentId++) {
@@ -592,7 +597,7 @@ export class ScheduleTournamentComponent implements OnInit {
           if (maxPlayed < aPlayer.playedAgainst[opponentId]) { maxPlayed = aPlayer.playedAgainst[opponentId]; }
           if (minPlayed > aPlayer.playedAgainst[opponentId]) { minPlayed = aPlayer.playedAgainst[opponentId]; }
         } else {
-          if (opponentId != aPlayer.playerId) { notPlayed.push(opponentId); }
+          if (opponentId !== aPlayer.playerId) { notPlayed.push(opponentId); }
         }
       }
       console.log('Min played = ', minPlayed);

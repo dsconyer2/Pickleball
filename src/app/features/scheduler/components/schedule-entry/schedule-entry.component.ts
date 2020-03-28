@@ -1,8 +1,16 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { NbrOfCourtsUpdated, NbrOfPlayersPerCourtUpdated, NbrOfPlayersUpdated, PlayerAdded, PlayerRemoveAll, RandomizeOrderUpdated, SchedulerPlayerTypeUpdated, SchedulerTypeUpdated, UseNamesForMatchesUpdated, LoadFromGroupUpdated, SelectedGroupUpdated } from '../../actions/scheduler.actions';
-import { SchedulerState, selectSchedulerPlayerType, selectSchedulerType, selectSchedulerNbrOfPlayers, selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt, selectSchedulerRandomizeOrder, selectSchedulerUseNamesForMatches, selectSchedulerLoadFromGroup, selectSchedulerSelectedGroup } from '../../reducers';
+import {
+  NbrOfCourtsUpdated, NbrOfPlayersPerCourtUpdated, NbrOfPlayersUpdated, PlayerAdded,
+  PlayerRemoveAll, RandomizeOrderUpdated, SchedulerPlayerTypeUpdated, SchedulerTypeUpdated,
+  UseNamesForMatchesUpdated, LoadFromGroupUpdated, SelectedGroupUpdated
+} from '../../actions/scheduler.actions';
+import {
+  SchedulerState, selectSchedulerPlayerType, selectSchedulerType, selectSchedulerNbrOfPlayers,
+  selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt, selectSchedulerRandomizeOrder,
+  selectSchedulerUseNamesForMatches, selectSchedulerLoadFromGroup, selectSchedulerSelectedGroup
+} from '../../reducers';
 import { Group, GroupPlayer } from 'src/app/features/player-contact/models';
 import { Observable, Subscription } from 'rxjs';
 import { selectGroupEntities, selectGroupPlayerEntities } from 'src/app/features/player-contact/reducers';
@@ -80,6 +88,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.groupSubscription.unsubscribe();
+    this.playerTypeSubscription.unsubscribe();
     this.typeSubscription.unsubscribe();
     this.nbrOfPlayersSubscription.unsubscribe();
     this.nbrOfCourtsSubscription.unsubscribe();
@@ -110,14 +119,14 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
     }
   }
 
-  
-  onSubmit(validForm: Boolean) {
+
+  onSubmit(validForm: boolean) {
     if (validForm) {
       this.sePlayersPerCourt = 2;
       if (this.seType === 'King') {
         if (this.sePlayerType === 'Individuals for Doubles') {
-        this.sePlayersPerCourt = 4;
-        } 
+          this.sePlayersPerCourt = 4;
+        }
       } else {
         this.seCourts = 0;
       }
@@ -125,20 +134,20 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
       if (this.seCourts * this.sePlayersPerCourt > this.sePlayers) {
         this.seCourts = this.sePlayers / this.sePlayersPerCourt;
       }
-      
-        this.loadPlayers();
 
-        this.store.dispatch(new SchedulerPlayerTypeUpdated(this.sePlayerType));
-        this.store.dispatch(new SchedulerTypeUpdated(this.seType));
-        this.store.dispatch(new NbrOfPlayersUpdated(this.sePlayers));
-        this.store.dispatch(new NbrOfCourtsUpdated(this.seCourts));
-        this.store.dispatch(new NbrOfPlayersPerCourtUpdated(this.sePlayersPerCourt));
-        this.store.dispatch(new RandomizeOrderUpdated(this.seRandomizeOrder));
-        this.store.dispatch(new UseNamesForMatchesUpdated(this.seUseNamesForMatches));
-        this.store.dispatch(new LoadFromGroupUpdated(this.seLoadFromGroup));
-        this.store.dispatch(new SelectedGroupUpdated(this.seSelectedGroup));
+      this.loadPlayers();
 
-        this.router.navigate(['/scheduleTournament']);
+      this.store.dispatch(new SchedulerPlayerTypeUpdated(this.sePlayerType));
+      this.store.dispatch(new SchedulerTypeUpdated(this.seType));
+      this.store.dispatch(new NbrOfPlayersUpdated(this.sePlayers));
+      this.store.dispatch(new NbrOfCourtsUpdated(this.seCourts));
+      this.store.dispatch(new NbrOfPlayersPerCourtUpdated(this.sePlayersPerCourt));
+      this.store.dispatch(new RandomizeOrderUpdated(this.seRandomizeOrder));
+      this.store.dispatch(new UseNamesForMatchesUpdated(this.seUseNamesForMatches));
+      this.store.dispatch(new LoadFromGroupUpdated(this.seLoadFromGroup));
+      // this.store.dispatch(new SelectedGroupUpdated(this.seSelectedGroup));
+
+      this.router.navigate(['/scheduleTournament']);
     }
   }
 
@@ -148,5 +157,6 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
 
   onClickScheduleType(value: string) {
     this.seType = value;
+    if (this.seType === 'Tournament' && this.sePlayerType === 'Individuals for Doubles') {this.sePlayerType = 'Teams'}
   }
 }

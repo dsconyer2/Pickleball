@@ -25,7 +25,7 @@ export class GroupPlayerDataService {
     const localGroupPlayers: GroupPlayerEntity[] =
         localStorage.getItem(this.groupPlayerKey) ? JSON.parse(localStorage.getItem(this.groupPlayerKey)) : [];
     const groupPlayer = localGroupPlayers.find(aPlayer => aPlayer.groupPlayerId === player.id);
-    if (groupPlayer) {groupPlayer.players = player.changes.players;}
+    if (groupPlayer) { groupPlayer.players = player.changes.players; }
     localStorage.setItem(this.groupPlayerKey, JSON.stringify(localGroupPlayers));
   }
 

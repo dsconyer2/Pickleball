@@ -32,26 +32,33 @@ const { selectAll: selectGroupPlayerEntityArray } = fromGroupPlayer.adapter.getS
 // 4. Create a selector for what the component needs.
 
 // TodoEntity[] => TodoListItem[]
-export const selectPlayerContactEntities = createSelector(selectPlayerContactEntityArray, t => t.map(x => x as PlayerContact).sort((a, b) => (a.name > b.name) ? 0:-1));
-const initPlayer: PlayerContact = {playerContactId: 0};
+export const selectPlayerContactEntities =
+  createSelector(selectPlayerContactEntityArray, t => t.map(x => x as PlayerContact).sort((a, b) => (a.name > b.name) ? 0 : -1));
+const initPlayer: PlayerContact = { playerContactId: 0 };
 export const selectHighestPlayerId =
-    createSelector(selectPlayerContactEntityArray,
-      t => t.map(x => x as PlayerContact)
-      .reduce((a, c) => {const n = Math.max(a.playerContactId, c.playerContactId);
-                         if (n === a.playerContactId) { return a; } else { return c; }}, initPlayer));
+  createSelector(selectPlayerContactEntityArray,
+    t => t.map(x => x as PlayerContact)
+      .reduce((a, c) => {
+        const n = Math.max(a.playerContactId, c.playerContactId);
+        if (n === a.playerContactId) { return a; } else { return c; }
+      }, initPlayer));
 
 export const selectGroupEntities = createSelector(selectGroupEntityArray, t => t.map(x => x as Group));
-const initGroup: Group = {groupId: 0};
+const initGroup: Group = { groupId: 0 };
 export const selectHighestGroupId =
-    createSelector(selectGroupEntityArray,
-      t => t.map(x => x as Group)
-      .reduce((a, c) => {const n = Math.max(a.groupId, c.groupId);
-                         if (n === a.groupId) { return a; } else { return c; }}, initGroup));
+  createSelector(selectGroupEntityArray,
+    t => t.map(x => x as Group)
+      .reduce((a, c) => {
+        const n = Math.max(a.groupId, c.groupId);
+        if (n === a.groupId) { return a; } else { return c; }
+      }, initGroup));
 
 export const selectGroupPlayerEntities = createSelector(selectGroupPlayerEntityArray, t => t.map(x => x as GroupPlayer));
-const initGroupPlayer: GroupPlayer = {groupPlayerId: 0};
+const initGroupPlayer: GroupPlayer = { groupPlayerId: 0 };
 export const selectHighestGroupPlayerId =
-    createSelector(selectGroupPlayerEntityArray,
-      t => t.map(x => x as GroupPlayer)
-      .reduce((a, c) => {const n = Math.max(a.groupPlayerId, c.groupPlayerId);
-                         if (n === a.groupPlayerId) { return a; } else { return c; }}, initGroupPlayer));
+  createSelector(selectGroupPlayerEntityArray,
+    t => t.map(x => x as GroupPlayer)
+      .reduce((a, c) => {
+        const n = Math.max(a.groupPlayerId, c.groupPlayerId);
+        if (n === a.groupPlayerId) { return a; } else { return c; }
+      }, initGroupPlayer));

@@ -10,6 +10,7 @@ import { ApplicationStarted } from './actions/app.actions';
 })
 export class AppComponent {
   title = 'Pickleball';
+  isCollapsed = false;
 
   constructor(store: Store<State>) {
     store.dispatch(new ApplicationStarted());

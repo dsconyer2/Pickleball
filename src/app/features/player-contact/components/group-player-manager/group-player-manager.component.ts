@@ -36,7 +36,7 @@ export class GroupPlayerManagerComponent implements OnInit {
   }
 
   sortedPlayers(groupPlayers: PlayerContact[]) {
-    return groupPlayers.sort((a, b) => (a.name > b.name) ? 0:-1);
+    return groupPlayers.sort((a, b) => (a.name > b.name) ? 0 : -1);
   }
 
   groupSelected() {

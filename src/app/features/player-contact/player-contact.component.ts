@@ -16,17 +16,17 @@ export class PlayerContactComponent implements OnInit {
   lastPlayerContact$: Observable<PlayerContact>;
   highestId: number;
 
-	constructor(private store: Store<PlayerContactState>) {
-	}
+  constructor(private store: Store<PlayerContactState>) {
+  }
 
   ngOnInit() {
     this.playerContacts$ = this.store.select(selectPlayerContactEntities);
     this.lastPlayerContact$ = this.store.select(selectHighestPlayerId);
   }
 
-  addContact(contactName:string, id:any) { 
+  addContact( contactName: string, id: any ) {
     this.highestId = 0;
-    this.lastPlayerContact$.forEach(aPlayer => this.highestId = Math.max(this.highestId, aPlayer.playerContactId))
+    this.lastPlayerContact$.forEach(aPlayer => this.highestId = Math.max(this.highestId, aPlayer.playerContactId));
     this.highestId++;
     this.store.dispatch(new PlayerContactAdded(this.highestId, contactName));
   }
