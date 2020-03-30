@@ -4,6 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Match, Player, RoundData, SchedulerSettings } from '../../models';
 import { SchedulerState, selectPlayerEntities, selectSchedulerSettings } from '../../reducers';
+import { ScheduleUpdated } from '../../actions/schedule.actions';
+import { NbrOfByePlayersUpdated } from '../../actions/scheduler.actions';
 
 
 @Component({
@@ -40,7 +42,7 @@ export class ScheduleTournamentComponent implements OnInit {
   ngOnInit() {
     this.store.select(selectSchedulerSettings).subscribe((settings: SchedulerSettings) => {
       this.playerType = settings.schedulerPlayerType;
-      this.isScheduleTypeKing = settings.schedulerType === 'King';
+      this.isScheduleTypeKing = settings.schedulerType === 'King of the Court';
       this.nbrOfPlayers = settings.nbrOfPlayers;
       this.nbrOfCourts = settings.nbrOfCourts;
       this.playersPerCourt = settings.nbrOfPlayersPerCourt;
@@ -613,7 +615,11 @@ export class ScheduleTournamentComponent implements OnInit {
   schedulePLayers() {
     this.initialize();
     this.processRounds();
+    this.store.dispatch(new NbrOfByePlayersUpdated(this.nbrOfByePlayers));
+    this.store.dispatch(new ScheduleUpdated(this.courtHeaders, this.rounds));
     // this.runAnalysisReport();
+
+    this.router.navigate(['/scheduleDisplay']);
   }
 
 }
