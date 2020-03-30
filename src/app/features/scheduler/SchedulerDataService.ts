@@ -10,6 +10,7 @@ export class SchedulerDataService {
   schedulerPlayerTypeKey = 'pickleballSchedulerPlayerType';
   schedulerTypeKey = 'pickleballSchedulerType';
   schedulerNbrOfPlayersKey = 'pickleballNbrOfPlayers';
+  schedulerNbrOfByePlayersKey = 'pickleballNbrOfByePlayers';
   schedulerNbrOfCourtsKey = 'pickleballNbrOfCourts';
   schedulerNbrOfPlayersPerCourtKey = 'pickleballNbrOfPlayersPerCourt';
   schedulerRandomizeOrderKey = 'pickleballRandomizeOrder';
@@ -40,6 +41,9 @@ export class SchedulerDataService {
       localStorage.getItem(this.schedulerTypeKey) ? JSON.parse(localStorage.getItem(this.schedulerTypeKey)) : undefined;
     const localSchedulerNbrOfPlayers: number =
       localStorage.getItem(this.schedulerNbrOfPlayersKey) ? JSON.parse(localStorage.getItem(this.schedulerNbrOfPlayersKey)) : undefined;
+    const localSchedulerNbrOfByePlayers: number =
+      localStorage.getItem(this.schedulerNbrOfByePlayersKey) ?
+      JSON.parse(localStorage.getItem(this.schedulerNbrOfByePlayersKey)) : undefined;
     const localSchedulerNbrOfCourts: number =
       localStorage.getItem(this.schedulerNbrOfCourtsKey) ? JSON.parse(localStorage.getItem(this.schedulerNbrOfCourtsKey)) : undefined;
     const localSchedulerNbrOfPlayersPerCourt: number =
@@ -61,6 +65,7 @@ export class SchedulerDataService {
       schedulerPlayerType: localSchedulerPlayerType,
       schedulerType: localSchedulerType,
       nbrOfPlayers: localSchedulerNbrOfPlayers,
+      nbrOfByePlayers: localSchedulerNbrOfByePlayers,
       nbrOfCourts: localSchedulerNbrOfCourts,
       nbrOfPlayersPerCourt: localSchedulerNbrOfPlayersPerCourt,
       randomizeOrder: localSchedulerRandomizeOrder,

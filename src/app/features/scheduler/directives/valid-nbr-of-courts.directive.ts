@@ -27,7 +27,7 @@ export class ValidNbrOfCourtsDirective implements Validator {
     console.log('validNbrOfCourts = ', invalidNbrOfCourts);
 
     /* check validation rules */
-    if (control.value.scheduleType === 'King') {
+    if (control.value.scheduleType === 'King of the Court') {
       return null;
     } else {
       return { validNbrOfCourts: invalidNbrOfCourts };

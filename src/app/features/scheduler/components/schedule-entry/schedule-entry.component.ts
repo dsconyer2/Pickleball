@@ -123,7 +123,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
   onSubmit(validForm: boolean) {
     if (validForm) {
       this.sePlayersPerCourt = 2;
-      if (this.seType === 'King') {
+      if (this.seType === 'King of the Court') {
         if (this.sePlayerType === 'Individuals for Doubles') {
           this.sePlayersPerCourt = 4;
         }
@@ -157,6 +157,6 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
 
   onClickScheduleType(value: string) {
     this.seType = value;
-    if (this.seType === 'Tournament' && this.sePlayerType === 'Individuals for Doubles') {this.sePlayerType = 'Teams'}
+    if (this.seType === 'Tournament' && this.sePlayerType === 'Individuals for Doubles') { this.sePlayerType = 'Teams'; }
   }
 }

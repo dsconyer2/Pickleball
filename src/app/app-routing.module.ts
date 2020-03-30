@@ -7,6 +7,7 @@ import { ScheduleTournamentComponent } from './features/scheduler/components/sch
 import { PlayerContactComponent } from './features/player-contact/player-contact.component';
 import { GroupManagerComponent } from './features/player-contact/components/group-manager/group-manager.component';
 import { GroupPlayerManagerComponent } from './features/player-contact/components/group-player-manager/group-player-manager.component';
+import { ScheduleDisplayComponent } from './features/scheduler/components/schedule-display/schedule-display.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: 'scheduleTournament',
     component: ScheduleTournamentComponent
+  },
+  {
+    path: 'scheduleDisplay',
+    component: ScheduleDisplayComponent
   },
   {
     path: 'playerContact',

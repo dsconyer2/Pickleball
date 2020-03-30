@@ -6,6 +6,7 @@ export interface SchedulerSettings {
   schedulerPlayerType: string;
   schedulerType: string;
   nbrOfPlayers: number;
+  nbrOfByePlayers: number;
   nbrOfCourts: number;
   nbrOfPlayersPerCourt: number;
   randomizeOrder: boolean;
@@ -18,6 +19,7 @@ export interface State {
   schedulerPlayerType: string;
   schedulerType: string;
   nbrOfPlayers: number;
+  nbrOfByePlayers: number;
   nbrOfCourts: number;
   nbrOfPlayersPerCourt: number;
   randomizeOrder: boolean;
@@ -28,8 +30,9 @@ export interface State {
 
 const initialState: State = {
   schedulerPlayerType: 'Individuals for Doubles',
-  schedulerType: 'King',
+  schedulerType: 'King of the Court',
   nbrOfPlayers: 0,
+  nbrOfByePlayers: 0,
   nbrOfCourts: 0,
   nbrOfPlayersPerCourt: 0,
   randomizeOrder: false,
@@ -46,6 +49,8 @@ export function reducer(state: State = initialState, action: actions.All): State
       return tassign(state, { schedulerType: action.payload.schedulerType });
     case actions.UPDATE_NBR_OF_PLAYERS:
       return tassign(state, { nbrOfPlayers: action.payload.nbrOfPlayers });
+    case actions.UPDATE_NBR_OF_BYE_PLAYERS:
+      return tassign(state, { nbrOfByePlayers: action.payload.nbrOfByePlayers });
     case actions.UPDATE_NBR_OF_COURTS:
       return tassign(state, { nbrOfCourts: action.payload.nbrOfCourts });
     case actions.UPDATE_NBR_OF_PLAYERS_PER_COURT:
@@ -63,6 +68,7 @@ export function reducer(state: State = initialState, action: actions.All): State
         schedulerPlayerType: action.payload.schedulerPlayerType,
         schedulerType: action.payload.schedulerType,
         nbrOfPlayers: action.payload.nbrOfPlayers,
+        nbrOfByePlayers: action.payload.nbrOfByePlayers,
         nbrOfCourts: action.payload.nbrOfCourts,
         nbrOfPlayersPerCourt: action.payload.nbrOfPlayersPerCourt,
         randomizeOrder: action.payload.randomizeOrder,

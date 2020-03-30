@@ -7,6 +7,7 @@ const emptySchedulerSettings = {
   schedulerPlayerType: undefined,
   schedulerType: undefined,
   nbrOfPlayers: undefined,
+  nbrOfByePlayers: undefined,
   nbrOfCourts: undefined,
   nbrOfPlayersPerCourt: undefined,
   randomizeOrder: undefined,
@@ -70,6 +71,16 @@ export class NbrOfPlayersUpdated implements Action {
   constructor(nbrOfPlayers: number) {
     this.payload = emptySchedulerSettings;
     this.payload.nbrOfPlayers = nbrOfPlayers;
+  }
+}
+
+export const UPDATE_NBR_OF_BYE_PLAYERS = '[schedulerFeature] update  nbrOfByePlayers';
+export class NbrOfByePlayersUpdated implements Action {
+  readonly type = UPDATE_NBR_OF_BYE_PLAYERS;
+  payload: SchedulerSettings;
+  constructor(nbrOfByePlayers: number) {
+    this.payload = emptySchedulerSettings;
+    this.payload.nbrOfByePlayers = nbrOfByePlayers;
   }
 }
 
@@ -152,6 +163,7 @@ PlayerAdded
 | SchedulerPlayerTypeUpdated
 | SchedulerTypeUpdated
 | NbrOfPlayersUpdated
+| NbrOfByePlayersUpdated
 | NbrOfCourtsUpdated
 | NbrOfPlayersPerCourtUpdated
 | RandomizeOrderUpdated

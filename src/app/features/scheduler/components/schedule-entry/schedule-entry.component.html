@@ -1,14 +1,12 @@
 <form name="form" (ngSubmit)="f.form.valid && onSubmit(f.form.valid)" #f="ngForm" novalidate>
-
-  <!-- </form><form #form="ngForm" novalidate> -->
   <div class="col-lg-4 offset-lg-1">
     <div>
       <label name="scheduleType" id="scheduleType">Schedule Type</label>
       <div class="bs-component" style="margin-bottom: 15px;">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="btn btn-primary" [class.active]="'King' === seType">
-            <input type="radio" name="scheduleType" id="King of the Court" value="King" autocomplete="off" ngModel
-              [(ngModel)]="seType" [checked]="'King' === seType" (click)="onClickScheduleType('King')"> King of the
+          <label class="btn btn-primary" [class.active]="'King of the Court' === seType">
+            <input type="radio" name="scheduleType" id="King of the Court" value="King of the Court" autocomplete="off" ngModel
+              [(ngModel)]="seType" [checked]="'King of the Court' === seType" (click)="onClickScheduleType('King of the Court')"> King of the
             Court
           </label>
           <label class="btn btn-primary" [class.active]="'Tournament' === seType">
@@ -23,7 +21,7 @@
       <label name="playerType" id="playerType">Player Type</label>
       <div class="bs-component" style="margin-bottom: 15px;">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label *ngIf="'King' === seType" class="btn btn-primary" [class.active]="'Individuals for Doubles' === sePlayerType">
+            <label *ngIf="'King of the Court' === seType" class="btn btn-primary" [class.active]="'Individuals for Doubles' === sePlayerType">
               <input type="radio" name="playerType" id="Individuals for Doubles" value="Individuals for Doubles" ngModel
                 [(ngModel)]="sePlayerType" autocomplete="off" [checked]="'Individuals for Doubles' === sePlayerType"
                 (click)="onClickPlayerType('Individuals for Doubles')"> Individuals for Doubles
@@ -65,7 +63,7 @@
         <br>
       </div>
     </div>
-    <div *ngIf="seType === 'King'">
+    <div *ngIf="seType === 'King of the Court'">
       <h5>Number of Courts</h5>
       <input class="form-control" type="number" name="nbrOfCourtsInput" id="nbrOfCourtsInput" ngModel
         [(ngModel)]="seCourts" #nbrOfCourtsInput="ngModel"
