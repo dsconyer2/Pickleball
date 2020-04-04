@@ -228,7 +228,9 @@ export class ScheduleTournamentComponent implements OnInit {
                   courtPriority: {},
                   courtAssigned: 0,
                   opponentsAssigned: false,
-                  isPrimary: false
+                  isPrimary: false,
+                  team1Score: undefined,
+                  team2Score: undefined
                 });
             } else {
               thisRound.matches.push(
@@ -241,7 +243,9 @@ export class ScheduleTournamentComponent implements OnInit {
                   courtPriority: {},
                   courtAssigned: 0,
                   opponentsAssigned: false,
-                  isPrimary: false
+                  isPrimary: false,
+                  team1Score: undefined,
+                  team2Score: undefined
                 });
               matchIndex++;
               thisRound.matches.push(
@@ -254,7 +258,9 @@ export class ScheduleTournamentComponent implements OnInit {
                   courtPriority: {},
                   courtAssigned: 0,
                   opponentsAssigned: false,
-                  isPrimary: false
+                  isPrimary: false,
+                  team1Score: undefined,
+                  team2Score: undefined
                 });
             }
           } else {
@@ -274,7 +280,9 @@ export class ScheduleTournamentComponent implements OnInit {
                 courtPriority: {},
                 courtAssigned: 0,
                 opponentsAssigned: true,
-                isPrimary: true
+                isPrimary: true,
+                team1Score: undefined,
+                team2Score: undefined
               });
           }
         }
@@ -316,24 +324,24 @@ export class ScheduleTournamentComponent implements OnInit {
   }
 
   updateMatchLabels(aRound: RoundData) {
-    aRound.matches.forEach(aMatch => {
-      let matchLabel = ' ';
-      if (this.useNamesForMatches) {
-        aMatch.team1.forEach(aPlayer => matchLabel += (aPlayer.playerName + ', '));
-        matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-        matchLabel += '  vs  ';
-        aMatch.team2.forEach(aPlayer => matchLabel += (aPlayer.playerName + ', '));
-        matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-        aMatch.matchLabel = matchLabel;
-      } else {
-        aMatch.team1.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
-        matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-        matchLabel += '  vs  ';
-        aMatch.team2.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
-        matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-        aMatch.matchLabel = matchLabel;
-      }
-    });
+    // aRound.matches.forEach(aMatch => {
+    //   let matchLabel = ' ';
+    //   if (this.useNamesForMatches) {
+    //     aMatch.team1.forEach(aPlayer => matchLabel += (aPlayer.playerName + ', '));
+    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
+    //     matchLabel += '  vs  ';
+    //     aMatch.team2.forEach(aPlayer => matchLabel += (aPlayer.playerName + ', '));
+    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
+    //     aMatch.matchLabel = matchLabel;
+    //   } else {
+    //     aMatch.team1.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
+    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
+    //     matchLabel += '  vs  ';
+    //     aMatch.team2.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
+    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
+    //     aMatch.matchLabel = matchLabel;
+    //   }
+    // });
   }
 
   updateByeLabels(aRound: RoundData) {

@@ -12,6 +12,8 @@ import { SchedulerComponent } from './scheduler.component';
 import { AppStartUpEffects } from './effects/app-startup.effects';
 import { ValidNbrOfCourtsDirective } from './directives/valid-nbr-of-courts.directive';
 import { ScheduleDisplayComponent } from './components/schedule-display/schedule-display.component';
+import { HighlightOnHoverDirective } from './directives/highlight-on-hover.directive';
+import { MatchLabelPipe } from './pipes/match-label.pipe';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { ScheduleDisplayComponent } from './components/schedule-display/schedule
     ScheduleEntryComponent,
     ScheduleTournamentComponent,
     ValidNbrOfCourtsDirective,
-    ScheduleDisplayComponent
+    HighlightOnHoverDirective,
+    ScheduleDisplayComponent,
+    MatchLabelPipe
   ],
   imports: [
     CommonModule,
