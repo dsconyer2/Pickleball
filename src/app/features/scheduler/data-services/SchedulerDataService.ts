@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { PlayerEntity } from './reducers/player.reducer';
-import { SchedulerSettings } from './reducers/scheduler.reducer';
-import { Group } from '../player-contact/models';
+import { PlayerEntity } from '../store/reducers/player.reducer';
+import { SchedulerSettings } from '../store/reducers/scheduler.reducer';
+import { Group } from '../../player-contact/models';
 
 @Injectable()
 export class SchedulerDataService {

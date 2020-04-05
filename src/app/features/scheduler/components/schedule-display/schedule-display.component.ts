@@ -6,7 +6,7 @@ import {
   SchedulerState, selectScheduleHeaders, selectScheduleRounds, selectSchedulerPlayerType,
   selectSchedulerNbrOfPlayers, selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt,
   selectSchedulerNbrOfByePlayers, selectSchedulerType
-} from '../../reducers';
+} from '../../store/reducers';
 import { Observable, Subject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';

@@ -15,7 +15,7 @@ import { SchedulerModule } from './features/scheduler/scheduler.module';
 import { reducers } from './reducers';
 import { PlayerContactModule } from './features/player-contact/player-contact.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { SchedulerDataService } from './features/scheduler/SchedulerDataService';
+import { SchedulerDataService } from './features/scheduler/data-services/SchedulerDataService';
 import { GroupManagerDataService } from './features/player-contact/dataServices/groupManagerDataService';
 import { GroupPlayerDataService } from './features/player-contact/dataServices/groupPlayerDataService';
 import { PlayerContactDataService } from './features/player-contact/dataServices/playerContactDataService';

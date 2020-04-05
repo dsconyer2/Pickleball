@@ -5,12 +5,12 @@ import {
   NbrOfCourtsUpdated, NbrOfPlayersPerCourtUpdated, NbrOfPlayersUpdated, PlayerAdded,
   PlayerRemoveAll, RandomizeOrderUpdated, SchedulerPlayerTypeUpdated, SchedulerTypeUpdated,
   UseNamesForMatchesUpdated, LoadFromGroupUpdated, SelectedGroupUpdated
-} from '../../actions/scheduler.actions';
+} from '../../store/actions/scheduler.actions';
 import {
   SchedulerState, selectSchedulerPlayerType, selectSchedulerType, selectSchedulerNbrOfPlayers,
   selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt, selectSchedulerRandomizeOrder,
   selectSchedulerUseNamesForMatches, selectSchedulerLoadFromGroup, selectSchedulerSelectedGroup
-} from '../../reducers';
+} from '../../store/reducers';
 import { Group, GroupPlayer } from 'src/app/features/player-contact/models';
 import { Observable, Subscription } from 'rxjs';
 import { selectGroupEntities, selectGroupPlayerEntities } from 'src/app/features/player-contact/reducers';

@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
 import { PlayerEntity } from '../reducers/player.reducer';
 import { SchedulerSettings } from '../reducers/scheduler.reducer';
-import { Group } from '../../player-contact/models';
+import { Group } from '../../../player-contact/models';
 
 const emptySchedulerSettings = {
   schedulerPlayerType: undefined,

@@ -1,5 +1,5 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Player } from '../models';
+import { Player } from '../../models';
 import * as fromPlayerManager from './player.reducer';
 import * as fromSchedulerManager from './scheduler.reducer';
 import * as fromScheduleManager from './schedule.reducer';
@@ -43,4 +43,3 @@ export const selectSchedulerLoadFromGroup = createSelector(selectSchedulerSettin
 export const selectSchedulerSelectedGroup = createSelector(selectSchedulerSettings, s => s.selectedGroup);
 export const selectScheduleHeaders = createSelector(selectSchedule, s => s.scheduleHeaders);
 export const selectScheduleRounds = createSelector(selectSchedule, s => s.scheduleRounds);
-
