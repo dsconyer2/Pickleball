@@ -3,9 +3,9 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Match, Player, RoundData, SchedulerSettings } from '../../models';
-import { SchedulerState, selectPlayerEntities, selectSchedulerSettings } from '../../reducers';
-import { ScheduleUpdated } from '../../actions/schedule.actions';
-import { NbrOfByePlayersUpdated } from '../../actions/scheduler.actions';
+import { SchedulerState, selectPlayerEntities, selectSchedulerSettings } from '../../store/reducers';
+import { ScheduleUpdated, ScheduleHeadersUpdated } from '../../store/actions/schedule.actions';
+import { NbrOfByePlayersUpdated } from '../../store/actions/scheduler.actions';
 
 
 @Component({
@@ -201,6 +201,7 @@ export class ScheduleTournamentComponent implements OnInit {
       // Gather data for the round.
       const thisRound: RoundData = { roundId: rounds, matches: [], byes: [], byeLabel: '' };
       let matchIndex = 0;
+
       for (let index = 0; index < indexBreak; index++) {
         matchIndex++;
         //  console.log('index = ', index);
@@ -228,7 +229,9 @@ export class ScheduleTournamentComponent implements OnInit {
                   courtPriority: {},
                   courtAssigned: 0,
                   opponentsAssigned: false,
-                  isPrimary: false
+                  isPrimary: false,
+                  team1Score: undefined,
+                  team2Score: undefined
                 });
             } else {
               thisRound.matches.push(
@@ -241,7 +244,9 @@ export class ScheduleTournamentComponent implements OnInit {
                   courtPriority: {},
                   courtAssigned: 0,
                   opponentsAssigned: false,
-                  isPrimary: false
+                  isPrimary: false,
+                  team1Score: undefined,
+                  team2Score: undefined
                 });
               matchIndex++;
               thisRound.matches.push(
@@ -254,7 +259,9 @@ export class ScheduleTournamentComponent implements OnInit {
                   courtPriority: {},
                   courtAssigned: 0,
                   opponentsAssigned: false,
-                  isPrimary: false
+                  isPrimary: false,
+                  team1Score: undefined,
+                  team2Score: undefined
                 });
             }
           } else {
@@ -274,7 +281,9 @@ export class ScheduleTournamentComponent implements OnInit {
                 courtPriority: {},
                 courtAssigned: 0,
                 opponentsAssigned: true,
-                isPrimary: true
+                isPrimary: true,
+                team1Score: undefined,
+                team2Score: undefined
               });
           }
         }
@@ -316,24 +325,24 @@ export class ScheduleTournamentComponent implements OnInit {
   }
 
   updateMatchLabels(aRound: RoundData) {
-    aRound.matches.forEach(aMatch => {
-      let matchLabel = ' ';
-      if (this.useNamesForMatches) {
-        aMatch.team1.forEach(aPlayer => matchLabel += (aPlayer.playerName + ', '));
-        matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-        matchLabel += '  vs  ';
-        aMatch.team2.forEach(aPlayer => matchLabel += (aPlayer.playerName + ', '));
-        matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-        aMatch.matchLabel = matchLabel;
-      } else {
-        aMatch.team1.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
-        matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-        matchLabel += '  vs  ';
-        aMatch.team2.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
-        matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-        aMatch.matchLabel = matchLabel;
-      }
-    });
+    // aRound.matches.forEach(aMatch => {
+    //   let matchLabel = ' ';
+    //   if (this.useNamesForMatches) {
+    //     aMatch.team1.forEach(aPlayer => matchLabel += (aPlayer.playerName + ', '));
+    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
+    //     matchLabel += '  vs  ';
+    //     aMatch.team2.forEach(aPlayer => matchLabel += (aPlayer.playerName + ', '));
+    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
+    //     aMatch.matchLabel = matchLabel;
+    //   } else {
+    //     aMatch.team1.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
+    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
+    //     matchLabel += '  vs  ';
+    //     aMatch.team2.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
+    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
+    //     aMatch.matchLabel = matchLabel;
+    //   }
+    // });
   }
 
   updateByeLabels(aRound: RoundData) {
@@ -617,6 +626,7 @@ export class ScheduleTournamentComponent implements OnInit {
     this.processRounds();
     this.store.dispatch(new NbrOfByePlayersUpdated(this.nbrOfByePlayers));
     this.store.dispatch(new ScheduleUpdated(this.courtHeaders, this.rounds));
+    this.store.dispatch(new ScheduleHeadersUpdated(this.courtHeaders));
     // this.runAnalysisReport();
 
     this.router.navigate(['/scheduleDisplay']);

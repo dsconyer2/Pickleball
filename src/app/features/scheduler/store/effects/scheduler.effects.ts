@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { map, tap } from 'rxjs/operators';
 import * as actions from '../actions/scheduler.actions';
-import { SchedulerDataService } from '../SchedulerDataService';
+import { SchedulerDataService } from '../../data-services/SchedulerDataService';
 
 @Injectable()
 export class SchedulerEffects {

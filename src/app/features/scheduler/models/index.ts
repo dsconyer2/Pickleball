@@ -37,6 +37,8 @@ export interface Match {
   courtAssigned: number;
   opponentsAssigned: boolean;
   isPrimary: boolean;
+  team1Score: number;
+  team2Score: number;
 }
 
 export interface RoundData {
@@ -65,4 +67,3 @@ export interface Level1RoundDataObject {
   id: number;
   playerIds: number[];
 }
-

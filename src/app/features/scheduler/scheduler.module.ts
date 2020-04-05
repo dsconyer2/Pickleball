@@ -6,12 +6,14 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { ScheduleEntryComponent } from './components/schedule-entry/schedule-entry.component';
 import { ScheduleTournamentComponent } from './components/schedule-tournament/schedule-tournament.component';
-import { SchedulerEffects } from './effects/scheduler.effects';
-import { reducers } from './reducers';
+import { SchedulerEffects } from './store/effects/scheduler.effects';
+import { reducers } from './store/reducers';
 import { SchedulerComponent } from './scheduler.component';
-import { AppStartUpEffects } from './effects/app-startup.effects';
+import { AppStartUpEffects } from './store/effects/app-startup.effects';
 import { ValidNbrOfCourtsDirective } from './directives/valid-nbr-of-courts.directive';
 import { ScheduleDisplayComponent } from './components/schedule-display/schedule-display.component';
+import { HighlightOnHoverDirective } from './directives/highlight-on-hover.directive';
+import { MatchLabelPipe } from './pipes/match-label.pipe';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { ScheduleDisplayComponent } from './components/schedule-display/schedule
     ScheduleEntryComponent,
     ScheduleTournamentComponent,
     ValidNbrOfCourtsDirective,
-    ScheduleDisplayComponent
+    HighlightOnHoverDirective,
+    ScheduleDisplayComponent,
+    MatchLabelPipe
   ],
   imports: [
     CommonModule,

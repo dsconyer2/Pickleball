@@ -15,10 +15,11 @@ import { SchedulerModule } from './features/scheduler/scheduler.module';
 import { reducers } from './reducers';
 import { PlayerContactModule } from './features/player-contact/player-contact.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { SchedulerDataService } from './features/scheduler/SchedulerDataService';
+import { SchedulerDataService } from './features/scheduler/data-services/SchedulerDataService';
 import { GroupManagerDataService } from './features/player-contact/dataServices/groupManagerDataService';
 import { GroupPlayerDataService } from './features/player-contact/dataServices/groupPlayerDataService';
 import { PlayerContactDataService } from './features/player-contact/dataServices/playerContactDataService';
+import { MatchLabelPipe } from './features/scheduler/pipes/match-label.pipe';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { PlayerContactDataService } from './features/player-contact/dataServices
     StoreDevtoolsModule.instrument(),
     EffectsModule.forRoot([])
   ],
-  providers: [SchedulerDataService, GroupManagerDataService, GroupPlayerDataService, PlayerContactDataService],
+  providers: [SchedulerDataService, GroupManagerDataService, GroupPlayerDataService, PlayerContactDataService, MatchLabelPipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,6 @@
 import * as actions from '../actions/schedule.actions';
 import { tassign } from 'tassign';
-import { RoundData } from '../models';
+import { RoundData } from '../../models';
 
 export interface Schedule {
   scheduleHeaders: string[];
@@ -23,6 +23,10 @@ export function reducer(state: State = initialState, action: actions.All): State
       return tassign(state, {
         scheduleHeaders: action.payload.scheduleHeaders,
         scheduleRounds: action.payload.scheduleRounds,
+      });
+      case actions.UPDATE_SCHEDULE_HEADERS:
+      return tassign(state, {
+        scheduleHeaders: action.payload.scheduleHeaders,
       });
     default: {
       return state;

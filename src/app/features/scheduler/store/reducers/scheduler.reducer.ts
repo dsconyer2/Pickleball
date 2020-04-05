@@ -1,6 +1,6 @@
 import * as actions from '../actions/scheduler.actions';
 import { tassign } from 'tassign';
-import { Group } from '../../player-contact/models';
+import { Group } from '../../../player-contact/models';
 
 export interface SchedulerSettings {
   schedulerPlayerType: string;

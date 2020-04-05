@@ -1,14 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RoundData } from '../../models';
+import { RoundData, Match } from '../../models';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import {
   SchedulerState, selectScheduleHeaders, selectScheduleRounds, selectSchedulerPlayerType,
   selectSchedulerNbrOfPlayers, selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt,
   selectSchedulerNbrOfByePlayers, selectSchedulerType
-} from '../../reducers';
+} from '../../store/reducers';
 import { Observable, Subject, of } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-schedule-display',
@@ -34,9 +35,12 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
   currentRoundIndex = 0;
   totalRounds = 0;
 
-  unsubscribe$: Subject<boolean> = new Subject<boolean>();
+  closeResult = '';
 
-  constructor(private store: Store<SchedulerState>, private router: Router) { }
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
+  selectedMatch: Match;
+
+  constructor(private store: Store<SchedulerState>, private router: Router, private modalService: NgbModal) { }
 
   ngOnInit(): void {
     this.headers$ = this.store.select(selectScheduleHeaders);
@@ -106,6 +110,39 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
           this.displayRounds$ = of(aRound.slice(this.currentRoundIndex, this.currentRoundIndex + 1));
         });
     }
+  }
+
+  addScore(content: any, match: Match, matchLabel: string) {
+    console.log('Match = ', match);
+    console.log('MatchLabel = ', matchLabel);
+    console.log('Content =', content);
+    this.selectedMatch = match;
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+      console.log('Result = ', result);
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      console.log('Reason = ', reason);
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  updateTeamScore(modal: NgbModalRef, team1Score: string, team2Score: string) {
+    console.log('Score 1 = ', team1Score);
+    console.log('Score 2 = ', team2Score);
+    this.selectedMatch.team1Score = parseInt(team1Score, 10);
+    this.selectedMatch.team2Score = parseInt(team2Score, 10);
+    console.log('Match = ', this.selectedMatch);
+    modal.close('Scores Updated');
   }
 
 }

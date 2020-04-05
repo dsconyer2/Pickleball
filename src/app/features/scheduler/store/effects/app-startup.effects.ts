@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { concatMap, map } from 'rxjs/operators';
-import * as appActions from '../../../actions/app.actions';
+import * as appActions from '../../../../actions/app.actions';
 import * as schedulerActions from '../actions/scheduler.actions';
 
 @Injectable()
