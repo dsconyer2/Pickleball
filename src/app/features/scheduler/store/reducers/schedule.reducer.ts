@@ -14,7 +14,7 @@ export interface State {
 
 const initialState: State = {
   scheduleHeaders: [],
-  scheduleRounds: [],
+  scheduleRounds: []
 };
 
 export function reducer(state: State = initialState, action: actions.All): State {

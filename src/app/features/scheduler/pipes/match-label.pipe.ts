@@ -21,7 +21,6 @@ export class MatchLabelPipe implements PipeTransform {
       matchLabel += ' )';
     }
     aMatch.matchLabel = matchLabel;
-    console.log('MatchLabel = ', matchLabel);
     return matchLabel;
   }
 }

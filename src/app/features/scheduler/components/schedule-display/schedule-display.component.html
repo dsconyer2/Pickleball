@@ -35,7 +35,7 @@
           <td *ngFor='let match of round.matches'>
             <span pbsHighlightOnHover (click)='addScore(content, match, match.matchLabel)'>{{match | matchLabel}}</span>
           </td>
-          <td>{{round.byeLabel}}</td>
+          <td>{{formattedByes(round.byeId)}}</td>
         </tr>
       </table>
     </div>

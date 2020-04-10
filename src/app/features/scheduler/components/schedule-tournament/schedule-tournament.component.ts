@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Match, Player, RoundData, SchedulerSettings } from '../../models';
-import { SchedulerState, selectPlayerEntities, selectSchedulerSettings } from '../../store/reducers';
+import { Match, Player, RoundData, SchedulerSettings, ScheduleBye } from '../../models';
+import { SchedulerState, selectPlayerEntities, selectSchedulerSettings, selectScheduleByeEntities } from '../../store/reducers';
 import { ScheduleUpdated, ScheduleHeadersUpdated } from '../../store/actions/schedule.actions';
 import { NbrOfByePlayersUpdated } from '../../store/actions/scheduler.actions';
+import { filter, map } from 'rxjs/operators';
+import { ScheduleByeCreated, ScheduleByesDeleted } from '../../store/actions/schedule-bye.actions';
 
 
 @Component({
@@ -17,6 +19,7 @@ export class ScheduleTournamentComponent implements OnInit {
 
   players$: Observable<Player[]>;
   schedulerSettings$: Observable<SchedulerSettings>;
+  byes$: Observable<ScheduleBye[]> = this.store.pipe(select(selectScheduleByeEntities));
 
   playerType: string;
   nbrOfPlayers: number;
@@ -79,6 +82,7 @@ export class ScheduleTournamentComponent implements OnInit {
     // console.table(this.myPlayers);
     // console.log('Player List 1 = ', this.playerList1);
     // console.table(this.playerList1);
+    this.store.dispatch(new ScheduleByesDeleted());
     this.useEvenPlayerLogic = (this.playerList1.length % 2 === 0);
     if (this.isScheduleTypeKing) {
       this.nbrOfByePlayers = this.nbrOfPlayers -
@@ -104,6 +108,14 @@ export class ScheduleTournamentComponent implements OnInit {
     }
   }
 
+  getByesById(aByeId: number): ScheduleBye {
+    let result: ScheduleBye[];
+    this.byes$.pipe(
+      map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId))
+    ).subscribe()
+    return (result.length > 0) ? result[0] : null;
+  }
+
   setByeIndexesForEvenNumberOfPlayers() {
     if (this.useEvenPlayerLogic) {
       // For even player logic the first player never rotates in the player matching logic.
@@ -118,7 +130,8 @@ export class ScheduleTournamentComponent implements OnInit {
           this.gamesPlayed(this.playerList1[index]) +
           this.gamesPlayed(this.playerList2[index]);
         if (this.rounds.length > 0) {
-          const prevByes = this.rounds.slice().pop().byes;
+          const prevByeId = this.rounds.slice().pop().byeId;
+          const prevByes = this.getByesById(prevByeId).byePlayers;
           if (prevByes.includes(this.playerList1[index])) { --gamesPlayed; }
           if (prevByes.includes(this.playerList2[index])) { --gamesPlayed; }
         }
@@ -199,17 +212,17 @@ export class ScheduleTournamentComponent implements OnInit {
       // Set the bye indexes for even number of players
       this.setByeIndexesForEvenNumberOfPlayers();
       // Gather data for the round.
-      const thisRound: RoundData = { roundId: rounds, matches: [], byes: [], byeLabel: '' };
+      const thisRound: RoundData = { roundId: rounds, matches: [], byeId: undefined, byeLabel: '' };
       let matchIndex = 0;
-
+      let roundByes: Player[] = [];
       for (let index = 0; index < indexBreak; index++) {
         matchIndex++;
         //  console.log('index = ', index);
         if (this.byeIndexes.includes(index)) {
           //  console.log('bye ', this.playerList1[index].playerId);
-          thisRound.byes.push(this.playerList1[index]);
+          roundByes.push(this.playerList1[index]);
           if (index <= this.playerList2.length - 1) {
-            thisRound.byes.push(this.playerList2[index]);
+            roundByes.push(this.playerList2[index]);
           }
         } else {
           // console.log('match ', this.playerList1[index].playerId);
@@ -288,6 +301,9 @@ export class ScheduleTournamentComponent implements OnInit {
           }
         }
       }
+      this.store.dispatch(new ScheduleByeCreated(rounds, roundByes));
+      thisRound.byeId = rounds;
+
       this.rounds.push(thisRound);
 
       // console.log('Calling schedule opponents');
@@ -346,16 +362,16 @@ export class ScheduleTournamentComponent implements OnInit {
   }
 
   updateByeLabels(aRound: RoundData) {
-    let byeLabel = ' ';
-    aRound.byes.forEach(aByePlayer => {
-      if (this.useNamesForMatches) {
-        byeLabel += (aByePlayer.playerName + ', ');
-      } else {
-        byeLabel += (aByePlayer.playerId + ', ');
-      }
-    });
-    byeLabel = byeLabel.slice(0, byeLabel.length - 2);
-    aRound.byeLabel = byeLabel;
+    // let byeLabel = ' ';
+    // aRound.byes.forEach(aByePlayer => {
+    //   if (this.useNamesForMatches) {
+    //     byeLabel += (aByePlayer.playerName + ', ');
+    //   } else {
+    //     byeLabel += (aByePlayer.playerId + ', ');
+    //   }
+    // });
+    // byeLabel = byeLabel.slice(0, byeLabel.length - 2);
+    // aRound.byeLabel = byeLabel;
   }
 
   gamesPlayed(aPlayer: Player) {
@@ -574,12 +590,12 @@ export class ScheduleTournamentComponent implements OnInit {
           console.log(team1, ' v ', team2, '  on Court ', aMatch.courtAssigned);
         }
       });
-      console.log('Byes');
-      let byeString = '';
-      aRound.byes.forEach(aBye => {
-        byeString += aBye.playerId + ', ';
-      });
-      console.log(byeString);
+      console.log('Byes - is commented out');
+      // let byeString = '';
+      // aRound.byes.forEach(aBye => {
+      //   byeString += aBye.playerId + ', ';
+      // });
+      // console.log(byeString);
     });
     console.log('My Players = ', this.players$);
 
