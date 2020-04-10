@@ -10,6 +10,11 @@ export interface Player {
     courtsPlayed: {};
 }
 
+export interface ScheduleBye {
+  byeId: number;
+  byePlayers?: Player[];
+}
+
 export interface SchedulerSettings {
   schedulerPlayerType: string;
   schedulerType: string;
@@ -44,7 +49,7 @@ export interface Match {
 export interface RoundData {
   roundId: number;
   matches: Match[];
-  byes: Player[];
+  byeId: number;
   byeLabel: string;
 }
 

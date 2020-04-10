@@ -1,19 +1,22 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { Player } from '../../models';
+import { Player, ScheduleBye } from '../../models';
 import * as fromPlayerManager from './player.reducer';
 import * as fromSchedulerManager from './scheduler.reducer';
 import * as fromScheduleManager from './schedule.reducer';
+import * as fromScheduleByeManager from './schedule-bye.reducer';
 
 export interface SchedulerState {
   players: fromPlayerManager.State;
   schedulerSettings: fromSchedulerManager.State;
   schedule: fromScheduleManager.State;
+  scheduleByes: fromScheduleByeManager.State;
 }
 
 export const reducers = {
   players: fromPlayerManager.reducer,
   schedulerSettings: fromSchedulerManager.reducer,
-  schedule: fromScheduleManager.reducer
+  schedule: fromScheduleManager.reducer,
+  scheduleByes: fromScheduleByeManager.reducer
 };
 
 // 1. Create a Feature Selector
@@ -22,9 +25,11 @@ const selectSchedulerFeature = createFeatureSelector<SchedulerState>('schedulerF
 const selectPlayers = createSelector(selectSchedulerFeature, f => f.players);
 export const selectSchedulerSettings = createSelector(selectSchedulerFeature, f => f.schedulerSettings);
 export const selectSchedule = createSelector(selectSchedulerFeature, f => f.schedule);
+export const selectScheduleByes = createSelector(selectSchedulerFeature, f => f.scheduleByes);
 
 // 3. Create any "helpers" you might need (optional)
 const { selectAll: selectPlayerEntityArray } = fromPlayerManager.adapter.getSelectors(selectPlayers);
+const { selectAll: selectScheduleByeEntityArray } = fromScheduleByeManager.adapter.getSelectors(selectScheduleByes);
 
 
 // 4. Create a selector for what the component needs.
@@ -43,3 +48,4 @@ export const selectSchedulerLoadFromGroup = createSelector(selectSchedulerSettin
 export const selectSchedulerSelectedGroup = createSelector(selectSchedulerSettings, s => s.selectedGroup);
 export const selectScheduleHeaders = createSelector(selectSchedule, s => s.scheduleHeaders);
 export const selectScheduleRounds = createSelector(selectSchedule, s => s.scheduleRounds);
+export const selectScheduleByeEntities = createSelector(selectScheduleByeEntityArray, t => t.map(x => x as ScheduleBye));
