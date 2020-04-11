@@ -32,39 +32,62 @@
         <th *ngFor='let header of (headers$ | async)'>{{header}}</th>
         <tr *ngFor='let round of (displayRounds$ | async)'>
           <td>{{round.roundId}}</td>
-          <td *ngFor='let matchId of round.matchIds'>
-            <span pbsHighlightOnHover (click)='addScore(content, match, match.matchLabel)'>{{getMatchForId(matchId) | matchLabel}}</span>
+          <td *ngFor='let match of round.matches'>
+            <span pbsHighlightOnHover
+                  (click)='addScore(content, match)'>
+              <span
+                    [ngStyle]='highlightWinner(match, 1)'>{{match | matchLabel: 1}}</span>vs<span
+                    [ngStyle]='highlightWinner(match, 2)'>{{match | matchLabel: 2}}</span></span>
           </td>
-          <td>{{formattedByes(round.byeId)}}</td>
+          <td *ngIf='hasBye(round.byeId)'>{{formattedByes(round.byeId)}}</td>
         </tr>
       </table>
     </div>
   </div>
 </form>
 
-<ng-template #content let-modal>
+<ng-template #content
+             let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Update Scores</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <h4 class="modal-title"
+        id="modal-basic-title">Update Scores</h4>
+    <button type="button"
+            class="close"
+            aria-label="Close"
+            (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
     <form>
       <div class="form-group">
-        <label for="updateScore">Team 1 Score</label>
         <div>
-          <input type="number" class="form-control" name="team1Score" #team1Score>
+          <label for="updateScore">Team 1 Score</label>
+          <input type="number"
+                 class="form-control"
+                 name="team1Score"
+                 value="{{selectedMatch.team1Score}}"
+                 #team1Score
+                 appAutofocus>
         </div>
         <div>
           <label for="updateScore">Team 2 Score</label>
-          <input type="number" class="form-control" name="team2Score" #team2Score>
+          <input type="number"
+                 class="form-control"
+                 name="team2Score"
+                 value="{{selectedMatch.team2Score}}"
+                 #team2Score>
         </div>
       </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Update Scores Cancelled')">Cancel</button>
-    <button type="button" class="btn btn-outline-dark" (click)="updateTeamScore(modal, team1Score.value, team2Score.value)">Update Team Score</button>
+    <button type="button"
+            class="btn btn-outline-dark"
+            (click)="modal.close('Update Scores Cancelled')">Cancel</button>
+    <button type="button"
+            class="btn btn-outline-dark"
+            (click)="updateTeamScore(modal, team1Score.value, team2Score.value)">Update
+      Team Score</button>
   </div>
 </ng-template>

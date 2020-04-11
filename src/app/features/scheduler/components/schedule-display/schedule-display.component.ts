@@ -1,15 +1,16 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RoundData, Match, ScheduleBye, ScheduleRound, ScheduleMatch } from '../../models';
+import { Match, ScheduleBye, ScheduleRound, ScheduleMatch, RoundData } from '../../models';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import {
-  SchedulerState, selectScheduleHeaders, selectScheduleRounds, selectSchedulerPlayerType,
+  SchedulerState, selectScheduleHeaders, selectSchedulerPlayerType,
   selectSchedulerNbrOfPlayers, selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt,
   selectSchedulerNbrOfByePlayers, selectSchedulerType, selectScheduleByeEntities, selectScheduleRoundEntities, selectScheduleMatchEntities
 } from '../../store/reducers';
-import { Observable, Subject, of } from 'rxjs';
-import { takeUntil, map } from 'rxjs/operators';
+import { Observable, Subject, of, combineLatest } from 'rxjs';
+import { takeUntil, map, switchMap } from 'rxjs/operators';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ScheduleMatchCreated, ScheduleMatchUpdated } from '../../store/actions/schedule-match.actions';
 
 @Component({
   selector: 'app-schedule-display',
@@ -18,7 +19,8 @@ import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-boo
 })
 export class ScheduleDisplayComponent implements OnInit, OnDestroy {
 
-  displayRounds$: Observable<ScheduleRound[]>;
+  displayRounds$: Observable<RoundData[]>;
+  roundData$: Observable<RoundData[]>;
   scheduleRounds$: Observable<ScheduleRound[]>;
   scheduleMatches$: Observable<ScheduleMatch[]>;
   scheduleByes$: Observable<ScheduleBye[]>;
@@ -67,6 +69,22 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
           this.router.navigate(['/scheduler']);
         }
       });
+
+    this.roundData$ =
+      combineLatest([this.scheduleRounds$, this.scheduleMatches$]).pipe(
+        map(([myScheduleRounds, myScheduleMatches]) => {
+          let result: RoundData[] = [];
+          myScheduleRounds
+            .forEach(aScheduleRound => {
+              let aRound: RoundData = { roundId: undefined, matches: [], byeId: undefined };
+              aRound.roundId = aScheduleRound.roundId;
+              aRound.byeId = aScheduleRound.byeId;
+              aScheduleRound.matchIds.forEach(aMatchId => aRound.matches.push(this.getaMatchForId(aMatchId, myScheduleMatches)));
+              result.push(aRound);
+            })
+          return result;
+        })
+      );
     this.updateDisplay();
   }
 
@@ -107,15 +125,37 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
 
   updateDisplay() {
     if (this.showAllRounds) {
-      this.displayRounds$ = this.scheduleRounds$;
+      this.displayRounds$ = this.roundData$;
     } else {
-      this.scheduleRounds$.pipe(
+      this.roundData$.pipe(
         takeUntil(this.unsubscribe$)
       )
         .subscribe(aRound => {
           this.displayRounds$ = of(aRound.slice(this.currentRoundIndex, this.currentRoundIndex + 1));
         });
     }
+  }
+
+  hasBye(aByeId: number): boolean {
+    let result: ScheduleBye[];
+    this.scheduleByes$.pipe(
+      map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId))
+    ).subscribe()
+    return (result.length > 0) ? result[0].byePlayers ? result[0].byePlayers.length > 0 : false : false;
+  }
+
+  highlightWinner(aMatch: Match, teamNumber: number) {
+    let styles = {};
+    if (teamNumber === 1 ? aMatch.team1Score > aMatch.team2Score : teamNumber === 2 ? aMatch.team2Score > aMatch.team1Score : false) {
+      styles = { 'color': 'darkmagenta' }
+    }
+    return styles;
+  }
+
+  getaMatchForId(aMatchId: number, scheduleMatches: ScheduleMatch[]): Match {
+    let result: ScheduleMatch[];
+    result = scheduleMatches.filter(aMatch => aMatch.matchId === aMatchId);
+    return (result.length > 0) ? result[0].match : null;
   }
 
   getMatchForId(aMatchId: number): Match {
@@ -147,17 +187,12 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     return output;
   }
 
-  addScore(content: any, match: Match, matchLabel: string) {
-    console.log('Match = ', match);
-    console.log('MatchLabel = ', matchLabel);
-    console.log('Content =', content);
+  addScore(content: any, match: Match) {
     this.selectedMatch = match;
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
-      console.log('Result = ', result);
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      console.log('Reason = ', reason);
     });
   }
 
@@ -172,12 +207,11 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
   }
 
   updateTeamScore(modal: NgbModalRef, team1Score: string, team2Score: string) {
-    // console.log('Score 1 = ', team1Score);
-    // console.log('Score 2 = ', team2Score);
     this.selectedMatch.team1Score = parseInt(team1Score, 10);
     this.selectedMatch.team2Score = parseInt(team2Score, 10);
-    // console.log('Match = ', this.selectedMatch);
+    this.store.dispatch(new ScheduleMatchUpdated(this.selectedMatch.matchId, this.selectedMatch));
     modal.close('Scores Updated');
+    this.updateDisplay();
   }
 
 }

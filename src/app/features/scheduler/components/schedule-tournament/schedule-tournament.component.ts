@@ -216,7 +216,7 @@ export class ScheduleTournamentComponent implements OnInit {
       // Set the bye indexes for even number of players
       this.setByeIndexesForEvenNumberOfPlayers();
       // Gather data for the round.
-      const thisRound: RoundData = { roundId: rounds, matches: [], byeId: undefined, byeLabel: '' };
+      const thisRound: RoundData = { roundId: rounds, matches: [], byeId: undefined };
       let matchIndex = 0;
       let roundByes: Player[] = [];
       for (let index = 0; index < indexBreak; index++) {
@@ -238,7 +238,6 @@ export class ScheduleTournamentComponent implements OnInit {
               thisRound.matches.push(
                 {
                   matchId: index,
-                  matchLabel: '',
                   team1: [this.playerList1[index],
                   this.playerList2[index]],
                   team2: [],
@@ -254,7 +253,6 @@ export class ScheduleTournamentComponent implements OnInit {
               thisRound.matches.push(
                 {
                   matchId: matchIndex,
-                  matchLabel: '',
                   team1: [this.playerList1[index]],
                   team2: [],
                   matchPriority: {},
@@ -269,7 +267,6 @@ export class ScheduleTournamentComponent implements OnInit {
               thisRound.matches.push(
                 {
                   matchId: matchIndex,
-                  matchLabel: '',
                   team1: [this.playerList2[index]],
                   team2: [],
                   matchPriority: {},
@@ -282,16 +279,9 @@ export class ScheduleTournamentComponent implements OnInit {
                 });
             }
           } else {
-            let label;
-            if (this.useNamesForMatches) {
-              label = ' ' + this.playerList1[index].playerName + ' v ' + this.playerList2[index].playerName;
-            } else {
-              label = ' ' + this.playerList1[index].playerId + ' v ' + this.playerList2[index].playerId;
-            }
             thisRound.matches.push(
               {
                 matchId: index,
-                matchLabel: label,
                 team1: [this.playerList1[index]],
                 team2: [this.playerList2[index]],
                 matchPriority: {},
@@ -615,6 +605,7 @@ export class ScheduleTournamentComponent implements OnInit {
 
       aRound.matches.forEach(aMatch => {
         matchIndex++;
+        aMatch.matchId = matchIndex;
         this.store.dispatch(new ScheduleMatchCreated(matchIndex, aMatch));
         matchIds.push(matchIndex);
       })

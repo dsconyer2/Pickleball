@@ -45,7 +45,6 @@ export interface MatchPriorityEntry {
 
 export interface Match {
   matchId: number;
-  matchLabel: string;
   team1: Player[];
   team2: Player[];
   matchPriority: {};
@@ -61,7 +60,6 @@ export interface RoundData {
   roundId: number;
   matches: Match[];
   byeId: number;
-  byeLabel: string;
 }
 
 export interface RowObject {
