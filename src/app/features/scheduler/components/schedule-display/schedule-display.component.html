@@ -32,8 +32,8 @@
         <th *ngFor='let header of (headers$ | async)'>{{header}}</th>
         <tr *ngFor='let round of (displayRounds$ | async)'>
           <td>{{round.roundId}}</td>
-          <td *ngFor='let match of round.matches'>
-            <span pbsHighlightOnHover (click)='addScore(content, match, match.matchLabel)'>{{match | matchLabel}}</span>
+          <td *ngFor='let matchId of round.matchIds'>
+            <span pbsHighlightOnHover (click)='addScore(content, match, match.matchLabel)'>{{getMatchForId(matchId) | matchLabel}}</span>
           </td>
           <td>{{formattedByes(round.byeId)}}</td>
         </tr>
