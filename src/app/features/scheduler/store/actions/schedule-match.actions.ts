@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { ScheduleMatchEntity } from '../reducers/schedule-match.reducer';
+import { ScheduleMatchEntity, ScheduleMatchUpdateEntity } from '../reducers/schedule-match.reducer';
 import { Match } from '../../models';
 
 
@@ -16,6 +16,18 @@ export class ScheduleMatchCreated implements Action {
    }
 }
 
+export const UPDATE_SCHEDULE_MATCH = '[schedulerFeature] update scheduleMatch';
+export class ScheduleMatchUpdated implements Action {
+  readonly type = UPDATE_SCHEDULE_MATCH;
+  payload: ScheduleMatchUpdateEntity;
+  constructor(matchId: number, match: Match) {
+    this.payload = {
+      id: matchId,
+      changes: {match}
+    };
+   }
+}
+
 export const DELETE_ALL_MATCHES = '[schedulerFeature] delete all scheduleMatch';
 export class ScheduleMatchesDeleted implements Action {
   readonly type = DELETE_ALL_MATCHES;
@@ -24,4 +36,5 @@ export class ScheduleMatchesDeleted implements Action {
 
 export type All =
 ScheduleMatchCreated
+| ScheduleMatchUpdated
 | ScheduleMatchesDeleted;

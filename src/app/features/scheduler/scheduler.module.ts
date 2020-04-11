@@ -14,6 +14,7 @@ import { ValidNbrOfCourtsDirective } from './directives/valid-nbr-of-courts.dire
 import { ScheduleDisplayComponent } from './components/schedule-display/schedule-display.component';
 import { HighlightOnHoverDirective } from './directives/highlight-on-hover.directive';
 import { MatchLabelPipe } from './pipes/match-label.pipe';
+import { AutofocusDirective } from './directives/auto-focus.directive';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { MatchLabelPipe } from './pipes/match-label.pipe';
     ScheduleTournamentComponent,
     ValidNbrOfCourtsDirective,
     HighlightOnHoverDirective,
+    AutofocusDirective,
     ScheduleDisplayComponent,
     MatchLabelPipe
   ],
