@@ -15,6 +15,17 @@ export interface ScheduleBye {
   byePlayers?: Player[];
 }
 
+export interface ScheduleMatch {
+  matchId: number;
+  match: Match;
+}
+
+export interface ScheduleRound {
+  roundId: number;
+  matchIds: number[];
+  byeId: number;
+}
+
 export interface SchedulerSettings {
   schedulerPlayerType: string;
   schedulerType: string;

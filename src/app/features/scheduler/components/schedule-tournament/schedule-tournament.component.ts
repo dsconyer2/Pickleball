@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Match, Player, RoundData, SchedulerSettings, ScheduleBye } from '../../models';
+import { Match, Player, RoundData, SchedulerSettings, ScheduleBye, ScheduleRound } from '../../models';
 import { SchedulerState, selectPlayerEntities, selectSchedulerSettings, selectScheduleByeEntities } from '../../store/reducers';
-import { ScheduleUpdated, ScheduleHeadersUpdated } from '../../store/actions/schedule.actions';
+import { ScheduleHeadersUpdated } from '../../store/actions/schedule-header.actions';
 import { NbrOfByePlayersUpdated } from '../../store/actions/scheduler.actions';
 import { filter, map } from 'rxjs/operators';
 import { ScheduleByeCreated, ScheduleByesDeleted } from '../../store/actions/schedule-bye.actions';
+import { ScheduleMatchesDeleted, ScheduleMatchCreated } from '../../store/actions/schedule-match.actions';
+import { ScheduleRoundCreated, ScheduleRoundsDeleted } from '../../store/actions/schedule-round.actions';
 
 
 @Component({
@@ -83,6 +85,8 @@ export class ScheduleTournamentComponent implements OnInit {
     // console.log('Player List 1 = ', this.playerList1);
     // console.table(this.playerList1);
     this.store.dispatch(new ScheduleByesDeleted());
+    this.store.dispatch(new ScheduleMatchesDeleted());
+    this.store.dispatch(new ScheduleRoundsDeleted());
     this.useEvenPlayerLogic = (this.playerList1.length % 2 === 0);
     if (this.isScheduleTypeKing) {
       this.nbrOfByePlayers = this.nbrOfPlayers -
@@ -311,10 +315,7 @@ export class ScheduleTournamentComponent implements OnInit {
         this.scheduleOpponents(thisRound);
         this.removeNonPrimaryMatches(thisRound);
         this.scheduleCourts(thisRound);
-        this.updateMatchLabels(thisRound);
       }
-
-      this.updateByeLabels(thisRound);
 
       // rotate player lists
       this.playerList1.push(this.playerList2.pop());
@@ -338,40 +339,6 @@ export class ScheduleTournamentComponent implements OnInit {
 
   removeNonPrimaryMatches(aRound: RoundData) {
     aRound.matches = aRound.matches.filter(m => m.isPrimary);
-  }
-
-  updateMatchLabels(aRound: RoundData) {
-    // aRound.matches.forEach(aMatch => {
-    //   let matchLabel = ' ';
-    //   if (this.useNamesForMatches) {
-    //     aMatch.team1.forEach(aPlayer => matchLabel += (aPlayer.playerName + ', '));
-    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-    //     matchLabel += '  vs  ';
-    //     aMatch.team2.forEach(aPlayer => matchLabel += (aPlayer.playerName + ', '));
-    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-    //     aMatch.matchLabel = matchLabel;
-    //   } else {
-    //     aMatch.team1.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
-    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-    //     matchLabel += '  vs  ';
-    //     aMatch.team2.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
-    //     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-    //     aMatch.matchLabel = matchLabel;
-    //   }
-    // });
-  }
-
-  updateByeLabels(aRound: RoundData) {
-    // let byeLabel = ' ';
-    // aRound.byes.forEach(aByePlayer => {
-    //   if (this.useNamesForMatches) {
-    //     byeLabel += (aByePlayer.playerName + ', ');
-    //   } else {
-    //     byeLabel += (aByePlayer.playerId + ', ');
-    //   }
-    // });
-    // byeLabel = byeLabel.slice(0, byeLabel.length - 2);
-    // aRound.byeLabel = byeLabel;
   }
 
   gamesPlayed(aPlayer: Player) {
@@ -641,8 +608,19 @@ export class ScheduleTournamentComponent implements OnInit {
     this.initialize();
     this.processRounds();
     this.store.dispatch(new NbrOfByePlayersUpdated(this.nbrOfByePlayers));
-    this.store.dispatch(new ScheduleUpdated(this.courtHeaders, this.rounds));
     this.store.dispatch(new ScheduleHeadersUpdated(this.courtHeaders));
+    let matchIndex = 0;
+    this.rounds.forEach(aRound => {
+      let matchIds: number[] = [];
+
+      aRound.matches.forEach(aMatch => {
+        matchIndex++;
+        this.store.dispatch(new ScheduleMatchCreated(matchIndex, aMatch));
+        matchIds.push(matchIndex);
+      })
+
+      this.store.dispatch(new ScheduleRoundCreated(aRound.roundId, matchIds, aRound.byeId));
+    })
     // this.runAnalysisReport();
 
     this.router.navigate(['/scheduleDisplay']);

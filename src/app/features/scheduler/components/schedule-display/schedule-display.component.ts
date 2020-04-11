@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { RoundData, Match, ScheduleBye } from '../../models';
+import { RoundData, Match, ScheduleBye, ScheduleRound, ScheduleMatch } from '../../models';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import {
   SchedulerState, selectScheduleHeaders, selectScheduleRounds, selectSchedulerPlayerType,
   selectSchedulerNbrOfPlayers, selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt,
-  selectSchedulerNbrOfByePlayers, selectSchedulerType, selectScheduleByeEntities
+  selectSchedulerNbrOfByePlayers, selectSchedulerType, selectScheduleByeEntities, selectScheduleRoundEntities, selectScheduleMatchEntities
 } from '../../store/reducers';
 import { Observable, Subject, of } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
@@ -18,8 +18,9 @@ import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-boo
 })
 export class ScheduleDisplayComponent implements OnInit, OnDestroy {
 
-  displayRounds$: Observable<RoundData[]>;
-  rounds$: Observable<RoundData[]>;
+  displayRounds$: Observable<ScheduleRound[]>;
+  scheduleRounds$: Observable<ScheduleRound[]>;
+  scheduleMatches$: Observable<ScheduleMatch[]>;
   scheduleByes$: Observable<ScheduleBye[]>;
   headers$: Observable<string[]>;
   schedulerType$: Observable<string>;
@@ -47,7 +48,8 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.headers$ = this.store.select(selectScheduleHeaders);
-    this.rounds$ = this.store.select(selectScheduleRounds);
+    this.scheduleRounds$ = this.store.select(selectScheduleRoundEntities);
+    this.scheduleMatches$ = this.store.select(selectScheduleMatchEntities);
     this.scheduleByes$ = this.store.select(selectScheduleByeEntities);
     this.schedulerType$ = this.store.select(selectSchedulerType);
     this.playerType$ = this.store.select(selectSchedulerPlayerType);
@@ -56,7 +58,7 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     this.playersPerCourt$ = this.store.select(selectSchedulerNbrOfPlayersPerCourt);
     this.nbrOfByePlayers$ = this.store.select(selectSchedulerNbrOfByePlayers);
 
-    this.rounds$.pipe(
+    this.scheduleRounds$.pipe(
       takeUntil(this.unsubscribe$)
     )
       .subscribe(aRound => {
@@ -105,15 +107,23 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
 
   updateDisplay() {
     if (this.showAllRounds) {
-      this.displayRounds$ = this.rounds$;
+      this.displayRounds$ = this.scheduleRounds$;
     } else {
-      this.rounds$.pipe(
+      this.scheduleRounds$.pipe(
         takeUntil(this.unsubscribe$)
       )
         .subscribe(aRound => {
           this.displayRounds$ = of(aRound.slice(this.currentRoundIndex, this.currentRoundIndex + 1));
         });
     }
+  }
+
+  getMatchForId(aMatchId: number): Match {
+    let result: ScheduleMatch[];
+    this.scheduleMatches$.pipe(
+      map(aMatchArray => result = aMatchArray.filter(aMatch => aMatch.matchId === aMatchId))
+    ).subscribe()
+    return (result.length > 0) ? result[0].match : null;
   }
 
   formattedByes(aByeId: number): string {
