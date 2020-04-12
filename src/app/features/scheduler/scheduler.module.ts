@@ -15,6 +15,7 @@ import { ScheduleDisplayComponent } from './components/schedule-display/schedule
 import { HighlightOnHoverDirective } from './directives/highlight-on-hover.directive';
 import { MatchLabelPipe } from './pipes/match-label.pipe';
 import { AutofocusDirective } from './directives/auto-focus.directive';
+import { MatchScorePipe } from './pipes/match-score.pipe';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AutofocusDirective } from './directives/auto-focus.directive';
     HighlightOnHoverDirective,
     AutofocusDirective,
     ScheduleDisplayComponent,
-    MatchLabelPipe
+    MatchLabelPipe,
+    MatchScorePipe
   ],
   imports: [
     CommonModule,

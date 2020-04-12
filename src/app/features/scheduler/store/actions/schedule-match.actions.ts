@@ -10,7 +10,7 @@ export class ScheduleMatchCreated implements Action {
   constructor(matchId: number, aMatch: Match) {
     this.payload = {
       id: matchId,
-      matchId: matchId,
+      matchId,
       match: aMatch
     };
    }

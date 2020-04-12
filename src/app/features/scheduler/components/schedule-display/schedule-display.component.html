@@ -33,11 +33,14 @@
         <tr *ngFor='let round of (displayRounds$ | async)'>
           <td>{{round.roundId}}</td>
           <td *ngFor='let match of round.matches'>
-            <span pbsHighlightOnHover
+            <span pbsHighlightOnHover style='text-align:center'
                   (click)='addScore(content, match)'>
-              <span
-                    [ngStyle]='highlightWinner(match, 1)'>{{match | matchLabel: 1}}</span>vs<span
-                    [ngStyle]='highlightWinner(match, 2)'>{{match | matchLabel: 2}}</span></span>
+              <span>{{match | matchLabel: 1}}</span>
+              <span [ngStyle]='highlightWinner(match, 1)'>{{match.team1Score | matchScore}}</span>
+              <span>  vs  </span>
+              <span [ngStyle]='highlightWinner(match, 2)'>{{match.team2Score | matchScore}}</span>
+              <span>{{match | matchLabel: 2}}</span>
+            </span>
           </td>
           <td *ngIf='hasBye(round.byeId)'>{{formattedByes(round.byeId)}}</td>
         </tr>
@@ -68,7 +71,7 @@
                  name="team1Score"
                  value="{{selectedMatch.team1Score}}"
                  #team1Score
-                 appAutofocus>
+                 pbsAutofocus>
         </div>
         <div>
           <label for="updateScore">Team 2 Score</label>

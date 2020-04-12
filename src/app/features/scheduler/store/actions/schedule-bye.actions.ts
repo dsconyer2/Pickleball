@@ -10,8 +10,8 @@ export class ScheduleByeCreated implements Action {
   constructor(byeId: number, byePlayers: Player[]) {
     this.payload = {
       id: byeId,
-      byeId: byeId,
-      byePlayers: byePlayers
+      byeId,
+      byePlayers
     };
    }
 }
