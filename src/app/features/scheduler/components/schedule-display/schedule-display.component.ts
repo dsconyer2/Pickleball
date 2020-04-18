@@ -145,9 +145,9 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
   }
 
   highlightWinner(aMatch: Match, teamNumber: number) {
-    let styles = { color: '#D5CABD' };
+    let styles = { 'color': '#4e72df9f', 'font-size': 'larger'  };
     if (teamNumber === 1 ? aMatch.team1Score > aMatch.team2Score : teamNumber === 2 ? aMatch.team2Score > aMatch.team1Score : false) {
-      styles = { color: 'rgb(250, 157, 141)' };
+      styles = { 'color': '#0b329b', 'font-size': 'larger' };
     }
     return styles;
   }

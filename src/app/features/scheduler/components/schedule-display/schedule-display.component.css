@@ -2,7 +2,7 @@
 /* tr:nth-child(even) {background-color: #f2f2f2;} */
 /* color: #4756DC; */
 tr:nth-child(odd) {
-    background-color: rgb(34, 54, 228);
+    background-color: #4e72df56;
   }
   table{
   border: thick solid black;
