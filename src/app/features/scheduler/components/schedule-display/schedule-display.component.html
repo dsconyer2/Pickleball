@@ -1,9 +1,11 @@
 <form #form="ngForm">
   <div class="col-lg-12">
+    <br>
     <div>
       <button type="submit"
               class="btn btn-primary mr-5"
-              (click)="setDisplayType()">{{showLabel}}</button>
+              (click)="setDisplayType()"
+              autofocus>{{showLabel}}</button>
       <button *ngIf='!showAllRounds'
               type="submit"
               class="btn btn-primary mr-5"
@@ -12,8 +14,7 @@
               type="submit"
               class="btn btn-primary mr-5"
               (click)="advanceDisplay(1)">Next</button>
-    </div>
-    <div>
+
       <button type="submit"
               class="btn btn-primary mr-5"
               (click)="setDisplayInfo()">{{infoLabel}}</button>
@@ -27,17 +28,21 @@
         {{(playersPerCourt$ | async)}}</label> <br>
       <label>Nbr of byes per round = {{(nbrOfByePlayers$ | async)}}</label> <br>
     </div>
+    <br>
     <div>
       <table>
         <th *ngFor='let header of (headers$ | async)'>{{header}}</th>
         <tr *ngFor='let round of (displayRounds$ | async)'>
           <td>{{round.roundId}}</td>
           <td *ngFor='let match of round.matches'>
-            <span pbsHighlightOnHover
+            <span pbsHighlightOnHover style='text-align:center'
                   (click)='addScore(content, match)'>
-              <span
-                    [ngStyle]='highlightWinner(match, 1)'>{{match | matchLabel: 1}}</span>vs<span
-                    [ngStyle]='highlightWinner(match, 2)'>{{match | matchLabel: 2}}</span></span>
+              <span>{{match | matchLabel: 1}}</span>
+              <span [ngStyle]='highlightWinner(match, 1)'>{{match.team1Score | matchScore}}</span>
+              <span>  vs  </span>
+              <span [ngStyle]='highlightWinner(match, 2)'>{{match.team2Score | matchScore}}</span>
+              <span>{{match | matchLabel: 2}}</span>
+            </span>
           </td>
           <td *ngIf='hasBye(round.byeId)'>{{formattedByes(round.byeId)}}</td>
         </tr>
@@ -68,7 +73,7 @@
                  name="team1Score"
                  value="{{selectedMatch.team1Score}}"
                  #team1Score
-                 appAutofocus>
+                 pbsAutofocus>
         </div>
         <div>
           <label for="updateScore">Team 2 Score</label>

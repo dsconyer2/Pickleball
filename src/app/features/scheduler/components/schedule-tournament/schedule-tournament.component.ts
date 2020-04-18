@@ -116,7 +116,7 @@ export class ScheduleTournamentComponent implements OnInit {
     let result: ScheduleBye[];
     this.byes$.pipe(
       map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId))
-    ).subscribe()
+    ).subscribe();
     return (result.length > 0) ? result[0] : null;
   }
 
@@ -218,7 +218,7 @@ export class ScheduleTournamentComponent implements OnInit {
       // Gather data for the round.
       const thisRound: RoundData = { roundId: rounds, matches: [], byeId: undefined };
       let matchIndex = 0;
-      let roundByes: Player[] = [];
+      const roundByes: Player[] = [];
       for (let index = 0; index < indexBreak; index++) {
         matchIndex++;
         //  console.log('index = ', index);
@@ -601,17 +601,17 @@ export class ScheduleTournamentComponent implements OnInit {
     this.store.dispatch(new ScheduleHeadersUpdated(this.courtHeaders));
     let matchIndex = 0;
     this.rounds.forEach(aRound => {
-      let matchIds: number[] = [];
+      const matchIds: number[] = [];
 
       aRound.matches.forEach(aMatch => {
         matchIndex++;
         aMatch.matchId = matchIndex;
         this.store.dispatch(new ScheduleMatchCreated(matchIndex, aMatch));
         matchIds.push(matchIndex);
-      })
+      });
 
       this.store.dispatch(new ScheduleRoundCreated(aRound.roundId, matchIds, aRound.byeId));
-    })
+    });
     // this.runAnalysisReport();
 
     this.router.navigate(['/scheduleDisplay']);

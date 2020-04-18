@@ -73,15 +73,15 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     this.roundData$ =
       combineLatest([this.scheduleRounds$, this.scheduleMatches$]).pipe(
         map(([myScheduleRounds, myScheduleMatches]) => {
-          let result: RoundData[] = [];
+          const result: RoundData[] = [];
           myScheduleRounds
             .forEach(aScheduleRound => {
-              let aRound: RoundData = { roundId: undefined, matches: [], byeId: undefined };
+              const aRound: RoundData = { roundId: undefined, matches: [], byeId: undefined };
               aRound.roundId = aScheduleRound.roundId;
               aRound.byeId = aScheduleRound.byeId;
               aScheduleRound.matchIds.forEach(aMatchId => aRound.matches.push(this.getaMatchForId(aMatchId, myScheduleMatches)));
               result.push(aRound);
-            })
+            });
           return result;
         })
       );
@@ -140,14 +140,14 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     let result: ScheduleBye[];
     this.scheduleByes$.pipe(
       map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId))
-    ).subscribe()
+    ).subscribe();
     return (result.length > 0) ? result[0].byePlayers ? result[0].byePlayers.length > 0 : false : false;
   }
 
   highlightWinner(aMatch: Match, teamNumber: number) {
-    let styles = {};
+    let styles = { 'color': '#4e72df9f', 'font-size': 'larger'  };
     if (teamNumber === 1 ? aMatch.team1Score > aMatch.team2Score : teamNumber === 2 ? aMatch.team2Score > aMatch.team1Score : false) {
-      styles = { 'color': 'darkmagenta' }
+      styles = { 'color': '#0b329b', 'font-size': 'larger' };
     }
     return styles;
   }
@@ -162,7 +162,7 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     let result: ScheduleMatch[];
     this.scheduleMatches$.pipe(
       map(aMatchArray => result = aMatchArray.filter(aMatch => aMatch.matchId === aMatchId))
-    ).subscribe()
+    ).subscribe();
     return (result.length > 0) ? result[0].match : null;
   }
 
@@ -170,7 +170,7 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     let result: ScheduleBye[];
     this.scheduleByes$.pipe(
       map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId))
-    ).subscribe()
+    ).subscribe();
     return (result.length > 0) ? this.formatByeOutput(result[0]) : null;
   }
 
@@ -209,6 +209,8 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
   updateTeamScore(modal: NgbModalRef, team1Score: string, team2Score: string) {
     this.selectedMatch.team1Score = parseInt(team1Score, 10);
     this.selectedMatch.team2Score = parseInt(team2Score, 10);
+    console.log('team1score = ', team1Score);
+    console.log('team2score = ', team2Score);
     this.store.dispatch(new ScheduleMatchUpdated(this.selectedMatch.matchId, this.selectedMatch));
     modal.close('Scores Updated');
     this.updateDisplay();

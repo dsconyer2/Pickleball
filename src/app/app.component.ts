@@ -9,7 +9,7 @@ import { ApplicationStarted } from './actions/app.actions';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Pickleball';
+  title = 'Pickleball Scheduler';
   isCollapsed = false;
 
   constructor(store: Store<State>) {

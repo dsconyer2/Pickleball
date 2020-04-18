@@ -1,7 +1,8 @@
 <form name="form" (ngSubmit)="f.form.valid && onSubmit(f.form.valid)" #f="ngForm" novalidate>
   <div class="col-lg-4 offset-lg-1">
     <div>
-      <label name="scheduleType" id="scheduleType">Schedule Type</label>
+      <br>
+      <label name="scheduleType" id="scheduleType" class="h5">Schedule Type</label>
       <div class="bs-component" style="margin-bottom: 15px;">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
           <label class="btn btn-primary" [class.active]="'King of the Court' === seType">
@@ -18,7 +19,7 @@
       </div>
     </div>
     <div>
-      <label name="playerType" id="playerType">Player Type</label>
+      <label name="playerType" id="playerType"class="h5">Player Type</label>
       <div class="bs-component" style="margin-bottom: 15px;">
         <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <label *ngIf="'King of the Court' === seType" class="btn btn-primary" [class.active]="'Individuals for Doubles' === sePlayerType">

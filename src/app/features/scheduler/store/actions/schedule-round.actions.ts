@@ -10,9 +10,9 @@ export class ScheduleRoundCreated implements Action {
   constructor(roundId: number, matchIds: number[], byeId: number) {
     this.payload = {
       id: roundId,
-      roundId: roundId,
-      matchIds: matchIds,
-      byeId: byeId
+      roundId,
+      matchIds,
+      byeId
     };
    }
 }

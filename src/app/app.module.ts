@@ -20,6 +20,7 @@ import { GroupManagerDataService } from './features/player-contact/dataServices/
 import { GroupPlayerDataService } from './features/player-contact/dataServices/groupPlayerDataService';
 import { PlayerContactDataService } from './features/player-contact/dataServices/playerContactDataService';
 import { MatchLabelPipe } from './features/scheduler/pipes/match-label.pipe';
+import { MatchScorePipe } from './features/scheduler/pipes/match-score.pipe';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,7 @@ import { MatchLabelPipe } from './features/scheduler/pipes/match-label.pipe';
     StoreDevtoolsModule.instrument(),
     EffectsModule.forRoot([])
   ],
-  providers: [SchedulerDataService, GroupManagerDataService, GroupPlayerDataService, PlayerContactDataService, MatchLabelPipe],
+  providers: [SchedulerDataService, GroupManagerDataService, GroupPlayerDataService, PlayerContactDataService, MatchLabelPipe, MatchScorePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
