@@ -3,12 +3,17 @@ import { Match } from '../models';
 
 @Pipe({ name: 'matchLabel' })
 export class MatchLabelPipe implements PipeTransform {
-  transform(aMatch: Match, teamNumber: number): string {
+  transform(aMatch: Match, teamNumber: number, useNamesForMatches: boolean): string {
     let matchLabel = '';
     const matchTeam = teamNumber === 1 ? aMatch.team1 : teamNumber === 2 ? aMatch.team2 : undefined;
-    matchTeam.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
+
+    if (useNamesForMatches) {
+      matchTeam.forEach(aPlayer => matchLabel += (aPlayer.playerName + ', '));
+    } else {
+      matchTeam.forEach(aPlayer => matchLabel += (aPlayer.playerId + ', '));
+    }
     matchLabel = matchLabel.slice(0, matchLabel.length - 2);
-    // matchLabel += '  ';
+
     return matchLabel;
   }
 }

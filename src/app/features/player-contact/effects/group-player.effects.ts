@@ -28,6 +28,20 @@ export class GroupPlayerEffects {
           tap(a => this.service.updateGroupPlayer(a.payload))
       );
 
+      @Effect({ dispatch: false }) groupPlayerUpdatedPlayerContactAdded$ = this.actions$
+      .pipe(
+          ofType(actions.UPDATE_GROUP_PLAYER_ADD_PLAYER_CONTACT),
+          map(a => a as actions.GroupPlayerUpdatedPlayerContactAdded),
+          tap(a => this.service.updateGroupPlayer(a.payload))
+      );
+
+      @Effect({ dispatch: false }) groupPlayerUpdatedPlayerContactRemoved$ = this.actions$
+      .pipe(
+          ofType(actions.UPDATE_GROUP_PLAYER_ADD_PLAYER_CONTACT),
+          map(a => a as actions.GroupPlayerUpdatedPlayerContactRemoved),
+          tap(a => this.service.updateGroupPlayer(a.payload))
+      );
+
       @Effect({ dispatch: false }) groupPlayerRemoved$ = this.actions$
       .pipe(
           ofType(actions.REMOVE_GROUP_PLAYER),

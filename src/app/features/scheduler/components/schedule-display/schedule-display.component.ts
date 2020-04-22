@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Match, ScheduleBye, ScheduleRound, ScheduleMatch, RoundData } from '../../models';
+import { Match, ScheduleBye, ScheduleRound, ScheduleMatch, RoundData, SchedulerSettings } from '../../models';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import {
   SchedulerState, selectScheduleHeaders, selectSchedulerPlayerType,
   selectSchedulerNbrOfPlayers, selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt,
-  selectSchedulerNbrOfByePlayers, selectSchedulerType, selectScheduleByeEntities, selectScheduleRoundEntities, selectScheduleMatchEntities
+  selectSchedulerNbrOfByePlayers, selectSchedulerType, selectScheduleByeEntities, selectScheduleRoundEntities,
+  selectScheduleMatchEntities, selectSchedulerSettings
 } from '../../store/reducers';
 import { Observable, Subject, of, combineLatest } from 'rxjs';
 import { takeUntil, map, switchMap } from 'rxjs/operators';
@@ -59,6 +60,10 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     this.nbrOfCourts$ = this.store.select(selectSchedulerNbrOfCourts);
     this.playersPerCourt$ = this.store.select(selectSchedulerNbrOfPlayersPerCourt);
     this.nbrOfByePlayers$ = this.store.select(selectSchedulerNbrOfByePlayers);
+
+    this.store.select(selectSchedulerSettings).subscribe((settings: SchedulerSettings) => {
+      this.useNamesForMatches = settings.useNamesForMatches;
+    });
 
     this.scheduleRounds$.pipe(
       takeUntil(this.unsubscribe$)
@@ -139,15 +144,16 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
   hasBye(aByeId: number): boolean {
     let result: ScheduleBye[];
     this.scheduleByes$.pipe(
-      map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId))
+      map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId)),
+      takeUntil(this.unsubscribe$)
     ).subscribe();
     return (result.length > 0) ? result[0].byePlayers ? result[0].byePlayers.length > 0 : false : false;
   }
 
   highlightWinner(aMatch: Match, teamNumber: number) {
-    let styles = { 'color': '#4e72df9f', 'font-size': 'larger'  };
+    let styles = { color: '#4e72df9f', 'font-size': 'larger' };
     if (teamNumber === 1 ? aMatch.team1Score > aMatch.team2Score : teamNumber === 2 ? aMatch.team2Score > aMatch.team1Score : false) {
-      styles = { 'color': '#0b329b', 'font-size': 'larger' };
+      styles = { color: '#0b329b', 'font-size': 'larger' };
     }
     return styles;
   }
@@ -161,7 +167,8 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
   getMatchForId(aMatchId: number): Match {
     let result: ScheduleMatch[];
     this.scheduleMatches$.pipe(
-      map(aMatchArray => result = aMatchArray.filter(aMatch => aMatch.matchId === aMatchId))
+      map(aMatchArray => result = aMatchArray.filter(aMatch => aMatch.matchId === aMatchId)),
+      takeUntil(this.unsubscribe$)
     ).subscribe();
     return (result.length > 0) ? result[0].match : null;
   }
@@ -169,20 +176,23 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
   formattedByes(aByeId: number): string {
     let result: ScheduleBye[];
     this.scheduleByes$.pipe(
-      map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId))
+      map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId)),
+      takeUntil(this.unsubscribe$)
     ).subscribe();
     return (result.length > 0) ? this.formatByeOutput(result[0]) : null;
   }
 
   formatByeOutput(aScheduleBye: ScheduleBye): string {
     let output = ' ';
-    aScheduleBye.byePlayers.sort((a, b) => a.playerId - b.playerId).forEach(aByePlayer => {
-      if (this.useNamesForMatches) {
+    if (this.useNamesForMatches) {
+      aScheduleBye.byePlayers.sort((a, b) => a.playerName < b.playerName ? -1 : 1).forEach(aByePlayer => {
         output += (aByePlayer.playerName + ', ');
-      } else {
+      });
+    } else {
+      aScheduleBye.byePlayers.sort((a, b) => a.playerId - b.playerId).forEach(aByePlayer => {
         output += (aByePlayer.playerId + ', ');
-      }
-    });
+      });
+    }
     output = output.slice(0, output.length - 2);
     return output;
   }

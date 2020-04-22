@@ -5,7 +5,7 @@ import { PlayerContact } from '../models';
 export interface GroupPlayerEntity {
   id: number;
   groupPlayerId: number;
-  players?: PlayerContact[];
+  playerContacts?: PlayerContact[];
 }
 
 export interface GroupPlayerUpdateEntity {
@@ -42,10 +42,19 @@ export function reducer(state: State = initialState, action: actions.All): State
       return adapter.removeOne(action.payload.id, state);
     }
     case actions.ADD_GROUP_PLAYER: {
-      return adapter.updateOne({id: action.payload.id, changes: action.payload.changes}, state);
+      return adapter.updateOne({ id: action.payload.id, changes: action.payload.changes }, state);
+    }
+    case actions.UPDATE_GROUP_PLAYER_ADD_PLAYER_CONTACT: {
+      const playerContacts = state.entities[action.payload.id].playerContacts.slice().concat(action.payload.changes.playerContacts);
+      return adapter.updateOne({ id: action.payload.id, changes: { playerContacts } }, state);
+    }
+    case actions.UPDATE_GROUP_PLAYER_REMOVE_PLAYER_CONTACT: {
+      const playerContacts = state.entities[action.payload.id].playerContacts.slice()
+        .filter(pc => action.payload.changes.playerContacts.find(aPc => aPc.playerContactId === pc.playerContactId) === undefined);
+      return adapter.updateOne({ id: action.payload.id, changes: { playerContacts } }, state);
     }
     case actions.REMOVE_GROUP_PLAYER: {
-      return adapter.updateOne({id: action.payload.id, changes: action.payload.changes}, state);
+      return adapter.updateOne({ id: action.payload.id, changes: action.payload.changes }, state);
     }
     case actions.LOAD_GROUP_PLAYERS_SUCCESS: {
       return adapter.addAll(action.payload, state);

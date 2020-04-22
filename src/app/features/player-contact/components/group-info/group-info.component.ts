@@ -20,8 +20,8 @@ export class GroupInfoComponent implements OnInit {
   }
 
   removeGroup(group) {
-    this.store.dispatch(new GroupPlayerDeleted(this.group.playerIds));
-    this.store.dispatch(new GroupPlayerDeleted(this.group.enabledPlayerIds));
+    this.store.dispatch(new GroupPlayerDeleted(this.group.groupPlayerId));
+    this.store.dispatch(new GroupPlayerDeleted(this.group.enabledPlayerId));
     this.store.dispatch(new GroupRemoved(this.group.groupId));
   }
 
