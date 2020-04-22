@@ -1,0 +1,14 @@
+.select-group {
+  border: 1px solid #f1f1f1;
+  height: 55px;
+  padding: 5px;
+  padding-left: 25px;
+  display: block;
+  width: 100%;
+  font-size: 1em;
+  color: #444;
+}
+
+.select-group:focus {
+  outline: none;
+}

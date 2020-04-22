@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, Subject } from 'rxjs';
 import { Group, PlayerContact, GroupPlayer } from '../../models';
-import { Store } from '@ngrx/store';
-import { selectGroupEntities, PlayerContactState, selectPlayerContactEntities, selectGroupPlayerEntities } from '../../reducers';
-import { GroupPlayerAdded, GroupPlayerRemoved } from '../../actions/group-player.actions';
+import { Store, select } from '@ngrx/store';
+import { selectGroupEntities, PlayerContactState, selectPlayerContactEntities, selectGroupPlayerEntities, selectGroupPlayerSelectedGroup, selectGroupPlayerSelectedGroupPlayer, selectAvailablePlayerContactEntities, selectGroupPlayerEnabledGroupPlayer } from '../../reducers';
+import { GroupPlayerAdded, GroupPlayerRemoved, UPDATE_GROUP_PLAYER_ADD_PLAYER_CONTACT, GroupPlayerUpdatedPlayerContactAdded, GroupPlayerUpdatedPlayerContactRemoved } from '../../actions/group-player.actions';
+import { GroupPlayerSelectedGroupUpdated } from '../../actions/group-player-settings.actions';
+import { FormGroup } from '@angular/forms';
+import { filter, switchMap, map, tap, take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-player-manager',
@@ -11,76 +14,130 @@ import { GroupPlayerAdded, GroupPlayerRemoved } from '../../actions/group-player
   styleUrls: ['./group-player-manager.component.css']
 })
 export class GroupPlayerManagerComponent implements OnInit {
-  playerContacts$: Observable<PlayerContact[]>;
+  availablePlayerContacts$: Observable<PlayerContact[]>;
   groups$: Observable<Group[]>;
+  selectedGroup$: Observable<Group>;
   selectedGroup: Group;
+  selectedGroupPlayer$: Observable<GroupPlayer>;
   groupPlayers$: Observable<GroupPlayer[]>;
   groupPlayers: GroupPlayer;
-  enabledGroupPlayers: GroupPlayer;
+  enabledGroupPlayers$: Observable<GroupPlayer>;
+
+  selectedGroupPlayer: GroupPlayer;
+
+  groupPlayerManagerForm: FormGroup;
+  private unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private store: Store<PlayerContactState>) { }
 
   ngOnInit() {
-    this.playerContacts$ = this.store.select(selectPlayerContactEntities);
+    this.availablePlayerContacts$ = this.store.select(selectAvailablePlayerContactEntities);
     this.groups$ = this.store.select(selectGroupEntities);
     this.groupPlayers$ = this.store.select(selectGroupPlayerEntities);
+    this.selectedGroup$ = this.store.select(selectGroupPlayerSelectedGroup);
+
+    this.selectedGroupPlayer$ = this.store.select(selectGroupPlayerSelectedGroupPlayer);
+    this.enabledGroupPlayers$ = this.store.select(selectGroupPlayerEnabledGroupPlayer);
   }
 
-  updatePlayers() {
-    this.store.select(selectGroupPlayerEntities).forEach(entities =>
-      entities.forEach(
-      aGroupPlayer => {
-      if (aGroupPlayer.groupPlayerId === this.selectedGroup.playerIds) { this.groupPlayers = aGroupPlayer; }
-      if (aGroupPlayer.groupPlayerId === this.selectedGroup.enabledPlayerIds) { this.enabledGroupPlayers = aGroupPlayer; }
-    }));
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
-  sortedPlayers(groupPlayers: PlayerContact[]) {
-    return groupPlayers.sort((a, b) => (a.name > b.name) ? 0 : -1);
+  enabledPlayers(): PlayerContact[] {
+    let result = [];
+    this.enabledGroupPlayers$
+    .pipe(
+      take(1),
+      takeUntil(this.unsubscribe),
+       tap(ep => {
+         result = ep.playerContacts;
+       })
+     ).subscribe();
+     return result;
   }
 
+  selectedPlayers(): PlayerContact[] {
+    let result = [];
+    this.selectedGroupPlayer$
+    .pipe(
+      take(1),
+      takeUntil(this.unsubscribe),
+       tap(ep => {
+         result = ep.playerContacts;
+       })
+     ).subscribe();
+     return result;
+  }
+  sortedGroupPlayers(groupPlayer: GroupPlayer) {
+    if (!!groupPlayer) {
+      const result = this.sortedPlayerContacts(groupPlayer.playerContacts);
+      return result;
+    } else {
+      return [];
+    }
+  }
+
+  sortedPlayerContacts(playerContacts: PlayerContact[]) {
+    if (!!playerContacts) {
+      const result = playerContacts.slice().sort((a, b) => b.name < a.name ? 1 : -1);
+      return result;
+    } else {
+      return [];
+    }
+  }
   groupSelected() {
-    this.updatePlayers();
+    this.store.dispatch(new GroupPlayerSelectedGroupUpdated(this.selectedGroup));
   }
 
   enablePlayerClass(player: PlayerContact) {
-    if (this.enabledGroupPlayers.players.find(aPlayer => aPlayer === player)) {
-      return 'fa fa-star';
-    } else {
-      return 'fa fa-thumbs-down';
-    }
+    let result = 'fa fa-thumbs-down';
+    if (this.enabledPlayers().find(aPlayer => aPlayer.playerContactId === player.playerContactId)) {
+          result = 'fa fa-star';
+        }
+
+    return result;
   }
 
   toggleEnablePlayer(player: PlayerContact) {
-    if (this.enabledGroupPlayers.players.find(aPlayer => aPlayer === player)) {
-      this.disablePlayer(player);
-    } else {
-      this.enablePlayer(player);
-    }
+    console.log('Enabled Players = ', this.enabledPlayers());
+    console.log('Player = ', player);
+    if (this.enabledPlayers().find(aPlayer => aPlayer.playerContactId === player.playerContactId)) {
+          this.disablePlayer(player);
+        } else {
+          this.enablePlayer(player);
+        }
   }
 
   enablePlayer(player: PlayerContact) {
-    const players = this.enabledGroupPlayers.players.slice();
+    let players = this.enabledPlayers().filter(aPlayer => aPlayer.playerContactId != player.playerContactId);
+    console.log('e players = ', players);
     players.push(player);
-    this.store.dispatch(new GroupPlayerAdded(this.enabledGroupPlayers.groupPlayerId, players));
+
+    this.store.dispatch(new GroupPlayerAdded(this.selectedGroup.enabledPlayerId, players));
   }
 
   disablePlayer(player: PlayerContact) {
-    const players = this.enabledGroupPlayers.players.filter(aPlayer => aPlayer !== player);
-    this.store.dispatch(new GroupPlayerRemoved(this.enabledGroupPlayers.groupPlayerId, players));
+    let players = this.enabledPlayers().filter(aPlayer => aPlayer.playerContactId != player.playerContactId);
+    console.log('Disable Players = ', players);
+    this.store.dispatch(new GroupPlayerRemoved(this.selectedGroup.enabledPlayerId, players));
   }
 
   addPlayer(player: PlayerContact) {
-    const players = this.groupPlayers.players.slice();
+    let players = this.selectedPlayers().filter(aPlayer => aPlayer.playerContactId != player.playerContactId);
+    console.log('add players = ', players);
     players.push(player);
-    this.store.dispatch(new GroupPlayerAdded(this.groupPlayers.groupPlayerId, players));
+
+    this.store.dispatch(new GroupPlayerAdded(this.selectedGroup.groupPlayerId, players));
     this.enablePlayer(player);
   }
 
   removePlayer(player: PlayerContact) {
+    let players = this.selectedPlayers().filter(aPlayer => aPlayer.playerContactId != player.playerContactId);
+    console.log('Remove Players = ', players);
+    this.store.dispatch(new GroupPlayerRemoved(this.selectedGroup.groupPlayerId, players));
     this.disablePlayer(player);
-    const players = this.groupPlayers.players.filter(aPlayer => aPlayer !== player);
-    this.store.dispatch(new GroupPlayerRemoved(this.groupPlayers.groupPlayerId, players));
   }
 
 

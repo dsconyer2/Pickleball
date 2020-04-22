@@ -19,11 +19,8 @@ export class ContactInfoComponent implements OnInit {
   ngOnInit() {
   }
 
-  removeContact(contact) {
+  removeContact() {
     this.store.dispatch(new PlayerContactRemoved(this.contact.playerContactId));
   }
 
-  // starContact(contact) {
-  //   this.store.dispatch(starContact(contact.id));
-  // }
 }

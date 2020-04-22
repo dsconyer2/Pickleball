@@ -11,7 +11,7 @@ export class GroupPlayerCreated implements Action {
     this.payload = {
       id: groupPlayerId,
       groupPlayerId,
-      players: []
+      playerContacts: []
 
     };
    }
@@ -33,10 +33,34 @@ export const ADD_GROUP_PLAYER = '[groupFeature] add  groupPlayer';
 export class GroupPlayerAdded implements Action {
   readonly type = ADD_GROUP_PLAYER;
   payload: GroupPlayerUpdateEntity;
-  constructor(groupPlayerId: number, players: PlayerContact[]) {
+  constructor(groupPlayerId: number, playerContacts: PlayerContact[]) {
     this.payload = {
       id: groupPlayerId,
-      changes: {players}
+      changes: {playerContacts}
+    };
+   }
+}
+
+export const UPDATE_GROUP_PLAYER_ADD_PLAYER_CONTACT = '[groupFeature] update groupPlayer add playerContact';
+export class GroupPlayerUpdatedPlayerContactAdded implements Action {
+  readonly type = UPDATE_GROUP_PLAYER_ADD_PLAYER_CONTACT;
+  payload: GroupPlayerUpdateEntity;
+  constructor(groupPlayerId: number, playerContacts: PlayerContact[]) {
+    this.payload = {
+      id: groupPlayerId,
+      changes: {playerContacts}
+    };
+   }
+}
+
+export const UPDATE_GROUP_PLAYER_REMOVE_PLAYER_CONTACT = '[groupFeature] update groupPlayer remove playerContact';
+export class GroupPlayerUpdatedPlayerContactRemoved implements Action {
+  readonly type = UPDATE_GROUP_PLAYER_REMOVE_PLAYER_CONTACT;
+  payload: GroupPlayerUpdateEntity;
+  constructor(groupPlayerId: number, playerContacts: PlayerContact[]) {
+    this.payload = {
+      id: groupPlayerId,
+      changes: {playerContacts}
     };
    }
 }
@@ -45,10 +69,10 @@ export const REMOVE_GROUP_PLAYER = '[groupFeature] remove  groupPlayer';
 export class GroupPlayerRemoved implements Action {
   readonly type = REMOVE_GROUP_PLAYER;
   payload: GroupPlayerUpdateEntity;
-  constructor(groupPlayerId: number, players: PlayerContact[]) {
+  constructor(groupPlayerId: number, playerContacts: PlayerContact[]) {
     this.payload = {
       id: groupPlayerId,
-      changes: {players}
+      changes: {playerContacts}
     };
    }
 }
@@ -69,6 +93,8 @@ export type All =
 GroupPlayerCreated
 | GroupPlayerDeleted
 | GroupPlayerAdded
+| GroupPlayerUpdatedPlayerContactAdded
+| GroupPlayerUpdatedPlayerContactRemoved
 | GroupPlayerRemoved
 | GroupPlayersLoad
 | GroupPlayersLoadedSuccessfully;

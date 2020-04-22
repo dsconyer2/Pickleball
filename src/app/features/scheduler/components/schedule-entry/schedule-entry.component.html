@@ -43,16 +43,17 @@
     <div>
       <h5 *ngIf="sePlayerType !== 'Teams'">Number of Players</h5>
       <h5 *ngIf="sePlayerType === 'Teams'">Number of Teams</h5>
-      <!-- <div class="input-group-text">
+      <div class="input-group-text">
         <input type="checkbox" aria-label="Load from Group" name="loadFromGroup" id="loadFromGroup" ngModel
           [(ngModel)]="seLoadFromGroup" #loadFromGroup="ngModel">
         <span>Load from Group</span>
-      </div> -->
+      </div>
       <div *ngIf="seLoadFromGroup">
-        <select name="groupToLoad" id="groupToLoad" [(ngModel)]="seSelectedGroup">
-          <option *ngFor="let group of groups$ | async" value={{seSelectedGroup}} [ngValue]="group">{{group.name}}
+        <select class="custom-select" name="groupToLoad" id="groupToLoad" [(ngModel)]="seSelectedGroup">
+          <option *ngFor="let group of groups$ | async" [ngValue]="group">{{group.name}}
           </option>
         </select>
+        <div *ngIf="!(validPlayerCount)">This group does not have enough players for Schedule Type and Player Type selected.</div>
         <br><br>
       </div>
       <div *ngIf="!seLoadFromGroup">

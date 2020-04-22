@@ -5,13 +5,13 @@ export const ADD_GROUP = '[groupFeature] add  group';
 export class GroupAdded implements Action {
   readonly type = ADD_GROUP;
   payload: GroupEntity;
-  constructor(groupId: number, name: string, playerIds: number, enabledPlayerIds: number) {
+  constructor(groupId: number, name: string, groupPlayerId: number, enabledPlayerId: number) {
     this.payload = {
       id: groupId,
       groupId,
       name,
-      playerIds,
-      enabledPlayerIds
+      groupPlayerId,
+      enabledPlayerId
     };
    }
 }

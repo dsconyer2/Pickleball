@@ -5,8 +5,8 @@ export interface GroupEntity {
   id: number;
   groupId: number;
   name?: string;
-  playerIds?: number;
-  enabledPlayerIds?: number;
+  groupPlayerId?: number;
+  enabledPlayerId?: number;
 }
 
 export interface State extends EntityState<GroupEntity> { }
@@ -14,8 +14,8 @@ export interface State extends EntityState<GroupEntity> { }
 // const initialState: State = {
 //   ids: ['1', '2'],
 //   entities: {
-//     1: { id: 1, groupId: 1, name: 'Monday at Mentor', playerIds: 1, enabledPlayerIds: 2},
-//     2: { id: 2, groupId: 2, name: 'YMCA Tuesday', playerIds: 3, enabledPlayerIds: 4}
+//     1: { id: 1, groupId: 1, name: 'Monday at Mentor', groupPlayerId: 1, enabledPlayerId: 2},
+//     2: { id: 2, groupId: 2, name: 'YMCA Tuesday', groupPlayerId: 3, enabledPlayerId: 4}
 //   }
 // };
 const initialState: State = {

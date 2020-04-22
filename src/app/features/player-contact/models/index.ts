@@ -6,11 +6,11 @@ export interface PlayerContact {
 export interface Group {
   groupId: number;
   name?: string;
-  playerIds?: number;
-  enabledPlayerIds?: number;
+  groupPlayerId?: number;
+  enabledPlayerId?: number;
 }
 
 export interface GroupPlayer {
   groupPlayerId: number;
-  players?: PlayerContact[];
+  playerContacts?: PlayerContact[];
 }

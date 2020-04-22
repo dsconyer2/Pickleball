@@ -15,7 +15,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { AppStartUpEffects } from './effects/app-startup.effects';
 
 @NgModule({
-  declarations: [PlayerContactComponent, ContactInfoComponent, GroupManagerComponent, GroupPlayerManagerComponent, GroupInfoComponent],
+  declarations: [
+    PlayerContactComponent,
+    ContactInfoComponent,
+    GroupManagerComponent,
+    GroupPlayerManagerComponent,
+    GroupInfoComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,

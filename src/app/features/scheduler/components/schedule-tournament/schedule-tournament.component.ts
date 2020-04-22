@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Match, Player, RoundData, SchedulerSettings, ScheduleBye, ScheduleRound } from '../../models';
 import { SchedulerState, selectPlayerEntities, selectSchedulerSettings, selectScheduleByeEntities } from '../../store/reducers';
 import { ScheduleHeadersUpdated } from '../../store/actions/schedule-header.actions';
 import { NbrOfByePlayersUpdated } from '../../store/actions/scheduler.actions';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { ScheduleByeCreated, ScheduleByesDeleted } from '../../store/actions/schedule-bye.actions';
 import { ScheduleMatchesDeleted, ScheduleMatchCreated } from '../../store/actions/schedule-match.actions';
 import { ScheduleRoundCreated, ScheduleRoundsDeleted } from '../../store/actions/schedule-round.actions';
@@ -17,7 +17,7 @@ import { ScheduleRoundCreated, ScheduleRoundsDeleted } from '../../store/actions
   templateUrl: './schedule-tournament.component.html',
   styleUrls: ['./schedule-tournament.component.css']
 })
-export class ScheduleTournamentComponent implements OnInit {
+export class ScheduleTournamentComponent implements OnInit, OnDestroy {
 
   players$: Observable<Player[]>;
   schedulerSettings$: Observable<SchedulerSettings>;
@@ -42,10 +42,12 @@ export class ScheduleTournamentComponent implements OnInit {
   rounds: RoundData[] = [];
   courtHeaders: string[] = [];
 
+  unsubscribe$: Subject<boolean> = new Subject<boolean>();
+
   constructor(private store: Store<SchedulerState>, private router: Router) { }
 
   ngOnInit() {
-    this.store.select(selectSchedulerSettings).subscribe((settings: SchedulerSettings) => {
+    this.store.select(selectSchedulerSettings).pipe(takeUntil(this.unsubscribe$)).subscribe((settings: SchedulerSettings) => {
       this.playerType = settings.schedulerPlayerType;
       this.isScheduleTypeKing = settings.schedulerType === 'King of the Court';
       this.nbrOfPlayers = settings.nbrOfPlayers;
@@ -55,7 +57,7 @@ export class ScheduleTournamentComponent implements OnInit {
       this.useNamesForMatches = settings.useNamesForMatches;
     });
 
-    this.store.select(selectPlayerEntities).subscribe((players: Player[]) => {
+    this.store.select(selectPlayerEntities).pipe(takeUntil(this.unsubscribe$)).subscribe((players: Player[]) => {
       players.forEach(aPlayer => this.playerList1.push(aPlayer));
     });
 
@@ -66,6 +68,11 @@ export class ScheduleTournamentComponent implements OnInit {
     } else {
       this.router.navigate(['/scheduler']);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.unsubscribe();
   }
 
   createByePlayer(playerId: number) {
@@ -115,7 +122,8 @@ export class ScheduleTournamentComponent implements OnInit {
   getByesById(aByeId: number): ScheduleBye {
     let result: ScheduleBye[];
     this.byes$.pipe(
-      map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId))
+      map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId)),
+      takeUntil(this.unsubscribe$)
     ).subscribe();
     return (result.length > 0) ? result[0] : null;
   }
@@ -558,7 +566,7 @@ export class ScheduleTournamentComponent implements OnInit {
 
     // Dump out player information
     this.playerList1.length = 0;
-    this.store.select(selectPlayerEntities).subscribe((players: Player[]) => {
+    this.store.select(selectPlayerEntities).pipe(takeUntil(this.unsubscribe$)).subscribe((players: Player[]) => {
       players.forEach(aPlayer => this.playerList1.push(aPlayer));
     });
 
