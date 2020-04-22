@@ -20,7 +20,7 @@ export interface State {
 
 const initialState: State = {
   selectedGroup: {groupId: undefined,
-    name: "",
+    name: '',
     groupPlayerId: undefined,
     enabledPlayerId: undefined}
 };

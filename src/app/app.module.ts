@@ -42,7 +42,14 @@ import { MatchScorePipe } from './features/scheduler/pipes/match-score.pipe';
     StoreDevtoolsModule.instrument(),
     EffectsModule.forRoot([])
   ],
-  providers: [SchedulerDataService, GroupManagerDataService, GroupPlayerDataService, PlayerContactDataService, MatchLabelPipe, MatchScorePipe],
+  providers: [
+    SchedulerDataService,
+    GroupManagerDataService,
+    GroupPlayerDataService,
+    PlayerContactDataService,
+    MatchLabelPipe,
+    MatchScorePipe
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

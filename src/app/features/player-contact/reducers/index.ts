@@ -36,7 +36,8 @@ const { selectAll: selectGroupPlayerEntityArray } = fromGroupPlayer.adapter.getS
 // 4. Create a selector for what the component needs.
 
 // TodoEntity[] => TodoListItem[]
-export const selectPlayerContactEntities = createSelector(selectPlayerContactEntityArray, t => t.map(x => x as PlayerContact).sort((a, b) => (a.name > b.name) ? 0 : -1));
+export const selectPlayerContactEntities =
+  createSelector(selectPlayerContactEntityArray, t => t.map(x => x as PlayerContact).sort((a, b) => (a.name > b.name) ? 0 : -1));
 const initPlayer: PlayerContact = { playerContactId: 0 };
 export const selectHighestPlayerId =
   createSelector(selectPlayerContactEntityArray,
@@ -80,9 +81,9 @@ export const selectGroupPlayerEnabledGroupPlayer = createSelector(selectGroupPla
 export const selectAvailablePlayerContactEntities = createSelector(selectPlayerContactEntities, selectGroupPlayerSelectedGroupPlayer,
   (p, gp) => {
     if (!!gp && !!gp.playerContacts) {
-      return p.filter(ap => !gp?.playerContacts.find(agp => agp.playerContactId === ap.playerContactId))
+      return p.filter(ap => !gp?.playerContacts.find(agp => agp.playerContactId === ap.playerContactId));
     } else {
-      return p
+      return p;
     }
   });
   // t => t.map(x => x as PlayerContact).sort((a, b) => (a.name > b.name) ? 0 : -1));

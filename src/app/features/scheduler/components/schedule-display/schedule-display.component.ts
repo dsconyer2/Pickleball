@@ -5,7 +5,8 @@ import { Router } from '@angular/router';
 import {
   SchedulerState, selectScheduleHeaders, selectSchedulerPlayerType,
   selectSchedulerNbrOfPlayers, selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt,
-  selectSchedulerNbrOfByePlayers, selectSchedulerType, selectScheduleByeEntities, selectScheduleRoundEntities, selectScheduleMatchEntities, selectSchedulerSettings
+  selectSchedulerNbrOfByePlayers, selectSchedulerType, selectScheduleByeEntities, selectScheduleRoundEntities,
+  selectScheduleMatchEntities, selectSchedulerSettings
 } from '../../store/reducers';
 import { Observable, Subject, of, combineLatest } from 'rxjs';
 import { takeUntil, map, switchMap } from 'rxjs/operators';
@@ -150,9 +151,9 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
   }
 
   highlightWinner(aMatch: Match, teamNumber: number) {
-    let styles = { 'color': '#4e72df9f', 'font-size': 'larger' };
+    let styles = { color: '#4e72df9f', 'font-size': 'larger' };
     if (teamNumber === 1 ? aMatch.team1Score > aMatch.team2Score : teamNumber === 2 ? aMatch.team2Score > aMatch.team1Score : false) {
-      styles = { 'color': '#0b329b', 'font-size': 'larger' };
+      styles = { color: '#0b329b', 'font-size': 'larger' };
     }
     return styles;
   }

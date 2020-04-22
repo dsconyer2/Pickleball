@@ -1,19 +1,22 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable, Subscription, Subject } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 import { Group, PlayerContact, GroupPlayer } from '../../models';
-import { Store, select } from '@ngrx/store';
-import { selectGroupEntities, PlayerContactState, selectPlayerContactEntities, selectGroupPlayerEntities, selectGroupPlayerSelectedGroup, selectGroupPlayerSelectedGroupPlayer, selectAvailablePlayerContactEntities, selectGroupPlayerEnabledGroupPlayer } from '../../reducers';
-import { GroupPlayerAdded, GroupPlayerRemoved, UPDATE_GROUP_PLAYER_ADD_PLAYER_CONTACT, GroupPlayerUpdatedPlayerContactAdded, GroupPlayerUpdatedPlayerContactRemoved } from '../../actions/group-player.actions';
+import { Store } from '@ngrx/store';
+import {
+  selectGroupEntities, PlayerContactState, selectGroupPlayerEntities, selectGroupPlayerSelectedGroup,
+  selectGroupPlayerSelectedGroupPlayer, selectAvailablePlayerContactEntities, selectGroupPlayerEnabledGroupPlayer
+} from '../../reducers';
+import { GroupPlayerAdded, GroupPlayerRemoved } from '../../actions/group-player.actions';
 import { GroupPlayerSelectedGroupUpdated } from '../../actions/group-player-settings.actions';
 import { FormGroup } from '@angular/forms';
-import { filter, switchMap, map, tap, take, takeUntil } from 'rxjs/operators';
+import { tap, take, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-player-manager',
   templateUrl: './group-player-manager.component.html',
   styleUrls: ['./group-player-manager.component.css']
 })
-export class GroupPlayerManagerComponent implements OnInit {
+export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
   availablePlayerContacts$: Observable<PlayerContact[]>;
   groups$: Observable<Group[]>;
   selectedGroup$: Observable<Group>;
@@ -48,27 +51,27 @@ export class GroupPlayerManagerComponent implements OnInit {
   enabledPlayers(): PlayerContact[] {
     let result = [];
     this.enabledGroupPlayers$
-    .pipe(
-      take(1),
-      takeUntil(this.unsubscribe),
-       tap(ep => {
-         result = ep.playerContacts;
-       })
-     ).subscribe();
-     return result;
+      .pipe(
+        take(1),
+        takeUntil(this.unsubscribe),
+        tap(ep => {
+          result = ep.playerContacts;
+        })
+      ).subscribe();
+    return result;
   }
 
   selectedPlayers(): PlayerContact[] {
     let result = [];
     this.selectedGroupPlayer$
-    .pipe(
-      take(1),
-      takeUntil(this.unsubscribe),
-       tap(ep => {
-         result = ep.playerContacts;
-       })
-     ).subscribe();
-     return result;
+      .pipe(
+        take(1),
+        takeUntil(this.unsubscribe),
+        tap(ep => {
+          result = ep.playerContacts;
+        })
+      ).subscribe();
+    return result;
   }
   sortedGroupPlayers(groupPlayer: GroupPlayer) {
     if (!!groupPlayer) {
@@ -94,8 +97,8 @@ export class GroupPlayerManagerComponent implements OnInit {
   enablePlayerClass(player: PlayerContact) {
     let result = 'fa fa-thumbs-down';
     if (this.enabledPlayers().find(aPlayer => aPlayer.playerContactId === player.playerContactId)) {
-          result = 'fa fa-star';
-        }
+      result = 'fa fa-star';
+    }
 
     return result;
   }
@@ -104,14 +107,14 @@ export class GroupPlayerManagerComponent implements OnInit {
     console.log('Enabled Players = ', this.enabledPlayers());
     console.log('Player = ', player);
     if (this.enabledPlayers().find(aPlayer => aPlayer.playerContactId === player.playerContactId)) {
-          this.disablePlayer(player);
-        } else {
-          this.enablePlayer(player);
-        }
+      this.disablePlayer(player);
+    } else {
+      this.enablePlayer(player);
+    }
   }
 
   enablePlayer(player: PlayerContact) {
-    let players = this.enabledPlayers().filter(aPlayer => aPlayer.playerContactId != player.playerContactId);
+    const players = this.enabledPlayers().filter(aPlayer => aPlayer.playerContactId !== player.playerContactId);
     console.log('e players = ', players);
     players.push(player);
 
@@ -119,13 +122,13 @@ export class GroupPlayerManagerComponent implements OnInit {
   }
 
   disablePlayer(player: PlayerContact) {
-    let players = this.enabledPlayers().filter(aPlayer => aPlayer.playerContactId != player.playerContactId);
+    const players = this.enabledPlayers().filter(aPlayer => aPlayer.playerContactId !== player.playerContactId);
     console.log('Disable Players = ', players);
     this.store.dispatch(new GroupPlayerRemoved(this.selectedGroup.enabledPlayerId, players));
   }
 
   addPlayer(player: PlayerContact) {
-    let players = this.selectedPlayers().filter(aPlayer => aPlayer.playerContactId != player.playerContactId);
+    const players = this.selectedPlayers().filter(aPlayer => aPlayer.playerContactId !== player.playerContactId);
     console.log('add players = ', players);
     players.push(player);
 
@@ -134,7 +137,7 @@ export class GroupPlayerManagerComponent implements OnInit {
   }
 
   removePlayer(player: PlayerContact) {
-    let players = this.selectedPlayers().filter(aPlayer => aPlayer.playerContactId != player.playerContactId);
+    const players = this.selectedPlayers().filter(aPlayer => aPlayer.playerContactId !== player.playerContactId);
     console.log('Remove Players = ', players);
     this.store.dispatch(new GroupPlayerRemoved(this.selectedGroup.groupPlayerId, players));
     this.disablePlayer(player);

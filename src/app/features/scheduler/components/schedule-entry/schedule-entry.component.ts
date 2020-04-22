@@ -77,17 +77,27 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
 
     this.groups$ = this.store.select(selectGroupEntities);
     this.groupPlayers$ = this.store.select(selectGroupPlayerEntities);
-    this.groupSubscription = this.groupPlayers$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.groupPlayers = g);
+    this.groupSubscription =
+      this.groupPlayers$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.groupPlayers = g);
 
-    this.playerTypeSubscription = this.schedulerPlayerType$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.sePlayerType = g);
-    this.typeSubscription = this.schedulerType$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seType = g);
-    this.nbrOfPlayersSubscription = this.schedulerNbrOfPlayers$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.sePlayers = g);
-    this.nbrOfCourtsSubscription = this.schedulerNbrOfCourts$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seCourts = g);
-    this.nbrOfPlayersPerCourtSubscription = this.schedulerNbrOfPlayersPerCourt$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.sePlayersPerCourt = g);
-    this.randomizeOrderSubscription = this.schedulerRandomizeOrder$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seRandomizeOrder = g);
-    this.useNamesForMatchesSubscription = this.schedulerUseNamesForMatches$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seUseNamesForMatches = g);
-    this.loadFromGroupSubscription = this.schedulerLoadFromGroup$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seLoadFromGroup = g);
-    this.selectedGroupSubscription = this.schedulerSelectedGroup$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seSelectedGroup = g);
+    this.playerTypeSubscription =
+      this.schedulerPlayerType$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.sePlayerType = g);
+    this.typeSubscription =
+      this.schedulerType$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seType = g);
+    this.nbrOfPlayersSubscription =
+      this.schedulerNbrOfPlayers$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.sePlayers = g);
+    this.nbrOfCourtsSubscription =
+      this.schedulerNbrOfCourts$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seCourts = g);
+    this.nbrOfPlayersPerCourtSubscription =
+      this.schedulerNbrOfPlayersPerCourt$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.sePlayersPerCourt = g);
+    this.randomizeOrderSubscription =
+      this.schedulerRandomizeOrder$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seRandomizeOrder = g);
+    this.useNamesForMatchesSubscription =
+      this.schedulerUseNamesForMatches$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seUseNamesForMatches = g);
+    this.loadFromGroupSubscription =
+      this.schedulerLoadFromGroup$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seLoadFromGroup = g);
+    this.selectedGroupSubscription =
+      this.schedulerSelectedGroup$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seSelectedGroup = g);
   }
 
   ngOnDestroy(): void {
@@ -122,13 +132,13 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
         if (this.sePlayerType === 'Individuals for Doubles') {
           this.sePlayersPerCourt = 4;
         }
-        if (this.sePlayersPerCourt > this.sePlayers) {this.validPlayerCount = false;}
+        if (this.sePlayersPerCourt > this.sePlayers) { this.validPlayerCount = false; }
       } else {
         this.seCourts = 0;
       }
 
       if (this.seCourts * this.sePlayersPerCourt > this.sePlayers) {
-        this.seCourts =  Math.floor(this.sePlayers / this.sePlayersPerCourt);
+        this.seCourts = Math.floor(this.sePlayers / this.sePlayersPerCourt);
       }
 
       if (this.validPlayerCount) {
