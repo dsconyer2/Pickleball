@@ -104,8 +104,6 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
   }
 
   toggleEnablePlayer(player: PlayerContact) {
-    console.log('Enabled Players = ', this.enabledPlayers());
-    console.log('Player = ', player);
     if (this.enabledPlayers().find(aPlayer => aPlayer.playerContactId === player.playerContactId)) {
       this.disablePlayer(player);
     } else {
@@ -115,7 +113,6 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
 
   enablePlayer(player: PlayerContact) {
     const players = this.enabledPlayers().filter(aPlayer => aPlayer.playerContactId !== player.playerContactId);
-    console.log('e players = ', players);
     players.push(player);
 
     this.store.dispatch(new GroupPlayerAdded(this.selectedGroup.enabledPlayerId, players));
@@ -123,13 +120,11 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
 
   disablePlayer(player: PlayerContact) {
     const players = this.enabledPlayers().filter(aPlayer => aPlayer.playerContactId !== player.playerContactId);
-    console.log('Disable Players = ', players);
     this.store.dispatch(new GroupPlayerRemoved(this.selectedGroup.enabledPlayerId, players));
   }
 
   addPlayer(player: PlayerContact) {
     const players = this.selectedPlayers().filter(aPlayer => aPlayer.playerContactId !== player.playerContactId);
-    console.log('add players = ', players);
     players.push(player);
 
     this.store.dispatch(new GroupPlayerAdded(this.selectedGroup.groupPlayerId, players));
@@ -138,7 +133,6 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
 
   removePlayer(player: PlayerContact) {
     const players = this.selectedPlayers().filter(aPlayer => aPlayer.playerContactId !== player.playerContactId);
-    console.log('Remove Players = ', players);
     this.store.dispatch(new GroupPlayerRemoved(this.selectedGroup.groupPlayerId, players));
     this.disablePlayer(player);
   }

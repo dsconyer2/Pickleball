@@ -37,10 +37,6 @@ export class GroupManagerComponent implements OnInit {
     const groupPlayerId = this.highestId + 1;
     const enabledPlayerId = this.highestId + 2;
 
-    console.log('GroupId = ', groupId);
-    console.log('GroupName = ', groupName);
-    console.log('GroupPlayerId = ', groupPlayerId);
-    console.log('EnabledPlayerId = ', enabledPlayerId);
     this.store.dispatch(new GroupPlayerCreated(groupPlayerId));
     this.store.dispatch(new GroupPlayerCreated(enabledPlayerId));
     this.store.dispatch(new GroupAdded(groupId, groupName, groupPlayerId, enabledPlayerId));
