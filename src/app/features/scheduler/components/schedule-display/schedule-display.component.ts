@@ -219,8 +219,6 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
   updateTeamScore(modal: NgbModalRef, team1Score: string, team2Score: string) {
     this.selectedMatch.team1Score = parseInt(team1Score, 10);
     this.selectedMatch.team2Score = parseInt(team2Score, 10);
-    console.log('team1score = ', team1Score);
-    console.log('team2score = ', team2Score);
     this.store.dispatch(new ScheduleMatchUpdated(this.selectedMatch.matchId, this.selectedMatch));
     modal.close('Scores Updated');
     this.updateDisplay();

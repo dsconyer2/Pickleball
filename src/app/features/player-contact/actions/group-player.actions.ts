@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 import { GroupPlayerEntity, GroupPlayerUpdateEntity } from '../reducers/group-player.reducer';
 import { PlayerContact } from '../models';
+import { PlayerContactEntity } from '../reducers/player-contact.reducer';
 
 
 export const CREATE_GROUP_PLAYER = '[groupFeature] create  groupPlayer';
@@ -41,30 +42,6 @@ export class GroupPlayerAdded implements Action {
    }
 }
 
-export const UPDATE_GROUP_PLAYER_ADD_PLAYER_CONTACT = '[groupFeature] update groupPlayer add playerContact';
-export class GroupPlayerUpdatedPlayerContactAdded implements Action {
-  readonly type = UPDATE_GROUP_PLAYER_ADD_PLAYER_CONTACT;
-  payload: GroupPlayerUpdateEntity;
-  constructor(groupPlayerId: number, playerContacts: PlayerContact[]) {
-    this.payload = {
-      id: groupPlayerId,
-      changes: {playerContacts}
-    };
-   }
-}
-
-export const UPDATE_GROUP_PLAYER_REMOVE_PLAYER_CONTACT = '[groupFeature] update groupPlayer remove playerContact';
-export class GroupPlayerUpdatedPlayerContactRemoved implements Action {
-  readonly type = UPDATE_GROUP_PLAYER_REMOVE_PLAYER_CONTACT;
-  payload: GroupPlayerUpdateEntity;
-  constructor(groupPlayerId: number, playerContacts: PlayerContact[]) {
-    this.payload = {
-      id: groupPlayerId,
-      changes: {playerContacts}
-    };
-   }
-}
-
 export const REMOVE_GROUP_PLAYER = '[groupFeature] remove  groupPlayer';
 export class GroupPlayerRemoved implements Action {
   readonly type = REMOVE_GROUP_PLAYER;
@@ -89,12 +66,22 @@ export class GroupPlayersLoadedSuccessfully implements Action {
   constructor(public payload: GroupPlayerEntity[]) {}
 }
 
+export const REMOVE_PLAYER_CONTACT_FROM_GROUP_PLAYERS = '[groupFeature] remove playerContact';
+export class PlayerContactRemovedFromGroupPlayers implements Action {
+  readonly type = REMOVE_PLAYER_CONTACT_FROM_GROUP_PLAYERS;
+  payload: PlayerContactEntity;
+  constructor(playerContactId: number) {
+    this.payload = {
+      id: playerContactId,
+      playerContactId
+    };
+   }
+}
+
 export type All =
 GroupPlayerCreated
 | GroupPlayerDeleted
 | GroupPlayerAdded
-| GroupPlayerUpdatedPlayerContactAdded
-| GroupPlayerUpdatedPlayerContactRemoved
 | GroupPlayerRemoved
 | GroupPlayersLoad
 | GroupPlayersLoadedSuccessfully;
