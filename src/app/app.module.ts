@@ -11,16 +11,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HelpComponent } from './components/help/help.component';
 import { HomeComponent } from './components/home/home.component';
-import { SchedulerModule } from './features/scheduler/scheduler.module';
+import { SchedulerModule } from './components/features/scheduler/scheduler.module';
 import { reducers } from './reducers';
-import { PlayerContactModule } from './features/player-contact/player-contact.module';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { SchedulerDataService } from './features/scheduler/data-services/SchedulerDataService';
-import { GroupManagerDataService } from './features/player-contact/dataServices/groupManagerDataService';
-import { GroupPlayerDataService } from './features/player-contact/dataServices/groupPlayerDataService';
-import { PlayerContactDataService } from './features/player-contact/dataServices/playerContactDataService';
-import { MatchLabelPipe } from './features/scheduler/pipes/match-label.pipe';
-import { MatchScorePipe } from './features/scheduler/pipes/match-score.pipe';
+import { PlayerContactModule } from './components/features/player-contact/player-contact.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SchedulerDataService } from './components/features/scheduler/data-services/SchedulerDataService';
+import { GroupManagerDataService } from './components/features/player-contact/dataServices/groupManagerDataService';
+import { GroupPlayerDataService } from './components/features/player-contact/dataServices/groupPlayerDataService';
+import { PlayerContactDataService } from './components/features/player-contact/dataServices/playerContactDataService';
+import { MatchLabelPipe } from './components/features/scheduler/pipes/match-label.pipe';
+import { MatchScorePipe } from './components/features/scheduler/pipes/match-score.pipe';
 
 @NgModule({
   declarations: [

@@ -11,9 +11,9 @@ import {
   selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt, selectSchedulerRandomizeOrder,
   selectSchedulerUseNamesForMatches, selectSchedulerLoadFromGroup, selectSchedulerSelectedGroup
 } from '../../store/reducers';
-import { Group, GroupPlayer } from 'src/app/features/player-contact/models';
+import { Group, GroupPlayer } from 'src/app/components/features/player-contact/models';
 import { Observable, Subscription, Subject } from 'rxjs';
-import { selectGroupEntities, selectGroupPlayerEntities } from 'src/app/features/player-contact/reducers';
+import { selectGroupEntities, selectGroupPlayerEntities } from 'src/app/components/features/player-contact/reducers';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
