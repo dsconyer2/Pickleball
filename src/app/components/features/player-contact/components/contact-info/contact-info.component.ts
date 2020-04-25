@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 import { PlayerContactState } from '../../reducers';
 import { PlayerContact } from '../../models';
 import { PlayerContactRemoved } from '../../actions/player-contact.actions';
+import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-contact-info',
@@ -13,8 +14,11 @@ import { PlayerContactRemoved } from '../../actions/player-contact.actions';
 export class ContactInfoComponent implements OnInit {
 
   @Input() contact: PlayerContact;
+  contactInfoForm: FormGroup;
 
-  constructor(private store: Store<PlayerContactState>) { }
+  constructor(private store: Store<PlayerContactState>, fb: FormBuilder) {
+    this.contactInfoForm = fb.group({});
+  }
 
   ngOnInit() {
   }

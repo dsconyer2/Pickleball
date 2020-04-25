@@ -60,7 +60,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
   selectedGroupSubscription: Subscription;
   validPlayerCount = true;
 
-  unsubscribe$: Subject<boolean> = new Subject<boolean>();
+  private unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private store: Store<SchedulerState>, private router: Router) { }
 
@@ -117,6 +117,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
       });
       this.sePlayers = selectedGroupPlayer.playerContacts.length;
     } else {
+      this.seUseNamesForMatches = false;
       for (let index = 0; index < this.sePlayers; index++) {
         this.store.dispatch(new PlayerAdded(index + 1, (index + 1).toString(), true, true, 0, {}, {}));
       }

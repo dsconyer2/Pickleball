@@ -47,7 +47,8 @@ export const selectHighestPlayerId =
         if (n === a.playerContactId) { return a; } else { return c; }
       }, initPlayer));
 
-export const selectGroupEntities = createSelector(selectGroupEntityArray, t => t.map(x => x as Group));
+export const selectGroupEntities =
+  createSelector(selectGroupEntityArray, t => t.map(x => x as Group).sort((a, b) => (a.name > b.name) ? 0 : -1));
 const initGroup: Group = { groupId: 0 };
 export const selectHighestGroupId =
   createSelector(selectGroupEntityArray,

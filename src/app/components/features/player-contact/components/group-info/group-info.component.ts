@@ -4,6 +4,7 @@ import { PlayerContactState } from '../../reducers';
 import { Store } from '@ngrx/store';
 import { GroupRemoved } from '../../actions/group-manager.actions';
 import { GroupPlayerDeleted } from '../../actions/group-player.actions';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-group-info',
@@ -13,8 +14,11 @@ import { GroupPlayerDeleted } from '../../actions/group-player.actions';
 export class GroupInfoComponent implements OnInit {
 
   @Input() group: Group;
+  groupInfoForm: FormGroup;
 
-  constructor(private store: Store<PlayerContactState>) { }
+  constructor(private store: Store<PlayerContactState>, fb: FormBuilder) {
+    this.groupInfoForm = fb.group({});
+  }
 
   ngOnInit() {
   }

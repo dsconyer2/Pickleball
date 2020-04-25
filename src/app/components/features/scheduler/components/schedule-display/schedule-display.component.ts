@@ -44,7 +44,7 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
 
   closeResult = '';
 
-  unsubscribe$: Subject<boolean> = new Subject<boolean>();
+  private unsubscribe$: Subject<boolean> = new Subject<boolean>();
   selectedMatch: Match;
 
   constructor(private store: Store<SchedulerState>, private router: Router, private modalService: NgbModal) { }
@@ -184,7 +184,7 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
 
   formatByeOutput(aScheduleBye: ScheduleBye): string {
     let output = ' ';
-    if (this.useNamesForMatches) {
+    if (!!this.useNamesForMatches) {
       aScheduleBye.byePlayers.sort((a, b) => a.playerName < b.playerName ? -1 : 1).forEach(aByePlayer => {
         output += (aByePlayer.playerName + ', ');
       });
