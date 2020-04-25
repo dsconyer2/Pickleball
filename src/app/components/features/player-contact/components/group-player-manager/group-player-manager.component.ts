@@ -30,8 +30,8 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<PlayerContactState>, fb: FormBuilder) {
     this.groupPlayerManagerForm = fb.group({
-      "groupSelector": new FormControl("", Validators.required)
-    })
+      groupSelector: new FormControl('', Validators.required)
+    });
   }
 
   ngOnInit() {
@@ -40,11 +40,11 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
     this.groupPlayers$ = this.store.select(selectGroupPlayerEntities);
     this.selectedGroup$ = this.store.select(selectGroupPlayerSelectedGroup);
 
-    combineLatest(this.groups$, this.selectedGroup$).subscribe(
+    combineLatest([this.groups$, this.selectedGroup$]).subscribe(
       ([grp, selGrp]) => {
         grp.forEach(aGrp => {
-          if (aGrp.groupId === selGrp.groupId) this.selectedGroup = aGrp;
-        })
+          if (aGrp.groupId === selGrp.groupId) { this.selectedGroup = aGrp; }
+        });
       }
     );
 
