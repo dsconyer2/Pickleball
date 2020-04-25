@@ -16,7 +16,7 @@ export class GroupPlayerSettingsDataService {
 
   loadGroupPlayerSettings(): GroupPlayerSettingsEntity {
     const localGroupPlayerSelectedGroup: Group =
-        localStorage.getItem(this.groupPlayerSelectedGroupKey)
+      localStorage.getItem(this.groupPlayerSelectedGroupKey)
         ? JSON.parse(localStorage.getItem(this.groupPlayerSelectedGroupKey)) : undefined;
     return {
       selectedGroup: localGroupPlayerSelectedGroup

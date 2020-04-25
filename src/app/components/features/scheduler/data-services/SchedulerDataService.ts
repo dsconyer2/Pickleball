@@ -16,7 +16,7 @@ export class SchedulerDataService {
   schedulerRandomizeOrderKey = 'pickleballRandomizeOrder';
   schedulerUseNamesForMatchesKey = 'pickleballUseNamesForMatches';
   schedulerLoadFromGroupKey = 'pickleballLoadFromGroup';
-  schedulerSelectedGroupKey = 'pickleballSelectedGroup';
+  schedulerSelectedGroupKey = 'pickleballSchedulerSelectedGroup';
 
   constructor() { }
 

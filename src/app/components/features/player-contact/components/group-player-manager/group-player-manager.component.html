@@ -1,17 +1,16 @@
-<!-- <form [formGroup]='groupPlayerManagerForm'> -->
-  <div class="form-group">
+<form [formGroup]='groupPlayerManagerForm'>
+  <div >
     <header>
       <div class="heading-user">
         <strong>Group List</strong>
       </div>
     </header>
-    <!-- <select class="form-control" type="text" formControlName="groupSelector" name="groupSelector"
-      (change)="groupSelected(form)" >
-      <option *ngFor="let group of (groups$ | async)">{{group.name}}</option>
-    </select> -->
-    <select class="form-control" name="groupSelector" id="groupSelector" ngModel [(ngModel)]="selectedGroup"
-      (change)="groupSelected()" >
-      <option *ngFor="let group of (groups$ | async)" [ngValue]='group'>{{group.name}}</option>
+    <select class="form-control"
+            name="groupSelector"
+            id="groupSelector"
+            formControlName="groupSelector"
+            (change)="groupSelected($event)">
+      <option *ngFor="let group of (groups$ | async)" [ngValue]="group">{{group.name}}</option>
     </select>
   </div>
   <div class="row">
@@ -20,16 +19,19 @@
       <div>
         <ul class="contact-list">
           <div>
-            <li *ngFor="let player of sortedGroupPlayers(selectedGroupPlayer$ | async)">
+            <li
+                *ngFor="let player of sortedGroupPlayers(selectedGroupPlayer$ | async)">
               <div class="contact-container">
                 <i class="fa fa-user fa-2x contact-icon"></i>
                 <div class="contact-info">
                   <h3 class="heading--name">{{ player.name }}</h3>
                 </div>
-                <button class="contact-action" (click)="toggleEnablePlayer(player)">
+                <button class="contact-action"
+                        (click)="toggleEnablePlayer(player)">
                   <i [class]="enablePlayerClass(player)"></i>
-              </button>
-                <button class="contact-action" (click)="removePlayer(player)">
+                </button>
+                <button class="contact-action"
+                        (click)="removePlayer(player)">
                   <i class="fa fa-minus-square fa-2x"></i>
                 </button>
               </div>
@@ -41,13 +43,16 @@
     <div class="column">
       <header>Available Players</header>
       <ul class="contact-list">
-        <li *ngFor="let contact of sortedPlayerContacts(availablePlayerContacts$ | async)">
+        <li
+            *ngFor="let contact of sortedPlayerContacts(availablePlayerContacts$ | async)">
           <div class="contact-container">
             <i class="fa fa-user fa-2x contact-icon"></i>
             <div class="contact-info">
               <h3 class="heading--name">{{ contact.name }}</h3>
             </div>
-            <button class="contact-action" (click)="addPlayer(contact)" *ngIf="selectedGroup">
+            <button class="contact-action"
+                    (click)="addPlayer(contact)"
+                    *ngIf="selectedGroup">
               <i class="fa fa-plus-square fa-2x"></i>
             </button>
           </div>
@@ -55,4 +60,4 @@
       </ul>
     </div>
   </div>
-<!-- </form> -->
+</form>
