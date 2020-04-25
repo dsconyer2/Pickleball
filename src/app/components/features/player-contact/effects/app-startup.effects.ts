@@ -4,6 +4,7 @@ import { concatMap, map } from 'rxjs/operators';
 import * as appActions from '../../../../actions/app.actions';
 import * as groupManagerActions from '../actions/group-manager.actions';
 import * as groupPlayerActions from '../actions/group-player.actions';
+import * as groupPlayerSettingActions from '../actions/group-player-settings.actions';
 import * as playerContactActions from '../actions/player-contact.actions';
 
 
@@ -16,7 +17,8 @@ export class AppStartUpEffects {
       concatMap(() => [
         new playerContactActions.PlayerContactsLoad(),
         new groupManagerActions.GroupsLoad(),
-        new groupPlayerActions.GroupPlayersLoad()
+        new groupPlayerActions.GroupPlayersLoad(),
+        new groupPlayerSettingActions.GroupPlayerSettingsLoad()
       ])
     );
 

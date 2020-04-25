@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, combineLatest } from 'rxjs';
 import { Group, PlayerContact, GroupPlayer } from '../../models';
 import { Store } from '@ngrx/store';
 import {
@@ -8,8 +8,8 @@ import {
 } from '../../reducers';
 import { GroupPlayerAdded, GroupPlayerRemoved } from '../../actions/group-player.actions';
 import { GroupPlayerSelectedGroupUpdated } from '../../actions/group-player-settings.actions';
-import { FormGroup } from '@angular/forms';
-import { tap, take, takeUntil } from 'rxjs/operators';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { tap, take, takeUntil, filter, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-player-manager',
@@ -23,21 +23,33 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
   selectedGroup: Group;
   selectedGroupPlayer$: Observable<GroupPlayer>;
   groupPlayers$: Observable<GroupPlayer[]>;
-  groupPlayers: GroupPlayer;
   enabledGroupPlayers$: Observable<GroupPlayer>;
-
-  selectedGroupPlayer: GroupPlayer;
 
   groupPlayerManagerForm: FormGroup;
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private store: Store<PlayerContactState>) { }
+  constructor(private store: Store<PlayerContactState>, fb: FormBuilder) {
+    this.groupPlayerManagerForm = fb.group({
+      "groupSelector": new FormControl("", Validators.required)
+    })
+  }
 
   ngOnInit() {
     this.availablePlayerContacts$ = this.store.select(selectAvailablePlayerContactEntities);
     this.groups$ = this.store.select(selectGroupEntities);
     this.groupPlayers$ = this.store.select(selectGroupPlayerEntities);
     this.selectedGroup$ = this.store.select(selectGroupPlayerSelectedGroup);
+
+    combineLatest(this.groups$, this.selectedGroup$).subscribe(
+      ([grp, selGrp]) => {
+        grp.forEach(aGrp => {
+          if (aGrp.groupId === selGrp.groupId) this.selectedGroup = aGrp;
+        })
+      }
+    );
+
+    this.groupPlayerManagerForm.controls.groupSelector.setValue(this.selectedGroup);
+    this.groupPlayerManagerForm.controls.groupSelector.updateValueAndValidity();
 
     this.selectedGroupPlayer$ = this.store.select(selectGroupPlayerSelectedGroupPlayer);
     this.enabledGroupPlayers$ = this.store.select(selectGroupPlayerEnabledGroupPlayer);
@@ -73,6 +85,7 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
       ).subscribe();
     return result;
   }
+
   sortedGroupPlayers(groupPlayer: GroupPlayer) {
     if (!!groupPlayer) {
       const result = this.sortedPlayerContacts(groupPlayer.playerContacts);
@@ -90,8 +103,9 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
       return [];
     }
   }
+
   groupSelected() {
-    this.store.dispatch(new GroupPlayerSelectedGroupUpdated(this.selectedGroup));
+    this.store.dispatch(new GroupPlayerSelectedGroupUpdated(this.groupPlayerManagerForm.controls.groupSelector.value));
   }
 
   enablePlayerClass(player: PlayerContact) {

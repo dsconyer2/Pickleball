@@ -53,7 +53,7 @@
           <option *ngFor="let group of groups$ | async" [ngValue]="group">{{group.name}}
           </option>
         </select>
-        <div *ngIf="!(validPlayerCount)">This group does not have enough players for Schedule Type and Player Type selected.</div>
+        <div *ngIf="!(validPlayerCount)">This group only has {{sePlayers}} enabled players which is not enough for the Schedule Type and Player Type selected.</div>
         <br><br>
       </div>
       <div *ngIf="!seLoadFromGroup">

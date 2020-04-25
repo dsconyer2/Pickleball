@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserModule } from '@angular/platform-browser';
@@ -18,6 +18,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SchedulerDataService } from './components/features/scheduler/data-services/SchedulerDataService';
 import { GroupManagerDataService } from './components/features/player-contact/dataServices/groupManagerDataService';
 import { GroupPlayerDataService } from './components/features/player-contact/dataServices/groupPlayerDataService';
+import { GroupPlayerSettingsDataService } from './components/features/player-contact/dataServices/groupPlayerSettingsDataService';
 import { PlayerContactDataService } from './components/features/player-contact/dataServices/playerContactDataService';
 import { MatchLabelPipe } from './components/features/scheduler/pipes/match-label.pipe';
 import { MatchScorePipe } from './components/features/scheduler/pipes/match-score.pipe';
@@ -35,7 +36,7 @@ import { MatchScorePipe } from './components/features/scheduler/pipes/match-scor
     MatMenuModule,
     MatIconModule,
     BrowserAnimationsModule,
-    FormsModule,
+    ReactiveFormsModule,
     SchedulerModule,
     PlayerContactModule,
     StoreModule.forRoot(reducers),
@@ -46,6 +47,7 @@ import { MatchScorePipe } from './components/features/scheduler/pipes/match-scor
     SchedulerDataService,
     GroupManagerDataService,
     GroupPlayerDataService,
+    GroupPlayerSettingsDataService,
     PlayerContactDataService,
     MatchLabelPipe,
     MatchScorePipe
