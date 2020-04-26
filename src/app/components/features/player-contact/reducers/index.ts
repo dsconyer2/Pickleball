@@ -69,8 +69,8 @@ export const selectHighestGroupPlayerId =
       }, initGroupPlayer));
 
 export const selectGroupPlayerSelectedGroup = createSelector(selectGroupPlayerSettings, s => s.selectedGroup);
-export const selectGroupPlayerSelectedGroupPlayerId = createSelector(selectGroupPlayerSettings, s => s.selectedGroup.groupPlayerId);
-export const selectGroupPlayerEnabledGroupPlayerId = createSelector(selectGroupPlayerSettings, s => s.selectedGroup.enabledPlayerId);
+export const selectGroupPlayerSelectedGroupPlayerId = createSelector(selectGroupPlayerSettings, s => s.selectedGroup?.groupPlayerId);
+export const selectGroupPlayerEnabledGroupPlayerId = createSelector(selectGroupPlayerSettings, s => s.selectedGroup?.enabledPlayerId);
 
 export const selectGroupPlayerSelectedGroupPlayer = createSelector(selectGroupPlayerEntities, selectGroupPlayerSelectedGroupPlayerId,
   (gpe, gpId) => gpe.find(gp => gp.groupPlayerId === gpId)

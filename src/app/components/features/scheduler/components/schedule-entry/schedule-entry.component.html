@@ -86,6 +86,7 @@
                 id="groupToLoad"
                 formControlName="groupToLoad"
                 (change)="groupToLoadChanged()">
+                <option [ngValue]="null">Select group</option>
           <option *ngFor="let group of groups$ | async"
                   [ngValue]="group">{{group.name}}
           </option>

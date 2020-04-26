@@ -20,7 +20,7 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
   availablePlayerContacts$: Observable<PlayerContact[]>;
   groups$: Observable<Group[]>;
   selectedGroup$: Observable<Group>;
-  selectedGroup: Group;
+  selectedGroup: Group = null;
   selectedGroupPlayer$: Observable<GroupPlayer>;
   groupPlayers$: Observable<GroupPlayer[]>;
   enabledGroupPlayers$: Observable<GroupPlayer>;
@@ -30,7 +30,7 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<PlayerContactState>, fb: FormBuilder) {
     this.groupPlayerManagerForm = fb.group({
-      groupSelector: new FormControl('', Validators.required)
+      groupSelector: new FormControl(null, Validators.required)
     });
   }
 
@@ -43,7 +43,7 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
     combineLatest([this.groups$, this.selectedGroup$]).subscribe(
       ([grp, selGrp]) => {
         grp.forEach(aGrp => {
-          if (aGrp.groupId === selGrp.groupId) { this.selectedGroup = aGrp; }
+          if (aGrp.groupId === selGrp?.groupId) { this.selectedGroup = aGrp; }
         });
       }
     );
