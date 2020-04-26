@@ -14,7 +14,7 @@ import {
 export class HighlightOnHoverDirective implements OnInit {
 
   @Input() defaultColor: string;
-  @Input() highlight = 'lime';
+  @Input() highlight = 'white';
   @HostBinding('style.color') color: string = this.defaultColor;
 
   constructor(

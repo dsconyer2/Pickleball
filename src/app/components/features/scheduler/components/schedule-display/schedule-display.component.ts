@@ -12,6 +12,7 @@ import { Observable, Subject, of, combineLatest } from 'rxjs';
 import { takeUntil, map, switchMap } from 'rxjs/operators';
 import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ScheduleMatchCreated, ScheduleMatchUpdated } from '../../store/actions/schedule-match.actions';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-schedule-display',
@@ -44,10 +45,17 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
 
   closeResult = '';
 
+  scheduleDisplayForm: FormGroup;
   private unsubscribe$: Subject<boolean> = new Subject<boolean>();
   selectedMatch: Match;
 
-  constructor(private store: Store<SchedulerState>, private router: Router, private modalService: NgbModal) { }
+  constructor(
+    private store: Store<SchedulerState>,
+    private router: Router,
+    private modalService: NgbModal,
+    fb: FormBuilder) {
+      this.scheduleDisplayForm = fb.group({});
+     }
 
   ngOnInit(): void {
     this.headers$ = this.store.select(selectScheduleHeaders);
