@@ -12,9 +12,10 @@ import {
   selectSchedulerUseNamesForMatches, selectSchedulerLoadFromGroup, selectSchedulerSelectedGroup
 } from '../../store/reducers';
 import { Group, GroupPlayer } from 'src/app/components/features/player-contact/models';
-import { Observable, Subscription, Subject } from 'rxjs';
+import { Observable, Subscription, Subject, combineLatest } from 'rxjs';
 import { selectGroupEntities, selectGroupPlayerEntities } from 'src/app/components/features/player-contact/reducers';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter, map, take, tap } from 'rxjs/operators';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-schedule-entry',
@@ -29,47 +30,43 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
 
   sePlayerType: string;
   seType: string;
-  sePlayers: number;
-  seCourts: number;
   sePlayersPerCourt: number;
-  seRandomizeOrder: boolean;
-  seUseNamesForMatches: boolean;
-  seLoadFromGroup: boolean;
-  seSelectedGroup: Group;
   validNbrOfCourts: boolean;
 
   schedulerPlayerType$: Observable<string>;
   schedulerType$: Observable<string>;
   schedulerNbrOfPlayers$: Observable<number>;
   schedulerNbrOfCourts$: Observable<number>;
-  schedulerNbrOfPlayersPerCourt$: Observable<number>;
   schedulerRandomizeOrder$: Observable<boolean>;
   schedulerUseNamesForMatches$: Observable<boolean>;
   schedulerLoadFromGroup$: Observable<boolean>;
   schedulerSelectedGroup$: Observable<Group>;
 
-  groupSubscription: Subscription;
-  playerTypeSubscription: Subscription;
-  typeSubscription: Subscription;
-  nbrOfPlayersSubscription: Subscription;
-  nbrOfCourtsSubscription: Subscription;
-  nbrOfPlayersPerCourtSubscription: Subscription;
-  randomizeOrderSubscription: Subscription;
-  useNamesForMatchesSubscription: Subscription;
-  loadFromGroupSubscription: Subscription;
-  selectedGroupSubscription: Subscription;
   validPlayerCount = true;
+  minPlayers: number;
+  maxCourts: number;
 
+  scheduleEntryForm: FormGroup;
   private unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private store: Store<SchedulerState>, private router: Router) { }
+  constructor(private store: Store<SchedulerState>, private router: Router, fb: FormBuilder) {
+    this.scheduleEntryForm = fb.group({
+      scheduleType: new FormControl('', Validators.required),
+      playerType: new FormControl('', Validators.required),
+      loadFromGroup: new FormControl(''),
+      groupToLoad: new FormControl(''),
+      nbrOfPlayersInput: new FormControl(''),
+      nbrOfCourtsInput: new FormControl(''),
+      randomizeOrder: new FormControl(''),
+      useNamesForMatches: new FormControl(''),
+    });
+  }
 
   ngOnInit() {
     this.schedulerPlayerType$ = this.store.select(selectSchedulerPlayerType);
     this.schedulerType$ = this.store.select(selectSchedulerType);
     this.schedulerNbrOfPlayers$ = this.store.select(selectSchedulerNbrOfPlayers);
     this.schedulerNbrOfCourts$ = this.store.select(selectSchedulerNbrOfCourts);
-    this.schedulerNbrOfPlayersPerCourt$ = this.store.select(selectSchedulerNbrOfPlayersPerCourt);
     this.schedulerRandomizeOrder$ = this.store.select(selectSchedulerRandomizeOrder);
     this.schedulerUseNamesForMatches$ = this.store.select(selectSchedulerUseNamesForMatches);
     this.schedulerLoadFromGroup$ = this.store.select(selectSchedulerLoadFromGroup);
@@ -77,27 +74,58 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
 
     this.groups$ = this.store.select(selectGroupEntities);
     this.groupPlayers$ = this.store.select(selectGroupPlayerEntities);
-    this.groupSubscription =
-      this.groupPlayers$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.groupPlayers = g);
 
-    this.playerTypeSubscription =
-      this.schedulerPlayerType$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.sePlayerType = g);
-    this.typeSubscription =
-      this.schedulerType$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seType = g);
-    this.nbrOfPlayersSubscription =
-      this.schedulerNbrOfPlayers$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.sePlayers = g);
-    this.nbrOfCourtsSubscription =
-      this.schedulerNbrOfCourts$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seCourts = g);
-    this.nbrOfPlayersPerCourtSubscription =
-      this.schedulerNbrOfPlayersPerCourt$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.sePlayersPerCourt = g);
-    this.randomizeOrderSubscription =
-      this.schedulerRandomizeOrder$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seRandomizeOrder = g);
-    this.useNamesForMatchesSubscription =
-      this.schedulerUseNamesForMatches$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seUseNamesForMatches = g);
-    this.loadFromGroupSubscription =
-      this.schedulerLoadFromGroup$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seLoadFromGroup = g);
-    this.selectedGroupSubscription =
-      this.schedulerSelectedGroup$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.seSelectedGroup = g);
+    this.groupPlayers$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.groupPlayers = g);
+    this.schedulerPlayerType$.pipe(takeUntil(this.unsubscribe$))
+      .subscribe(g => {
+        this.scheduleEntryForm.controls.playerType.setValue(g);
+        this.scheduleEntryForm.controls.playerType.updateValueAndValidity();
+      });
+    this.schedulerType$.pipe(takeUntil(this.unsubscribe$))
+      .subscribe(g => {
+        this.scheduleEntryForm.controls.scheduleType.setValue(g);
+        this.scheduleEntryForm.controls.scheduleType.updateValueAndValidity();
+      });
+    this.schedulerNbrOfPlayers$.pipe(takeUntil(this.unsubscribe$))
+      .subscribe(g => {
+        this.scheduleEntryForm.controls.nbrOfPlayersInput.setValue(g);
+        this.scheduleEntryForm.controls.nbrOfPlayersInput.updateValueAndValidity();
+      });
+    this.schedulerNbrOfCourts$.pipe(takeUntil(this.unsubscribe$))
+      .subscribe(g => {
+        this.scheduleEntryForm.controls.nbrOfCourtsInput.setValue(g);
+        this.scheduleEntryForm.controls.nbrOfCourtsInput.updateValueAndValidity();
+      });
+    this.schedulerRandomizeOrder$.pipe(takeUntil(this.unsubscribe$))
+      .subscribe(g => {
+        this.scheduleEntryForm.controls.randomizeOrder.setValue(g);
+        this.scheduleEntryForm.controls.randomizeOrder.updateValueAndValidity();
+      });
+    this.schedulerUseNamesForMatches$.pipe(takeUntil(this.unsubscribe$))
+      .subscribe(g => {
+        this.scheduleEntryForm.controls.useNamesForMatches.setValue(g);
+        this.scheduleEntryForm.controls.useNamesForMatches.updateValueAndValidity();
+      });
+    this.schedulerLoadFromGroup$.pipe(takeUntil(this.unsubscribe$))
+      .subscribe(g => {
+        this.scheduleEntryForm.controls.loadFromGroup.setValue(g);
+        this.scheduleEntryForm.controls.loadFromGroup.updateValueAndValidity();
+      });
+
+    combineLatest([this.groups$, this.schedulerSelectedGroup$]).subscribe(
+      ([grp, selGrp]) => {
+        grp.forEach(aGrp => {
+          if (aGrp?.groupId === selGrp?.groupId) {
+            this.scheduleEntryForm.controls.groupToLoad.setValue(aGrp);
+            this.scheduleEntryForm.controls.groupToLoad.updateValueAndValidity();
+          }
+        });
+      }
+    );
+
+    this.onScheduleTypeChange();
+    this.onPlayerTypeChange();
+    this.setValidators();
   }
 
   ngOnDestroy(): void {
@@ -105,67 +133,102 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
     this.unsubscribe$.unsubscribe();
   }
 
+  setValidators() {
+    this.minPlayers = this.scheduleEntryForm.controls.playerType.value === 'Individuals for Doubles' ? 4 : 2;
+    this.scheduleEntryForm.controls.nbrOfPlayersInput.setValidators([Validators.required, Validators.min(this.minPlayers)]);
+    this.scheduleEntryForm.controls.nbrOfPlayersInput.updateValueAndValidity();
+    // King of the court requires nbrOfCourtsInput
+    // Tournament does not
+    if (this.scheduleEntryForm.controls.scheduleType.value === 'King of the Court') {
+      this.maxCourts = Math.max(Math.floor(this.scheduleEntryForm.controls.nbrOfPlayersInput.value / this.sePlayersPerCourt), 1);
+      this.scheduleEntryForm.controls.nbrOfCourtsInput
+        .setValidators([Validators.required, Validators.min(1), Validators.max(this.maxCourts)]);
+      this.scheduleEntryForm.controls.nbrOfCourtsInput.updateValueAndValidity();
+    } else {
+      this.scheduleEntryForm.controls.nbrOfCourtsInput.setValidators([]);
+      this.scheduleEntryForm.controls.nbrOfCourtsInput.updateValueAndValidity();
+    }
+
+    // LoadFromGroup turns off nbrOfPlayersInput
+    if (this.scheduleEntryForm.controls.loadFromGroup.value) {
+      this.scheduleEntryForm.controls.groupToLoad.setValidators([Validators.required, Validators.minLength(1)]);
+      this.scheduleEntryForm.controls.groupToLoad.updateValueAndValidity();
+    } else {
+      this.scheduleEntryForm.controls.groupToLoad.setValidators([]);
+      this.scheduleEntryForm.controls.groupToLoad.updateValueAndValidity();
+    }
+  }
+
   loadPlayers() {
     this.store.dispatch(new PlayerRemoveAll());
 
-    if (this.seLoadFromGroup) {
-      // get selectedGroup.
-      const selectedGroupPlayer = this.groupPlayers.find(gp => gp.groupPlayerId === this.seSelectedGroup.enabledPlayerId);
-      // load players
-      selectedGroupPlayer.playerContacts.forEach((aPlayer) => {
-        this.store.dispatch(new PlayerAdded(aPlayer.playerContactId, aPlayer.name, true, true, 0, {}, {}));
-      });
-      this.sePlayers = selectedGroupPlayer.playerContacts.length;
+    if (this.scheduleEntryForm.controls.loadFromGroup.value) {
+      if (!!this.scheduleEntryForm.controls.groupToLoad.value) {
+        // get selectedGroup.
+        const groupToLoad: Group = this.scheduleEntryForm.controls.groupToLoad.value;
+        let selectedGroupPlayer;
+        this.groupPlayers$.pipe(
+          take(1),
+          tap(groupPlayers => selectedGroupPlayer = groupPlayers.find(gp => gp.groupPlayerId === groupToLoad.enabledPlayerId))
+        ).subscribe();
+        // load players
+        selectedGroupPlayer.playerContacts.forEach((aPlayer) => {
+          this.store.dispatch(new PlayerAdded(aPlayer.playerContactId, aPlayer.name, true, true, 0, {}, {}));
+        });
+        this.scheduleEntryForm.controls.nbrOfPlayersInput.setValue(selectedGroupPlayer.playerContacts.length);
+        this.scheduleEntryForm.controls.nbrOfPlayersInput.updateValueAndValidity();
+      }
     } else {
-      this.seUseNamesForMatches = false;
-      for (let index = 0; index < this.sePlayers; index++) {
+      this.scheduleEntryForm.controls.useNamesForMatches.setValue(false);
+      this.scheduleEntryForm.controls.useNamesForMatches.updateValueAndValidity();
+      for (let index = 0; index < this.scheduleEntryForm.controls.nbrOfPlayersInput.value; index++) {
         this.store.dispatch(new PlayerAdded(index + 1, (index + 1).toString(), true, true, 0, {}, {}));
       }
     }
   }
 
 
-  onSubmit(validForm: boolean) {
-    if (validForm) {
-      this.validPlayerCount = true;
-      this.sePlayersPerCourt = 2;
-      if (this.seType === 'King of the Court') {
-        if (this.sePlayerType === 'Individuals for Doubles') {
-          this.sePlayersPerCourt = 4;
-        }
-        if (this.sePlayersPerCourt > this.sePlayers) { this.validPlayerCount = false; }
-      } else {
-        this.seCourts = 0;
-      }
+  onSubmit() {
+    if (this.scheduleEntryForm.valid) {
 
-      if (this.seCourts * this.sePlayersPerCourt > this.sePlayers) {
-        this.seCourts = Math.floor(this.sePlayers / this.sePlayersPerCourt);
-      }
+      this.loadPlayers();
 
-      if (this.validPlayerCount) {
-        this.loadPlayers();
+      this.store.dispatch(new SchedulerPlayerTypeUpdated(this.sePlayerType));
+      this.store.dispatch(new SchedulerTypeUpdated(this.scheduleEntryForm.controls.scheduleType.value));
+      this.store.dispatch(new NbrOfPlayersUpdated(this.scheduleEntryForm.controls.nbrOfPlayersInput.value));
+      this.store.dispatch(new NbrOfCourtsUpdated(this.scheduleEntryForm.controls.nbrOfCourtsInput.value));
+      this.store.dispatch(new NbrOfPlayersPerCourtUpdated(this.sePlayersPerCourt));
+      this.store.dispatch(new RandomizeOrderUpdated(this.scheduleEntryForm.controls.randomizeOrder.value));
+      this.store.dispatch(new UseNamesForMatchesUpdated(this.scheduleEntryForm.controls.useNamesForMatches.value));
+      this.store.dispatch(new LoadFromGroupUpdated(this.scheduleEntryForm.controls.loadFromGroup.value));
+      this.store.dispatch(new SelectedGroupUpdated(this.scheduleEntryForm.controls.groupToLoad.value));
 
-        this.store.dispatch(new SchedulerPlayerTypeUpdated(this.sePlayerType));
-        this.store.dispatch(new SchedulerTypeUpdated(this.seType));
-        this.store.dispatch(new NbrOfPlayersUpdated(this.sePlayers));
-        this.store.dispatch(new NbrOfCourtsUpdated(this.seCourts));
-        this.store.dispatch(new NbrOfPlayersPerCourtUpdated(this.sePlayersPerCourt));
-        this.store.dispatch(new RandomizeOrderUpdated(this.seRandomizeOrder));
-        this.store.dispatch(new UseNamesForMatchesUpdated(this.seUseNamesForMatches));
-        this.store.dispatch(new LoadFromGroupUpdated(this.seLoadFromGroup));
-        this.store.dispatch(new SelectedGroupUpdated(this.seSelectedGroup));
-
-        this.router.navigate(['/scheduleTournament']);
-      }
+      this.router.navigate(['/scheduleTournament']);
     }
   }
 
-  onClickPlayerType(value: string) {
-    this.sePlayerType = value;
+  onPlayerTypeChange() {
+    this.sePlayerType = this.scheduleEntryForm.controls.playerType.value;
+    this.sePlayersPerCourt = (this.sePlayerType === 'Individuals for Doubles') ? 4 : 2;
+    this.setValidators();
   }
 
-  onClickScheduleType(value: string) {
-    this.seType = value;
-    if (this.seType === 'Tournament' && this.sePlayerType === 'Individuals for Doubles') { this.sePlayerType = 'Teams'; }
+  onScheduleTypeChange() {
+    this.seType = this.scheduleEntryForm.controls.scheduleType.value;
+    if (this.scheduleEntryForm.controls.scheduleType.value === 'Tournament'
+      && this.sePlayerType === 'Individuals for Doubles') {
+      this.scheduleEntryForm.controls.playerType.setValue('Teams');
+      this.scheduleEntryForm.controls.playerType.updateValueAndValidity();
+    }
+    this.setValidators();
   }
+
+  loadFromGroupChanged() {
+    this.setValidators();
+  }
+
+  groupToLoadChanged() {
+    this.loadPlayers();
+  }
+
 }

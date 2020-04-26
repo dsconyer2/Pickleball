@@ -1,40 +1,70 @@
-<form name="form" (ngSubmit)="f.form.valid && onSubmit(f.form.valid)" #f="ngForm" novalidate>
+<form [formGroup]='scheduleEntryForm'>
   <div class="col-lg-4 offset-lg-1">
     <div>
       <br>
-      <label name="scheduleType" id="scheduleType" class="h5">Schedule Type</label>
-      <div class="bs-component" style="margin-bottom: 15px;">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-          <label class="btn btn-primary" [class.active]="'King of the Court' === seType">
-            <input type="radio" name="scheduleType" id="King of the Court" value="King of the Court" autocomplete="off" ngModel
-              [(ngModel)]="seType" [checked]="'King of the Court' === seType" (click)="onClickScheduleType('King of the Court')"> King of the
-            Court
+      <label name="scheduleType"
+             id="scheduleType"
+             class="h5">Schedule Type</label>
+      <div class="bs-component"
+           style="margin-bottom: 15px;">
+        <div class="btn-group btn-group-toggle"
+             data-toggle="buttons">
+          <label class="btn btn-primary"
+                 [class.active]="'King of the Court' === seType">
+            <input type="radio"
+                   id="King of the Court"
+                   formControlName="scheduleType"
+                   value="King of the Court"
+                   (change)="onScheduleTypeChange()">
+            King of the Court
           </label>
-          <label class="btn btn-primary" [class.active]="'Tournament' === seType">
-            <input type="radio" name="scheduleType" id="Tournament" value="Tournament" autocomplete="off" ngModel
-              [(ngModel)]="seType" [checked]="'Tournament' === seType" (click)="onClickScheduleType('Tournament')">
+          <label class="btn btn-primary"
+                 [class.active]="'Tournament' === seType">
+            <input type="radio"
+                   id="Tournament"
+                   value="Tournament"
+                   FnbrOfPlayersInput
+                   formControlName="scheduleType"
+                   (change)="onScheduleTypeChange()">
             Tournament
           </label>
         </div>
       </div>
     </div>
     <div>
-      <label name="playerType" id="playerType"class="h5">Player Type</label>
-      <div class="bs-component" style="margin-bottom: 15px;">
-        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <label *ngIf="'King of the Court' === seType" class="btn btn-primary" [class.active]="'Individuals for Doubles' === sePlayerType">
-              <input type="radio" name="playerType" id="Individuals for Doubles" value="Individuals for Doubles" ngModel
-                [(ngModel)]="sePlayerType" autocomplete="off" [checked]="'Individuals for Doubles' === sePlayerType"
-                (click)="onClickPlayerType('Individuals for Doubles')"> Individuals for Doubles
-            </label>
-          <label class="btn btn-primary" [class.active]="'Singles' === sePlayerType">
-            <input type="radio" name="playerType" id="Singles" value="Singles" autocomplete="off" ngModel
-              [(ngModel)]="sePlayerType" [checked]="'Singles' === sePlayerType" (click)="onClickPlayerType('Singles')">
+      <label name="playerType"
+             id="playerType"
+             class="h5">Player Type</label>
+      <div class="bs-component"
+           style="margin-bottom: 15px;">
+        <div class="btn-group btn-group-toggle"
+             data-toggle="buttons">
+          <label *ngIf="'King of the Court' === seType"
+                 class="btn btn-primary"
+                 [class.active]="'Individuals for Doubles' === sePlayerType">
+            <input type="radio"
+                   id="Individuals for Doubles"
+                   formControlName="playerType"
+                   value="Individuals for Doubles"
+                   (change)="onPlayerTypeChange()">
+            Individuals for Doubles
+          </label>
+          <label class="btn btn-primary"
+                 [class.active]="'Singles' === sePlayerType">
+            <input type="radio"
+                   id="Singles"
+                   formControlName="playerType"
+                   value="Singles"
+                   (change)="onPlayerTypeChange()">
             Singles
           </label>
-          <label class="btn btn-primary" [class.active]="'Teams' === sePlayerType">
-            <input type="radio" name="playerType" id="Teams" value="Teams" autocomplete="off" ngModel
-              [(ngModel)]="sePlayerType" [checked]="'Teams' === sePlayerType" (click)="onClickPlayerType('Teams')">
+          <label class="btn btn-primary"
+                 [class.active]="'Teams' === sePlayerType">
+            <input type="radio"
+                   id="Teams"
+                   formControlName="playerType"
+                   value="Teams"
+                   (change)="onPlayerTypeChange()">
             Teams
           </label>
         </div>
@@ -44,52 +74,108 @@
       <h5 *ngIf="sePlayerType !== 'Teams'">Number of Players</h5>
       <h5 *ngIf="sePlayerType === 'Teams'">Number of Teams</h5>
       <div class="input-group-text">
-        <input type="checkbox" aria-label="Load from Group" name="loadFromGroup" id="loadFromGroup" ngModel
-          [(ngModel)]="seLoadFromGroup" #loadFromGroup="ngModel">
+        <input type="checkbox"
+               aria-label="Load from Group"
+               id="loadFromGroup"
+               formControlName="loadFromGroup"
+               (change)="loadFromGroupChanged()">
         <span>Load from Group</span>
       </div>
-      <div *ngIf="seLoadFromGroup">
-        <select class="custom-select" name="groupToLoad" id="groupToLoad" [(ngModel)]="seSelectedGroup">
-          <option *ngFor="let group of groups$ | async" [ngValue]="group">{{group.name}}
+      <div *ngIf="scheduleEntryForm.controls.loadFromGroup.value">
+        <select class="custom-select"
+                id="groupToLoad"
+                formControlName="groupToLoad"
+                (change)="groupToLoadChanged()">
+          <option *ngFor="let group of groups$ | async"
+                  [ngValue]="group">{{group.name}}
           </option>
         </select>
-        <div *ngIf="!(validPlayerCount)">This group only has {{sePlayers}} enabled players which is not enough for the Schedule Type and Player Type selected.</div>
+        <div *ngIf="scheduleEntryForm.controls.groupToLoad.errors
+          && (scheduleEntryForm.controls.groupToLoad.touched || scheduleEntryForm.controls.groupToLoad.dirty)"
+             class="alert alert-danger">Please select a Group.
+        </div>
+        <div *ngIf="scheduleEntryForm.controls.nbrOfPlayersInput.errors?.min
+        && !scheduleEntryForm.controls.groupToLoad.errors"
+             class="alert alert-danger">This group has {{scheduleEntryForm.controls.nbrOfPlayersInput.value}}
+          enabled players which is not enough for the Schedule Type and Player
+          Type selected.</div>
         <br><br>
       </div>
-      <div *ngIf="!seLoadFromGroup">
-        <input type="number" class="form-control" name="nbrOfPlayersInput" ngModel [(ngModel)]="sePlayers"
-          #nbrOfPlayersInput="ngModel" autofocus required>
-        <div *ngIf="nbrOfPlayersInput.invalid && (nbrOfPlayersInput.dirty || nbrOfPlayersInput.touched)">
-          <div *ngIf="nbrOfPlayersInput?.errors.required">This field is required</div>
+      <div *ngIf="!scheduleEntryForm.controls.loadFromGroup.value">
+        <input type="number"
+               class="form-control"
+               formControlName="nbrOfPlayersInput"
+               autofocus>
+        <div *ngIf="sePlayerType !== 'Teams'">
+          <div *ngIf="scheduleEntryForm.controls.nbrOfPlayersInput.errors?.required
+          && (scheduleEntryForm.controls.nbrOfPlayersInput.touched || scheduleEntryForm.controls.nbrOfPlayersInput.dirty)"
+               class="alert alert-danger">Please enter the number of players
+          </div>
+          <div *ngIf="scheduleEntryForm.controls.nbrOfPlayersInput.errors?.min
+          && (scheduleEntryForm.controls.nbrOfPlayersInput.touched || scheduleEntryForm.controls.nbrOfPlayersInput.dirty)"
+               class="alert alert-danger">
+            You need a min of {{minPlayers}} players for the Schedule Type and
+            Player Type selected.</div>
+        </div>
+        <div *ngIf="sePlayerType === 'Teams'">
+          <div *ngIf="scheduleEntryForm.controls.nbrOfPlayersInput.errors?.required
+          && (scheduleEntryForm.controls.nbrOfPlayersInput.touched || scheduleEntryForm.controls.nbrOfPlayersInput.dirty)"
+               class="alert alert-danger">Please enter the number of teams.
+          </div>
+          <div *ngIf="scheduleEntryForm.controls.nbrOfPlayersInput.errors?.min
+          && (scheduleEntryForm.controls.nbrOfPlayersInput.touched || scheduleEntryForm.controls.nbrOfPlayersInput.dirty)"
+               class="alert alert-danger">
+            You need a min of {{minPlayers}} teams for the Schedule Type and
+            Player Type selected.</div>
         </div>
         <br>
       </div>
     </div>
     <div *ngIf="seType === 'King of the Court'">
       <h5>Number of Courts</h5>
-      <input class="form-control" type="number" name="nbrOfCourtsInput" id="nbrOfCourtsInput" ngModel
-        [(ngModel)]="seCourts" #nbrOfCourtsInput="ngModel"
-        [ngClass]="{ 'is-invalid': f.submitted && nbrOfCourtsInput.invalid }" required>
-      <div *ngIf="nbrOfCourtsInput.invalid && (nbrOfCourtsInput.dirty || nbrOfCourtsInput.touched)">
-        <div *ngIf="nbrOfCourtsInput?.errors.required">This field is required</div>
+      <input class="form-control"
+             type="number"
+             #nbrOfCourtsInput
+             formControlName="nbrOfCourtsInput">
+      <div *ngIf="scheduleEntryForm.controls.nbrOfCourtsInput.errors?.required
+      && (scheduleEntryForm.controls.nbrOfCourtsInput.touched || scheduleEntryForm.controls.nbrOfCourtsInput.dirty)"
+           class="alert alert-danger">
+        Please enter the number of courts.
       </div>
-
+      <div *ngIf="scheduleEntryForm.controls.nbrOfCourtsInput.errors?.min
+      && (scheduleEntryForm.controls.nbrOfCourtsInput.touched || scheduleEntryForm.controls.nbrOfCourtsInput.dirty)"
+           class="alert alert-danger">
+        You need a min of 1 court.
+      </div>
+      <div *ngIf="scheduleEntryForm.controls.nbrOfCourtsInput.errors?.max
+      && (scheduleEntryForm.controls.nbrOfCourtsInput.touched || scheduleEntryForm.controls.nbrOfCourtsInput.dirty)"
+           class="alert alert-danger">
+        You need {{maxCourts}} courts or less for the Schedule Type and
+        Player Type selected.
+      </div>
       <br>
     </div>
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <div class="input-group-text">
-          <input type="checkbox" aria-label="Randomize order" name="randomizeOrder" id="randomizeOrder" ngModel
-            [(ngModel)]="seRandomizeOrder" #randomizeOrder="ngModel">
+          <input type="checkbox"
+                 aria-label="Randomize order"
+                 id="randomizeOrder"
+                 formControlName="randomizeOrder">
           <span>Randomize order</span>
         </div>
-        <div class="input-group-text" *ngIf="seLoadFromGroup">
-          <input type="checkbox" aria-label="Use names for matches" name="useNamesForMatches" id="useNamesForMatches"
-            ngModel [(ngModel)]="seUseNamesForMatches" #useNamesForMatches="ngModel">
+        <div class="input-group-text"
+             *ngIf="scheduleEntryForm.controls.loadFromGroup.value">
+          <input type="checkbox"
+                 aria-label="Use names for matches"
+                 id="useNamesForMatches"
+                 formControlName="useNamesForMatches">
           <span>Use names for matches</span>
         </div>
       </div>
     </div>
-    <button type="submit" class="btn btn-primary" (click)="onSubmit(f.form.valid)">Start</button>
+    <button type="submit"
+            class="btn btn-primary"
+            (click)="onSubmit()">Start</button>
   </div>
 </form>

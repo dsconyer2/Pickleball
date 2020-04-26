@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 import { ScheduleEntryComponent } from './components/schedule-entry/schedule-entry.component';
@@ -33,6 +33,7 @@ import { MatchScorePipe } from './pipes/match-score.pipe';
     CommonModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     StoreModule.forFeature('schedulerFeature', reducers),
     EffectsModule.forFeature([SchedulerEffects, AppStartUpEffects])
   ],
