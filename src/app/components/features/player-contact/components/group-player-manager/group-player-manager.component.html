@@ -9,7 +9,7 @@
             name="groupSelector"
             id="groupSelector"
             formControlName="groupSelector"
-            (change)="groupSelected($event)">
+            (change)="groupSelected()">
       <option *ngFor="let group of (groups$ | async)" [ngValue]="group">{{group.name}}</option>
     </select>
   </div>

@@ -81,7 +81,7 @@ export class SchedulerEffects {
       .pipe(
           ofType(actions.UPDATE_SELECTED_GROUP),
           map(a => a as actions.SelectedGroupUpdated),
-          tap(a => this.service.updateSchedulerSetting('pickleballSelectedGroup', a.payload.selectedGroup))
+          tap(a => this.service.updateSchedulerSetting('pickleballSchedulerSelectedGroup', a.payload.selectedGroup))
       );
 
       @Effect() schedulerSettingsLoad$ = this.actions$
