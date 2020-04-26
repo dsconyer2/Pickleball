@@ -26,7 +26,7 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
   enabledGroupPlayers$: Observable<GroupPlayer>;
 
   groupPlayerManagerForm: FormGroup;
-  private unsubscribe: Subject<void> = new Subject<void>();
+  private unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private store: Store<PlayerContactState>, fb: FormBuilder) {
     this.groupPlayerManagerForm = fb.group({
@@ -56,8 +56,8 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
+    this.unsubscribe$.next(true);
+    this.unsubscribe$.unsubscribe();
   }
 
   enabledPlayers(): PlayerContact[] {
@@ -65,7 +65,7 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
     this.enabledGroupPlayers$
       .pipe(
         take(1),
-        takeUntil(this.unsubscribe),
+        takeUntil(this.unsubscribe$),
         tap(ep => {
           result = ep.playerContacts;
         })
@@ -78,7 +78,7 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
     this.selectedGroupPlayer$
       .pipe(
         take(1),
-        takeUntil(this.unsubscribe),
+        takeUntil(this.unsubscribe$),
         tap(ep => {
           result = ep.playerContacts;
         })

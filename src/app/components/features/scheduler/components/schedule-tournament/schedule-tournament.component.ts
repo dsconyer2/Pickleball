@@ -42,7 +42,7 @@ export class ScheduleTournamentComponent implements OnInit, OnDestroy {
   rounds: RoundData[] = [];
   courtHeaders: string[] = [];
 
-  unsubscribe$: Subject<boolean> = new Subject<boolean>();
+  private unsubscribe$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private store: Store<SchedulerState>, private router: Router) { }
 

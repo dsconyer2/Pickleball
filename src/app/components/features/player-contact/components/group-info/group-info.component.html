@@ -1,9 +1,12 @@
-<div class="group-container">
-	<i class="fa fa-user fa-2x contact-icon"></i>
-	<div class="group-info">
-		<h3 class="heading--name">{{ group.name }}</h3>
-	</div>
-	<button class="group-action" (click)="removeGroup()">
-		<i class="fa fa-trash fa-2x"></i>
-	</button>
-</div>
+<form [formGroup]='groupInfoForm'>
+  <div class="group-container">
+    <i class="fa fa-user fa-2x contact-icon"></i>
+    <div class="group-info">
+      <h3 class="heading--name">{{ group.name }}</h3>
+    </div>
+    <button class="group-action"
+            (click)="removeGroup()">
+      <i class="fa fa-trash fa-2x"></i>
+    </button>
+  </div>
+</form>
