@@ -6,10 +6,10 @@
       </div>
     </header>
     <ng-container>
-      <input
-             class="add-group"
+      <input class="add-group"
              placeholder="Add Group"
              formControlName="newGroup"
+             autofocus
              (keyup.enter)="addGroup()">
     </ng-container>
     <ul class="group-list">

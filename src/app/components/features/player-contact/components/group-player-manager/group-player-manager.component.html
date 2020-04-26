@@ -1,5 +1,5 @@
 <form [formGroup]='groupPlayerManagerForm'>
-  <div >
+  <div>
     <header>
       <div class="heading-user">
         <strong>Group List</strong>
@@ -9,8 +9,12 @@
             name="groupSelector"
             id="groupSelector"
             formControlName="groupSelector"
+            placeholder="Pick a group"
+            autofocus
             (change)="groupSelected()">
-      <option *ngFor="let group of (groups$ | async)" [ngValue]="group">{{group.name}}</option>
+      <option [ngValue]="null">Select Group</option>
+      <option *ngFor="let group of (groups$ | async)"
+              [ngValue]="group">{{group.name}}</option>
     </select>
   </div>
   <div class="row">

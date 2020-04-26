@@ -54,7 +54,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
       scheduleType: new FormControl('', Validators.required),
       playerType: new FormControl('', Validators.required),
       loadFromGroup: new FormControl(''),
-      groupToLoad: new FormControl(''),
+      groupToLoad: new FormControl(),
       nbrOfPlayersInput: new FormControl(''),
       nbrOfCourtsInput: new FormControl(''),
       randomizeOrder: new FormControl(''),
