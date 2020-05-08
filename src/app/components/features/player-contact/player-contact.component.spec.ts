@@ -8,7 +8,7 @@ describe('PlayerContactComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PlayerContactComponent ]
+      declarations: [PlayerContactComponent],
     })
     .compileComponents();
   }));

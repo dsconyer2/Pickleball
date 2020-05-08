@@ -1,11 +1,13 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+
 import { Player, ScheduleBye, ScheduleMatch, ScheduleRound } from '../../models';
+
 import * as fromPlayerManager from './player.reducer';
-import * as fromSchedulerManager from './scheduler.reducer';
-import * as fromScheduleManager from './schedule-header.reducer';
 import * as fromScheduleByeManager from './schedule-bye.reducer';
+import * as fromScheduleManager from './schedule-header.reducer';
 import * as fromScheduleMatchManager from './schedule-match.reducer';
 import * as fromScheduleRoundManager from './schedule-round.reducer';
+import * as fromSchedulerManager from './scheduler.reducer';
 
 export interface SchedulerState {
   players: fromPlayerManager.State;
@@ -22,7 +24,7 @@ export const reducers = {
   schedule: fromScheduleManager.reducer,
   scheduleByes: fromScheduleByeManager.reducer,
   scheduleMatches: fromScheduleMatchManager.reducer,
-  scheduleRounds: fromScheduleRoundManager.reducer
+  scheduleRounds: fromScheduleRoundManager.reducer,
 };
 
 // 1. Create a Feature Selector
@@ -40,7 +42,6 @@ const { selectAll: selectPlayerEntityArray } = fromPlayerManager.adapter.getSele
 const { selectAll: selectScheduleByeEntityArray } = fromScheduleByeManager.adapter.getSelectors(selectScheduleByes);
 const { selectAll: selectScheduleMatchEntityArray } = fromScheduleMatchManager.adapter.getSelectors(selectScheduleMatches);
 const { selectAll: selectScheduleRoundEntityArray } = fromScheduleRoundManager.adapter.getSelectors(selectScheduleRounds);
-
 
 // 4. Create a selector for what the component needs.
 

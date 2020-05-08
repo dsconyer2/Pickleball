@@ -1,16 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import { PlayerContactAdded } from './actions/player-contact.actions';
 import { PlayerContact } from './models';
-import { PlayerContactState, selectPlayerContactEntities, selectHighestPlayerId } from './reducers';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { takeUntil, take } from 'rxjs/operators';
+import { PlayerContactState, selectHighestPlayerId, selectPlayerContactEntities } from './reducers';
 
 @Component({
   selector: 'app-player-contact',
   templateUrl: './player-contact.component.html',
-  styleUrls: ['./player-contact.component.css']
+  styleUrls: ['./player-contact.component.css'],
 })
 export class PlayerContactComponent implements OnInit, OnDestroy {
   playerContacts$: Observable<PlayerContact[]>;
@@ -21,7 +22,7 @@ export class PlayerContactComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<PlayerContactState>, fb: FormBuilder) {
     this.playerContactForm = fb.group({
-      newContact: new FormControl('')
+      newContact: new FormControl(''),
     });
   }
 

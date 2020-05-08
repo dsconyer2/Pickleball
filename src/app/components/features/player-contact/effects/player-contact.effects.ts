@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions, ofType } from '@ngrx/effects';
-import { map, tap, switchMap } from 'rxjs/operators';
-import * as actions from '../actions/player-contact.actions';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { map, tap } from 'rxjs/operators';
+
 import * as groupPlayerActions from '../actions/group-player.actions';
+import * as actions from '../actions/player-contact.actions';
 import { PlayerContactDataService } from '../dataServices/playerContactDataService';
 
 @Injectable()
@@ -12,7 +13,7 @@ export class PlayerContactEffects {
     .pipe(
       ofType(actions.ADD_PLAYER_CONTACT),
       map(a => a as actions.PlayerContactAdded),
-      tap(a => this.service.addPlayerContact(a.payload))
+      tap(a => this.service.addPlayerContact(a.payload)),
     );
 
   @Effect() removePlayerContact$ = this.actions$
@@ -21,15 +22,15 @@ export class PlayerContactEffects {
       map((a: actions.PlayerContactRemoved) => {
         this.service.removePlayerContact(a.payload);
         return new groupPlayerActions.PlayerContactRemovedFromGroupPlayers(a.payload.playerContactId);
-      }
-      )
+      },
+      ),
     );
 
   @Effect() playerContactsLoad$ = this.actions$
     .pipe(
       ofType(actions.LOAD_PLAYER_CONTACTS),
-      map(() => new actions.LoadedPlayerContactsSuccessfully(this.service.loadPlayerContacts()))
+      map(() => new actions.LoadedPlayerContactsSuccessfully(this.service.loadPlayerContacts())),
     );
 
-  constructor(private actions$: Actions, private service: PlayerContactDataService) { }
+  constructor(private actions$: Actions, private service: PlayerContactDataService) {}
 }

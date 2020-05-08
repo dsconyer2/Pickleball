@@ -1,7 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Match } from '../models';
 
-@Pipe({ name: 'matchScore' })
+@Pipe({ name: 'pbsMatchScore' })
 export class MatchScorePipe implements PipeTransform {
   transform(aScore: number): string {
     let matchLabel = '  ';

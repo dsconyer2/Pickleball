@@ -1,63 +1,64 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HelpComponent } from './components/help/help.component';
-import { HomeComponent } from './components/home/home.component';
-import { ScheduleEntryComponent } from './components/features/scheduler/components/schedule-entry/schedule-entry.component';
-import { ScheduleTournamentComponent } from './components/features/scheduler/components/schedule-tournament/schedule-tournament.component';
-import { PlayerContactComponent } from './components/features/player-contact/player-contact.component';
+
 import { GroupManagerComponent } from './components/features/player-contact/components/group-manager/group-manager.component';
 import {
-  GroupPlayerManagerComponent
+  GroupPlayerManagerComponent,
 } from './components/features/player-contact/components/group-player-manager/group-player-manager.component';
+import { PlayerContactComponent } from './components/features/player-contact/player-contact.component';
 import { ScheduleDisplayComponent } from './components/features/scheduler/components/schedule-display/schedule-display.component';
+import { ScheduleEntryComponent } from './components/features/scheduler/components/schedule-entry/schedule-entry.component';
+import { ScheduleTournamentComponent } from './components/features/scheduler/components/schedule-tournament/schedule-tournament.component';
+import { HelpComponent } from './components/help/help.component';
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
   {
     path: 'home',
-    component: HomeComponent
+    component: HomeComponent,
   },
   {
     path: 'scheduler',
-    component: ScheduleEntryComponent
+    component: ScheduleEntryComponent,
   },
   {
     path: 'scheduleTournament',
-    component: ScheduleTournamentComponent
+    component: ScheduleTournamentComponent,
   },
   {
     path: 'scheduleDisplay',
-    component: ScheduleDisplayComponent
+    component: ScheduleDisplayComponent,
   },
   {
     path: 'playerContact',
-    component: PlayerContactComponent
+    component: PlayerContactComponent,
   },
   {
     path: 'groupManager',
-    component: GroupManagerComponent
+    component: GroupManagerComponent,
   },
   {
     path: 'groupPlayerManager',
-    component: GroupPlayerManagerComponent
+    component: GroupPlayerManagerComponent,
   },
   {
     path: 'help',
-    component: HelpComponent
+    component: HelpComponent,
   },
   {
     path: '',
     redirectTo: '/home',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: '**',
     redirectTo: '/home',
-    pathMatch: 'full'
-  }
+    pathMatch: 'full',
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule { }

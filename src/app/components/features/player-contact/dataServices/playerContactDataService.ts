@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+
 import { PlayerContactEntity } from '../reducers/player-contact.reducer';
 
 @Injectable()
 export class PlayerContactDataService {
 
   playerKey = 'pickleballPlayerContacts';
-  constructor() { }
+  constructor() {}
 
   addPlayerContact(player: PlayerContactEntity) {
     const localPlayerContacts: PlayerContactEntity[] =

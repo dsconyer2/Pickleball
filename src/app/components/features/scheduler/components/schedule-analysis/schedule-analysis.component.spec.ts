@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GroupInfoComponent } from './group-info.component';
+import { ScheduleAnalysisComponent } from './schedule-analysis.component';
 
-describe('GroupInfoComponent', () => {
-  let component: GroupInfoComponent;
-  let fixture: ComponentFixture<GroupInfoComponent>;
+describe('ScheduleAnalysisComponent', () => {
+  let component: ScheduleAnalysisComponent;
+  let fixture: ComponentFixture<ScheduleAnalysisComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GroupInfoComponent],
+      declarations: [ScheduleAnalysisComponent],
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GroupInfoComponent);
+    fixture = TestBed.createComponent(ScheduleAnalysisComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

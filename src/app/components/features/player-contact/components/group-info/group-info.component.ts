@@ -1,15 +1,16 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Group } from '../../models';
-import { PlayerContactState } from '../../reducers';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
+
 import { GroupRemoved } from '../../actions/group-manager.actions';
 import { GroupPlayerDeleted } from '../../actions/group-player.actions';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { Group } from '../../models';
+import { PlayerContactState } from '../../reducers';
 
 @Component({
   selector: 'app-group-info',
   templateUrl: './group-info.component.html',
-  styleUrls: ['./group-info.component.css']
+  styleUrls: ['./group-info.component.css'],
 })
 export class GroupInfoComponent implements OnInit {
 
@@ -20,8 +21,7 @@ export class GroupInfoComponent implements OnInit {
     this.groupInfoForm = fb.group({});
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   removeGroup() {
     this.store.dispatch(new GroupPlayerDeleted(this.group.groupPlayerId));

@@ -8,7 +8,7 @@ describe('GroupPlayerManagerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GroupPlayerManagerComponent ]
+      declarations: [GroupPlayerManagerComponent],
     })
     .compileComponents();
   }));

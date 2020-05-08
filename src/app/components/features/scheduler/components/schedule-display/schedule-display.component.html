@@ -37,11 +37,11 @@
           <td *ngFor='let match of round.matches'>
             <span pbsHighlightOnHover style='text-align:center'
                   (click)='addScore(content, match)'>
-              <span>{{match | matchLabel: 1 : useNamesForMatches}}</span>
-              <span [ngStyle]='highlightWinner(match, 1)'>{{match.team1Score | matchScore}}</span>
+              <span>{{match | pbsMatchLabel: 1 : useNamesForMatches}}</span>
+              <span [ngStyle]='highlightWinner(match, 1)'>{{match.team1Score | pbsMatchScore}}</span>
               <span>  vs  </span>
-              <span [ngStyle]='highlightWinner(match, 2)'>{{match.team2Score | matchScore}}</span>
-              <span>{{match | matchLabel: 2 : useNamesForMatches}}</span>
+              <span [ngStyle]='highlightWinner(match, 2)'>{{match.team2Score | pbsMatchScore}}</span>
+              <span>{{match | pbsMatchLabel: 2 : useNamesForMatches}}</span>
             </span>
           </td>
           <td *ngIf='hasBye(round.byeId)'>{{formattedByes(round.byeId)}}</td>

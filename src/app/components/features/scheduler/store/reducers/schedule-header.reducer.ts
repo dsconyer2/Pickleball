@@ -1,5 +1,6 @@
-import * as actions from '../actions/schedule-header.actions';
 import { tassign } from 'tassign';
+
+import * as actions from '../actions/schedule-header.actions';
 
 export interface Schedule {
   scheduleHeaders: string[];
@@ -10,12 +11,12 @@ export interface State {
 }
 
 const initialState: State = {
-  scheduleHeaders: []
+  scheduleHeaders: [],
 };
 
 export function reducer(state: State = initialState, action: actions.All): State {
   switch (action.type) {
-      case actions.UPDATE_SCHEDULE_HEADERS:
+    case actions.UPDATE_SCHEDULE_HEADERS:
       return tassign(state, {
         scheduleHeaders: action.payload.scheduleHeaders,
       });

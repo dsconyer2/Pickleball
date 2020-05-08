@@ -1,4 +1,5 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
+
 import * as actions from '../actions/group-manager.actions';
 
 export interface GroupEntity {
@@ -20,8 +21,7 @@ export interface State extends EntityState<GroupEntity> { }
 // };
 const initialState: State = {
   ids: [],
-  entities: {
-  }
+  entities: {},
 };
 
 export const adapter = createEntityAdapter<GroupEntity>();

@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+
 import { GroupEntity } from '../reducers/group-manager.reducer';
 
 export const ADD_GROUP = '[groupFeature] add  group';
@@ -7,13 +8,13 @@ export class GroupAdded implements Action {
   payload: GroupEntity;
   constructor(groupId: number, name: string, groupPlayerId: number, enabledPlayerId: number) {
     this.payload = {
-      id: groupId,
       groupId,
       name,
       groupPlayerId,
-      enabledPlayerId
+      enabledPlayerId,
+      id: groupId,
     };
-   }
+  }
 }
 
 export const REMOVE_GROUP = '[groupFeature] remove  group';
@@ -22,10 +23,10 @@ export class GroupRemoved implements Action {
   payload: GroupEntity;
   constructor(groupId: number) {
     this.payload = {
+      groupId,
       id: groupId,
-      groupId
     };
-   }
+  }
 }
 
 export const LOAD_GROUPS = '[groupFeature] load  groups';
@@ -41,7 +42,7 @@ export class GroupsLoadedSuccessfully implements Action {
 }
 
 export type All =
-GroupAdded
-| GroupRemoved
-| GroupsLoad
-| GroupsLoadedSuccessfully;
+  GroupAdded
+  | GroupRemoved
+  | GroupsLoad
+  | GroupsLoadedSuccessfully;

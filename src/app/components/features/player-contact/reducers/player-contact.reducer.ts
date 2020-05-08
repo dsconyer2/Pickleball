@@ -1,4 +1,5 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
+
 import * as actions from '../actions/player-contact.actions';
 export interface PlayerContactEntity {
   id: number;
@@ -20,7 +21,7 @@ export interface State extends EntityState<PlayerContactEntity> { }
 const initialState: State = {
   ids: [],
   entities: {
-  }
+  },
 };
 
 export const adapter = createEntityAdapter<PlayerContactEntity>();

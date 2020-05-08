@@ -1,15 +1,16 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { PlayerContactState } from '../../reducers';
-import { PlayerContact } from '../../models';
+
 import { PlayerContactRemoved } from '../../actions/player-contact.actions';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { PlayerContact } from '../../models';
+import { PlayerContactState } from '../../reducers';
 
 @Component({
   selector: 'app-contact-info',
   templateUrl: './contact-info.component.html',
   styleUrls: ['./contact-info.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactInfoComponent implements OnInit {
 
@@ -20,8 +21,7 @@ export class ContactInfoComponent implements OnInit {
     this.contactInfoForm = fb.group({});
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   removeContact() {
     this.store.dispatch(new PlayerContactRemoved(this.contact.playerContactId));

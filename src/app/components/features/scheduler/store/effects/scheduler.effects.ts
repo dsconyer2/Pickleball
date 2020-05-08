@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions, ofType } from '@ngrx/effects';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { map, tap } from 'rxjs/operators';
-import * as actions from '../actions/scheduler.actions';
+
 import { SchedulerDataService } from '../../data-services/SchedulerDataService';
+import * as actions from '../actions/scheduler.actions';
 
 @Injectable()
 export class SchedulerEffects {
@@ -11,84 +12,84 @@ export class SchedulerEffects {
       .pipe(
           ofType(actions.ADD_PLAYER),
           map(a => a as actions.PlayerAdded),
-          tap(a => this.service.addPlayer(a.payload))
+          tap(a => this.service.addPlayer(a.payload)),
       );
 
-      @Effect({ dispatch: false }) removeAllPlayers$ = this.actions$
+  @Effect({ dispatch: false }) removeAllPlayers$ = this.actions$
       .pipe(
           ofType(actions.REMOVE_ALL_PLAYER),
           map(a => a as actions.PlayerRemoveAll),
-          tap(a => this.service.removeAllPlayers())
+          tap(a => this.service.removeAllPlayers()),
       );
 
-      @Effect({ dispatch: false }) updateSchedulerPlayerType$ = this.actions$
+  @Effect({ dispatch: false }) updateSchedulerPlayerType$ = this.actions$
       .pipe(
           ofType(actions.UPDATE_SCHEDULER_PLAYER_TYPE),
           map(a => a as actions.SchedulerPlayerTypeUpdated),
-          tap(a => this.service.updateSchedulerSetting('pickleballSchedulerPlayerType', a.payload.schedulerPlayerType))
+          tap(a => this.service.updateSchedulerSetting('pickleballSchedulerPlayerType', a.payload.schedulerPlayerType)),
       );
 
-      @Effect({ dispatch: false }) updateSchedulerType$ = this.actions$
+  @Effect({ dispatch: false }) updateSchedulerType$ = this.actions$
       .pipe(
           ofType(actions.UPDATE_SCHEDULER_TYPE),
           map(a => a as actions.SchedulerTypeUpdated),
-          tap(a => this.service.updateSchedulerSetting('pickleballSchedulerType', a.payload.schedulerType))
+          tap(a => this.service.updateSchedulerSetting('pickleballSchedulerType', a.payload.schedulerType)),
       );
 
-      @Effect({ dispatch: false }) updateNbrOfPlayers$ = this.actions$
+  @Effect({ dispatch: false }) updateNbrOfPlayers$ = this.actions$
       .pipe(
           ofType(actions.UPDATE_NBR_OF_PLAYERS),
           map(a => a as actions.NbrOfPlayersUpdated),
-          tap(a => this.service.updateSchedulerSetting('pickleballNbrOfPlayers', a.payload.nbrOfPlayers))
+          tap(a => this.service.updateSchedulerSetting('pickleballNbrOfPlayers', a.payload.nbrOfPlayers)),
       );
 
-      @Effect({ dispatch: false }) updateNbrOfCourts$ = this.actions$
+  @Effect({ dispatch: false }) updateNbrOfCourts$ = this.actions$
       .pipe(
           ofType(actions.UPDATE_NBR_OF_COURTS),
           map(a => a as actions.NbrOfCourtsUpdated),
-          tap(a => this.service.updateSchedulerSetting('pickleballNbrOfCourts', a.payload.nbrOfCourts))
+          tap(a => this.service.updateSchedulerSetting('pickleballNbrOfCourts', a.payload.nbrOfCourts)),
       );
 
-      @Effect({ dispatch: false }) updateNbrOfPlayersPerCourt$ = this.actions$
+  @Effect({ dispatch: false }) updateNbrOfPlayersPerCourt$ = this.actions$
       .pipe(
           ofType(actions.UPDATE_NBR_OF_PLAYERS_PER_COURT),
           map(a => a as actions.NbrOfPlayersPerCourtUpdated),
-          tap(a => this.service.updateSchedulerSetting('pickleballNbrOfPlayersPerCourt', a.payload.nbrOfPlayersPerCourt))
+          tap(a => this.service.updateSchedulerSetting('pickleballNbrOfPlayersPerCourt', a.payload.nbrOfPlayersPerCourt)),
       );
 
-      @Effect({ dispatch: false }) updateRandomizeOrder$ = this.actions$
+  @Effect({ dispatch: false }) updateRandomizeOrder$ = this.actions$
       .pipe(
           ofType(actions.UPDATE_RANDOMIZE_ORDER),
           map(a => a as actions.RandomizeOrderUpdated),
-          tap(a => this.service.updateSchedulerSetting('pickleballRandomizeOrder', a.payload.randomizeOrder))
+          tap(a => this.service.updateSchedulerSetting('pickleballRandomizeOrder', a.payload.randomizeOrder)),
       );
 
-      @Effect({ dispatch: false }) updateUseNamesForMatches$ = this.actions$
+  @Effect({ dispatch: false }) updateUseNamesForMatches$ = this.actions$
       .pipe(
           ofType(actions.UPDATE_USE_NAMES_FOR_MATCHES),
           map(a => a as actions.UseNamesForMatchesUpdated),
-          tap(a => this.service.updateSchedulerSetting('pickleballUseNamesForMatches', a.payload.useNamesForMatches))
+          tap(a => this.service.updateSchedulerSetting('pickleballUseNamesForMatches', a.payload.useNamesForMatches)),
       );
 
-      @Effect({ dispatch: false }) updateLoadFromGroup$ = this.actions$
+  @Effect({ dispatch: false }) updateLoadFromGroup$ = this.actions$
       .pipe(
           ofType(actions.UPDATE_LOAD_FROM_GROUP),
           map(a => a as actions.LoadFromGroupUpdated),
-          tap(a => this.service.updateSchedulerSetting('pickleballLoadFromGroup', a.payload.loadFromGroup))
+          tap(a => this.service.updateSchedulerSetting('pickleballLoadFromGroup', a.payload.loadFromGroup)),
       );
 
-      @Effect({ dispatch: false }) updateSelectedGroup$ = this.actions$
+  @Effect({ dispatch: false }) updateSelectedGroup$ = this.actions$
       .pipe(
           ofType(actions.UPDATE_SELECTED_GROUP),
           map(a => a as actions.SelectedGroupUpdated),
-          tap(a => this.service.updateSchedulerSetting('pickleballSchedulerSelectedGroup', a.payload.selectedGroup))
+          tap(a => this.service.updateSchedulerSetting('pickleballSchedulerSelectedGroup', a.payload.selectedGroup)),
       );
 
-      @Effect() schedulerSettingsLoad$ = this.actions$
+  @Effect() schedulerSettingsLoad$ = this.actions$
       .pipe(
           ofType(actions.LOAD_SCHEDULER_SETTINGS),
-          map(() => new actions.SchedulerSettingsLoadedSuccessfully(this.service.loadSchedulerSettings()))
+          map(() => new actions.SchedulerSettingsLoadedSuccessfully(this.service.loadSchedulerSettings())),
       );
 
-      constructor(private actions$: Actions, private service: SchedulerDataService) {}
+  constructor(private actions$: Actions, private service: SchedulerDataService) {}
 }

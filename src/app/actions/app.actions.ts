@@ -12,5 +12,4 @@ export class ApplicationError implements Action {
   constructor(public message: string, public feature: string) { }
 }
 
-
 export type AppActions = ApplicationStarted | ApplicationError;

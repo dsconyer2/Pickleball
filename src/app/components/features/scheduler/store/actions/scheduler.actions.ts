@@ -1,7 +1,8 @@
 import { Action } from '@ngrx/store';
+
+import { Group } from '../../../player-contact/models';
 import { PlayerEntity } from '../reducers/player.reducer';
 import { SchedulerSettings } from '../reducers/scheduler.reducer';
-import { Group } from '../../../player-contact/models';
 
 const emptySchedulerSettings = {
   schedulerPlayerType: undefined,
@@ -13,7 +14,7 @@ const emptySchedulerSettings = {
   randomizeOrder: undefined,
   useNamesForMatches: undefined,
   loadFromGroup: false,
-  selectedGroup: undefined
+  selectedGroup: undefined,
 };
 
 let myId = 10;
@@ -31,7 +32,7 @@ export class PlayerAdded implements Action {
       byeRound,
       playedAgainst,
       courtsPlayed,
-      id: myId++
+      id: myId++,
     };
   }
 }

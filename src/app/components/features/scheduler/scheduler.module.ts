@@ -4,18 +4,20 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
+
+import { ScheduleAnalysisComponent } from './components/schedule-analysis/schedule-analysis.component';
+import { ScheduleDisplayComponent } from './components/schedule-display/schedule-display.component';
 import { ScheduleEntryComponent } from './components/schedule-entry/schedule-entry.component';
 import { ScheduleTournamentComponent } from './components/schedule-tournament/schedule-tournament.component';
-import { SchedulerEffects } from './store/effects/scheduler.effects';
-import { reducers } from './store/reducers';
+import { AutofocusDirective } from './directives/auto-focus.directive';
+import { HighlightOnHoverDirective } from './directives/highlight-on-hover.directive';
+import { ValidNbrOfCourtsDirective } from './directives/valid-nbr-of-courts.directive';
+import { MatchLabelPipe } from './pipes/match-label.pipe';
+import { MatchScorePipe } from './pipes/match-score.pipe';
 import { SchedulerComponent } from './scheduler.component';
 import { AppStartUpEffects } from './store/effects/app-startup.effects';
-import { ValidNbrOfCourtsDirective } from './directives/valid-nbr-of-courts.directive';
-import { ScheduleDisplayComponent } from './components/schedule-display/schedule-display.component';
-import { HighlightOnHoverDirective } from './directives/highlight-on-hover.directive';
-import { MatchLabelPipe } from './pipes/match-label.pipe';
-import { AutofocusDirective } from './directives/auto-focus.directive';
-import { MatchScorePipe } from './pipes/match-score.pipe';
+import { SchedulerEffects } from './store/effects/scheduler.effects';
+import { reducers } from './store/reducers';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,8 @@ import { MatchScorePipe } from './pipes/match-score.pipe';
     AutofocusDirective,
     ScheduleDisplayComponent,
     MatchLabelPipe,
-    MatchScorePipe
+    MatchScorePipe,
+    ScheduleAnalysisComponent,
   ],
   imports: [
     CommonModule,
@@ -35,8 +38,8 @@ import { MatchScorePipe } from './pipes/match-score.pipe';
     FormsModule,
     ReactiveFormsModule,
     StoreModule.forFeature('schedulerFeature', reducers),
-    EffectsModule.forFeature([SchedulerEffects, AppStartUpEffects])
+    EffectsModule.forFeature([SchedulerEffects, AppStartUpEffects]),
   ],
-  exports: [SchedulerComponent]
+  exports: [SchedulerComponent],
 })
 export class SchedulerModule { }

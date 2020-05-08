@@ -1,8 +1,8 @@
 import { Action } from '@ngrx/store';
-import { GroupPlayerEntity, GroupPlayerUpdateEntity } from '../reducers/group-player.reducer';
-import { PlayerContact } from '../models';
-import { PlayerContactEntity } from '../reducers/player-contact.reducer';
 
+import { PlayerContact } from '../models';
+import { GroupPlayerEntity, GroupPlayerUpdateEntity } from '../reducers/group-player.reducer';
+import { PlayerContactEntity } from '../reducers/player-contact.reducer';
 
 export const CREATE_GROUP_PLAYER = '[groupFeature] create  groupPlayer';
 export class GroupPlayerCreated implements Action {
@@ -10,12 +10,11 @@ export class GroupPlayerCreated implements Action {
   payload: GroupPlayerEntity;
   constructor(groupPlayerId: number) {
     this.payload = {
-      id: groupPlayerId,
       groupPlayerId,
-      playerContacts: []
-
+      playerContacts: [],
+      id: groupPlayerId,
     };
-   }
+  }
 }
 
 export const DELETE_GROUP_PLAYER = '[groupFeature] delete  groupPlayer';
@@ -24,10 +23,10 @@ export class GroupPlayerDeleted implements Action {
   payload: GroupPlayerEntity;
   constructor(groupPlayerId: number) {
     this.payload = {
+      groupPlayerId,
       id: groupPlayerId,
-      groupPlayerId
     };
-   }
+  }
 }
 
 export const ADD_GROUP_PLAYER = '[groupFeature] add  groupPlayer';
@@ -36,10 +35,10 @@ export class GroupPlayerAdded implements Action {
   payload: GroupPlayerUpdateEntity;
   constructor(groupPlayerId: number, playerContacts: PlayerContact[]) {
     this.payload = {
+      changes: { playerContacts },
       id: groupPlayerId,
-      changes: {playerContacts}
     };
-   }
+  }
 }
 
 export const REMOVE_GROUP_PLAYER = '[groupFeature] remove  groupPlayer';
@@ -48,10 +47,10 @@ export class GroupPlayerRemoved implements Action {
   payload: GroupPlayerUpdateEntity;
   constructor(groupPlayerId: number, playerContacts: PlayerContact[]) {
     this.payload = {
+      changes: { playerContacts },
       id: groupPlayerId,
-      changes: {playerContacts}
     };
-   }
+  }
 }
 
 export const LOAD_GROUP_PLAYERS = '[groupFeature] load  groupPlayers';
@@ -72,16 +71,16 @@ export class PlayerContactRemovedFromGroupPlayers implements Action {
   payload: PlayerContactEntity;
   constructor(playerContactId: number) {
     this.payload = {
+      playerContactId,
       id: playerContactId,
-      playerContactId
     };
-   }
+  }
 }
 
 export type All =
-GroupPlayerCreated
-| GroupPlayerDeleted
-| GroupPlayerAdded
-| GroupPlayerRemoved
-| GroupPlayersLoad
-| GroupPlayersLoadedSuccessfully;
+  GroupPlayerCreated
+  | GroupPlayerDeleted
+  | GroupPlayerAdded
+  | GroupPlayerRemoved
+  | GroupPlayersLoad
+  | GroupPlayersLoadedSuccessfully;

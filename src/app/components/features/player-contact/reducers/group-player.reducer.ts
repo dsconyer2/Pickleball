@@ -1,4 +1,5 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
+
 import * as actions from '../actions/group-player.actions';
 import { PlayerContact } from '../models';
 
@@ -27,8 +28,7 @@ export interface State extends EntityState<GroupPlayerEntity> { }
 
 const initialState: State = {
   ids: [],
-  entities: {
-  }
+  entities: {},
 };
 
 export const adapter = createEntityAdapter<GroupPlayerEntity>();

@@ -1,5 +1,7 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
+
 import * as actions from '../actions/scheduler.actions';
+
 export interface PlayerEntity {
   id: number;
   playerId: number;
@@ -23,7 +25,7 @@ export interface State extends EntityState<PlayerEntity> { }
 const initialState: State = {
   ids: [],
   entities: {
-  }
+  },
 };
 
 export const adapter = createEntityAdapter<PlayerEntity>();
