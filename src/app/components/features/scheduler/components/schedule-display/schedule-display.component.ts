@@ -172,15 +172,6 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     return (result.length > 0) ? result[0].match : null;
   }
 
-  getMatchForId(aMatchId: number): Match {
-    let result: ScheduleMatch[];
-    this.scheduleMatches$.pipe(
-      map(aMatchArray => result = aMatchArray.filter(aMatch => aMatch.matchId === aMatchId)),
-      takeUntil(this.unsubscribe$),
-    ).subscribe();
-    return (result.length > 0) ? result[0].match : null;
-  }
-
   formattedByes(aByeId: number): string {
     let result: ScheduleBye[];
     this.scheduleByes$.pipe(
@@ -203,6 +194,10 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     }
     output = output.slice(0, output.length - 2);
     return output;
+  }
+
+  performAnalysis() {
+    this.router.navigate(['/scheduleAnalysis']);
   }
 
   addScore(content: any, match: Match) {

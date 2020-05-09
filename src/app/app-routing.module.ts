@@ -6,6 +6,7 @@ import {
   GroupPlayerManagerComponent,
 } from './components/features/player-contact/components/group-player-manager/group-player-manager.component';
 import { PlayerContactComponent } from './components/features/player-contact/player-contact.component';
+import { ScheduleAnalysisComponent } from './components/features/scheduler/components/schedule-analysis/schedule-analysis.component';
 import { ScheduleDisplayComponent } from './components/features/scheduler/components/schedule-display/schedule-display.component';
 import { ScheduleEntryComponent } from './components/features/scheduler/components/schedule-entry/schedule-entry.component';
 import { ScheduleTournamentComponent } from './components/features/scheduler/components/schedule-tournament/schedule-tournament.component';
@@ -28,6 +29,10 @@ const routes: Routes = [
   {
     path: 'scheduleDisplay',
     component: ScheduleDisplayComponent,
+  },
+  {
+    path: 'scheduleAnalysis',
+    component: ScheduleAnalysisComponent,
   },
   {
     path: 'playerContact',
