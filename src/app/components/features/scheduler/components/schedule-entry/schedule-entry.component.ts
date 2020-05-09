@@ -1,26 +1,27 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { combineLatest, Observable, Subject, Subscription } from 'rxjs';
+import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
+import { Group, GroupPlayer } from 'src/app/components/features/player-contact/models';
+import { selectGroupEntities, selectGroupPlayerEntities } from 'src/app/components/features/player-contact/reducers';
+
 import {
-  NbrOfCourtsUpdated, NbrOfPlayersPerCourtUpdated, NbrOfPlayersUpdated, PlayerAdded,
-  PlayerRemoveAll, RandomizeOrderUpdated, SchedulerPlayerTypeUpdated, SchedulerTypeUpdated,
-  UseNamesForMatchesUpdated, LoadFromGroupUpdated, SelectedGroupUpdated
+  LoadFromGroupUpdated, NbrOfCourtsUpdated, NbrOfPlayersPerCourtUpdated, NbrOfPlayersUpdated,
+  PlayerAdded, PlayerRemoveAll, RandomizeOrderUpdated, SchedulerPlayerTypeUpdated,
+  SchedulerTypeUpdated, SelectedGroupUpdated, UseNamesForMatchesUpdated,
 } from '../../store/actions/scheduler.actions';
 import {
-  SchedulerState, selectSchedulerPlayerType, selectSchedulerType, selectSchedulerNbrOfPlayers,
-  selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt, selectSchedulerRandomizeOrder,
-  selectSchedulerUseNamesForMatches, selectSchedulerLoadFromGroup, selectSchedulerSelectedGroup
+  SchedulerState, selectSchedulerLoadFromGroup, selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayers,
+  selectSchedulerNbrOfPlayersPerCourt, selectSchedulerPlayerType, selectSchedulerRandomizeOrder,
+  selectSchedulerSelectedGroup, selectSchedulerType, selectSchedulerUseNamesForMatches,
 } from '../../store/reducers';
-import { Group, GroupPlayer } from 'src/app/components/features/player-contact/models';
-import { Observable, Subscription, Subject, combineLatest } from 'rxjs';
-import { selectGroupEntities, selectGroupPlayerEntities } from 'src/app/components/features/player-contact/reducers';
-import { takeUntil, filter, map, take, tap } from 'rxjs/operators';
-import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-schedule-entry',
   templateUrl: './schedule-entry.component.html',
-  styleUrls: ['./schedule-entry.component.css']
+  styleUrls: ['./schedule-entry.component.css'],
 })
 export class ScheduleEntryComponent implements OnInit, OnDestroy {
 
@@ -77,50 +78,50 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
 
     this.groupPlayers$.pipe(takeUntil(this.unsubscribe$)).subscribe(g => this.groupPlayers = g);
     this.schedulerPlayerType$.pipe(takeUntil(this.unsubscribe$))
-      .subscribe(g => {
+      .subscribe((g) => {
         this.scheduleEntryForm.controls.playerType.setValue(g);
         this.scheduleEntryForm.controls.playerType.updateValueAndValidity();
       });
     this.schedulerType$.pipe(takeUntil(this.unsubscribe$))
-      .subscribe(g => {
+      .subscribe((g) => {
         this.scheduleEntryForm.controls.scheduleType.setValue(g);
         this.scheduleEntryForm.controls.scheduleType.updateValueAndValidity();
       });
     this.schedulerNbrOfPlayers$.pipe(takeUntil(this.unsubscribe$))
-      .subscribe(g => {
+      .subscribe((g) => {
         this.scheduleEntryForm.controls.nbrOfPlayersInput.setValue(g);
         this.scheduleEntryForm.controls.nbrOfPlayersInput.updateValueAndValidity();
       });
     this.schedulerNbrOfCourts$.pipe(takeUntil(this.unsubscribe$))
-      .subscribe(g => {
+      .subscribe((g) => {
         this.scheduleEntryForm.controls.nbrOfCourtsInput.setValue(g);
         this.scheduleEntryForm.controls.nbrOfCourtsInput.updateValueAndValidity();
       });
     this.schedulerRandomizeOrder$.pipe(takeUntil(this.unsubscribe$))
-      .subscribe(g => {
+      .subscribe((g) => {
         this.scheduleEntryForm.controls.randomizeOrder.setValue(g);
         this.scheduleEntryForm.controls.randomizeOrder.updateValueAndValidity();
       });
     this.schedulerUseNamesForMatches$.pipe(takeUntil(this.unsubscribe$))
-      .subscribe(g => {
+      .subscribe((g) => {
         this.scheduleEntryForm.controls.useNamesForMatches.setValue(g);
         this.scheduleEntryForm.controls.useNamesForMatches.updateValueAndValidity();
       });
     this.schedulerLoadFromGroup$.pipe(takeUntil(this.unsubscribe$))
-      .subscribe(g => {
+      .subscribe((g) => {
         this.scheduleEntryForm.controls.loadFromGroup.setValue(g);
         this.scheduleEntryForm.controls.loadFromGroup.updateValueAndValidity();
       });
 
     combineLatest([this.groups$, this.schedulerSelectedGroup$]).subscribe(
       ([grp, selGrp]) => {
-        grp.forEach(aGrp => {
+        grp.forEach((aGrp) => {
           if (aGrp?.groupId === selGrp?.groupId) {
             this.scheduleEntryForm.controls.groupToLoad.setValue(aGrp);
             this.scheduleEntryForm.controls.groupToLoad.updateValueAndValidity();
           }
         });
-      }
+      },
     );
 
     this.onScheduleTypeChange();
@@ -169,7 +170,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
         let selectedGroupPlayer;
         this.groupPlayers$.pipe(
           take(1),
-          tap(groupPlayers => selectedGroupPlayer = groupPlayers.find(gp => gp.groupPlayerId === groupToLoad.enabledPlayerId))
+          tap(groupPlayers => selectedGroupPlayer = groupPlayers.find(gp => gp.groupPlayerId === groupToLoad.enabledPlayerId)),
         ).subscribe();
         // load players
         selectedGroupPlayer.playerContacts.forEach((aPlayer) => {
@@ -186,7 +187,6 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
       }
     }
   }
-
 
   onSubmit() {
     if (this.scheduleEntryForm.valid) {

@@ -1,6 +1,7 @@
-import * as actions from '../actions/scheduler.actions';
 import { tassign } from 'tassign';
+
 import { Group } from '../../../player-contact/models';
+import * as actions from '../actions/scheduler.actions';
 
 export interface SchedulerSettings {
   schedulerPlayerType: string;
@@ -38,7 +39,7 @@ const initialState: State = {
   randomizeOrder: false,
   useNamesForMatches: false,
   loadFromGroup: false,
-  selectedGroup: undefined
+  selectedGroup: undefined,
 };
 
 export function reducer(state: State = initialState, action: actions.All): State {
@@ -74,7 +75,7 @@ export function reducer(state: State = initialState, action: actions.All): State
         randomizeOrder: action.payload.randomizeOrder,
         useNamesForMatches: action.payload.useNamesForMatches,
         loadFromGroup: action.payload.loadFromGroup,
-        selectedGroup: action.payload.selectedGroup
+        selectedGroup: action.payload.selectedGroup,
       });
     default: {
       return state;

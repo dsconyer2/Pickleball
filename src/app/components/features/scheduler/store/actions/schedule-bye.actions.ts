@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
-import { ScheduleByeEntity } from '../reducers/schedule-bye.reducer';
-import { Player } from '../../models';
 
+import { Player } from '../../models';
+import { ScheduleByeEntity } from '../reducers/schedule-bye.reducer';
 
 export const CREATE_SCHEDULE_BYE = '[schedulerFeature] create scheduleBye';
 export class ScheduleByeCreated implements Action {
@@ -9,19 +9,19 @@ export class ScheduleByeCreated implements Action {
   payload: ScheduleByeEntity;
   constructor(byeId: number, byePlayers: Player[]) {
     this.payload = {
-      id: byeId,
       byeId,
-      byePlayers
+      byePlayers,
+      id: byeId,
     };
-   }
+  }
 }
 
 export const DELETE_ALL_BYES = '[schedulerFeature] delete all scheduleBye';
 export class ScheduleByesDeleted implements Action {
   readonly type = DELETE_ALL_BYES;
-  constructor() {}
+  constructor() { }
 }
 
 export type All =
-ScheduleByeCreated
-| ScheduleByesDeleted;
+  ScheduleByeCreated
+  | ScheduleByesDeleted;

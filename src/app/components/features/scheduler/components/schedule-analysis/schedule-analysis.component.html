@@ -1,0 +1,73 @@
+<form [formGroup]='scheduleAnalysisForm'>
+  <div class="col-lg-12">
+    <br>
+    <div>
+      <button type="submit"
+              class="btn btn-primary mr-5"
+              (click)="analysisFinished()"
+              autofocus>Done with Analysis</button>
+    </div>
+    <br>
+    <label>{{(schedulerType)}}</label> <br>
+    <label>Nbr of {{(playerType)}} =
+      {{(nbrOfPlayers)}}</label> <br>
+    <label>Nbr of courts = {{(nbrOfCourts)}}</label> <br>
+    <label>Nbr of {{(playerType)}} per court =
+      {{(playersPerCourt)}}</label> <br>
+    <label>Nbr of byes per round = {{(nbrOfByePlayers)}}</label> <br>
+    <label>Nbr of rounds = {{(nbrOfRounds)}}</label> <br>
+    <br>
+    <div>
+      <label class="h3">Played With Counts</label>
+      <table>
+        <th *ngFor='let header of (playerHeader)'>{{header}}</th>
+        <tr *ngFor='let playedWithRow of (playedWithArray); let playedWithIndex = index'>
+          <td>{{playedWithIndex + 1}}</td>
+          <td *ngFor='let playedWithCol of playedWithRow'>
+            <span>{{playedWithCol}}</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <br>
+    <div>
+      <label class="h3">Played Against Counts</label>
+      <table>
+        <th *ngFor='let header of (playerHeader)'>{{header}}</th>
+        <tr *ngFor='let playedAgainstRow of (playedAgainstArray); let playedAgainstIndex = index'>
+          <td>{{playedAgainstIndex + 1}}</td>
+          <td *ngFor='let playedAgainstCol of playedAgainstRow'>
+            <span>{{playedAgainstCol}}</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <br>
+    <div>
+      <label class="h3">Byes</label>
+      <table>
+        <th *ngFor='let header of (roundHeader)'>{{header}}</th>
+        <tr *ngFor='let byeRow of (byeArray); let byeIndex = index'>
+          <td>{{byeIndex + 1}}</td>
+          <td *ngFor='let byeCol of byeRow'>
+            <span>{{byeCol}}</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <br>
+    <div>
+      <label class="h3">Back to Back Byes</label>
+      <table>
+        <th>Player</th>
+        <th>Count</th>
+        <tr *ngFor='let backToBackByesRow of (backToBackByes); let backToBackByesIndex = index'>
+          <td>{{backToBackByesIndex + 1}}</td>
+          <td>
+            <span>{{backToBackByesRow}}</span>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</form>

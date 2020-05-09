@@ -1,7 +1,8 @@
-import * as actions from '../actions/group-player-settings.actions';
+import { createEntityAdapter } from '@ngrx/entity';
 import { tassign } from 'tassign';
+
+import * as actions from '../actions/group-player-settings.actions';
 import { Group } from '../models';
-import { createEntityAdapter, EntityState } from '@ngrx/entity';
 
 export interface GroupPlayerSettingsEntity {
   selectedGroup: Group;
@@ -23,8 +24,8 @@ const initialState: State = {
     groupId: undefined,
     name: '',
     groupPlayerId: undefined,
-    enabledPlayerId: undefined
-  }
+    enabledPlayerId: undefined,
+  },
 };
 
 export const adapter = createEntityAdapter<GroupPlayerSettingsEntity>();
@@ -35,7 +36,7 @@ export function reducer(state: State = initialState, action: actions.All): State
       return tassign(state, { selectedGroup: action.payload.selectedGroup });
     case actions.LOAD_GROUP_PLAYER_SETTINGS_SUCCESS:
       return tassign(state, {
-        selectedGroup: action.payload.selectedGroup
+        selectedGroup: action.payload.selectedGroup,
       });
     default: {
       return state;

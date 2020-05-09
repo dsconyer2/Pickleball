@@ -1,0 +1,16 @@
+/* tr:nth-child(even) {background-color: #f2f2f2;} */
+/* color: #4756DC; */
+tr:nth-child(odd) {
+  background-color: #4e72df56;
+}
+table{
+border: thick solid black;
+width: 100%;
+text-align: center;
+font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+td {
+  border: thick solid black;
+}

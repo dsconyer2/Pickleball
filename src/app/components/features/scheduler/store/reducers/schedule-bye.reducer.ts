@@ -1,6 +1,7 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
-import * as actions from '../actions/schedule-bye.actions';
+
 import { Player } from '../../models';
+import * as actions from '../actions/schedule-bye.actions';
 
 export interface ScheduleByeEntity {
   id: number;
@@ -13,7 +14,7 @@ export interface State extends EntityState<ScheduleByeEntity> { }
 const initialState: State = {
   ids: [],
   entities: {
-  }
+  },
 };
 
 export const adapter = createEntityAdapter<ScheduleByeEntity>();

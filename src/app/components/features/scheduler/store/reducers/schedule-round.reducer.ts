@@ -1,4 +1,5 @@
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
+
 import * as actions from '../actions/schedule-round.actions';
 
 export interface ScheduleRoundEntity {
@@ -13,7 +14,7 @@ export interface State extends EntityState<ScheduleRoundEntity> { }
 const initialState: State = {
   ids: [],
   entities: {
-  }
+  },
 };
 
 export const adapter = createEntityAdapter<ScheduleRoundEntity>();

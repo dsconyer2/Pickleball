@@ -1,17 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { Group, GroupPlayer } from '../../models';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { selectGroupEntities, PlayerContactState, selectHighestGroupId, selectHighestGroupPlayerId } from '../../reducers';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import { GroupAdded } from '../../actions/group-manager.actions';
 import { GroupPlayerCreated } from '../../actions/group-player.actions';
-import { takeUntil } from 'rxjs/operators';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Group, GroupPlayer } from '../../models';
+import { PlayerContactState, selectGroupEntities, selectHighestGroupId, selectHighestGroupPlayerId } from '../../reducers';
 
 @Component({
   selector: 'app-group-manager',
   templateUrl: './group-manager.component.html',
-  styleUrls: ['./group-manager.component.css']
+  styleUrls: ['./group-manager.component.css'],
 })
 export class GroupManagerComponent implements OnInit, OnDestroy {
   groups$: Observable<Group[]>;
@@ -23,7 +24,7 @@ export class GroupManagerComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<PlayerContactState>, fb: FormBuilder) {
     this.groupManagerForm = fb.group({
-      newGroup: new FormControl('')
+      newGroup: new FormControl(''),
     });
   }
 

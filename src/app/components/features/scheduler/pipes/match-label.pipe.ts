@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
+
 import { Match } from '../models';
 
-@Pipe({ name: 'matchLabel' })
+@Pipe({ name: 'pbsMatchLabel' })
 export class MatchLabelPipe implements PipeTransform {
   transform(aMatch: Match, teamNumber: number, useNamesForMatches: boolean): string {
     let matchLabel = '';

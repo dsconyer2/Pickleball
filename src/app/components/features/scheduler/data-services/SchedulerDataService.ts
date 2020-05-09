@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+
+import { Group } from '../../player-contact/models';
 import { PlayerEntity } from '../store/reducers/player.reducer';
 import { SchedulerSettings } from '../store/reducers/scheduler.reducer';
-import { Group } from '../../player-contact/models';
 
 @Injectable()
 export class SchedulerDataService {
@@ -71,7 +72,7 @@ export class SchedulerDataService {
       randomizeOrder: localSchedulerRandomizeOrder,
       useNamesForMatches: localSchedulerUseNamesForMatches,
       loadFromGroup: localSchedulerLoadFromGroup,
-      selectedGroup: localSchedulerSelectedGroup
+      selectedGroup: localSchedulerSelectedGroup,
     };
   }
 

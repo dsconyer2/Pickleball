@@ -1,13 +1,13 @@
 import { Group } from '../../player-contact/models';
 
 export interface Player {
-    playerId: number;
-    playerName: string;
-    isPlayerAvailable: boolean;
-    isByeAvailable: boolean;
-    byeRound: number;
-    playedAgainst: {};
-    courtsPlayed: {};
+  playerId: number;
+  playerName: string;
+  isPlayerAvailable: boolean;
+  isByeAvailable: boolean;
+  byeRound: number;
+  playedAgainst: {};
+  courtsPlayed: {};
 }
 
 export interface ScheduleBye {

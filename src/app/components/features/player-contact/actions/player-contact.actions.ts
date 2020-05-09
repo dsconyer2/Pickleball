@@ -1,4 +1,5 @@
 import { Action } from '@ngrx/store';
+
 import { PlayerContactEntity } from '../reducers/player-contact.reducer';
 
 export const ADD_PLAYER_CONTACT = '[playerContactFeature] add  playerContact';
@@ -7,11 +8,11 @@ export class PlayerContactAdded implements Action {
   payload: PlayerContactEntity;
   constructor(playerContactId: number, name: string) {
     this.payload = {
-      id: playerContactId,
       playerContactId,
-    name
+      name,
+      id: playerContactId,
     };
-   }
+  }
 }
 
 export const REMOVE_PLAYER_CONTACT = '[playerContactFeature] remove  playerContact';
@@ -20,10 +21,10 @@ export class PlayerContactRemoved implements Action {
   payload: PlayerContactEntity;
   constructor(playerContactId: number) {
     this.payload = {
+      playerContactId,
       id: playerContactId,
-      playerContactId
     };
-   }
+  }
 }
 
 export const LOAD_PLAYER_CONTACTS = '[playerContactFeature] load  playerContacts';
@@ -39,7 +40,7 @@ export class LoadedPlayerContactsSuccessfully implements Action {
 }
 
 export type All =
-PlayerContactAdded
-| PlayerContactRemoved
-| PlayerContactsLoad
-| LoadedPlayerContactsSuccessfully;
+  PlayerContactAdded
+  | PlayerContactRemoved
+  | PlayerContactsLoad
+  | LoadedPlayerContactsSuccessfully;

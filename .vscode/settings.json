@@ -14,6 +14,10 @@
   "files.insertFinalNewline": true,
   "html.format.wrapAttributes": "force-aligned",
   "html.format.wrapLineLength": 80,
+  "htmlhint.options": {
+    "attr-lowercase": false,
+    "doctype-first": false
+  },
   "http.proxy": "http://clientcache",
   "http.proxyAuthorization": null,
   "http.proxyStrictSSL": false,
@@ -25,7 +29,7 @@
   },
   "vsicons.dontShowNewVersionMessage": true,
   "vsicons.projectDetection.autoReload": true,
-  "window.zoomLevel": 0,
+  "window.zoomLevel": 1,
   "workbench.activityBar.visible": true,
   "workbench.iconTheme": "vscode-icons",
   "workbench.panel.location": "bottom",

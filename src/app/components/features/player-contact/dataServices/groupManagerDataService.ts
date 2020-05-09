@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { GroupPlayerUpdateEntity, GroupPlayerEntity } from '../reducers/group-player.reducer';
+
 import { GroupEntity } from '../reducers/group-manager.reducer';
 
 @Injectable()
 export class GroupManagerDataService {
 
   groupKey = 'pickleballGroups';
-  constructor() { }
+  constructor() {}
 
   addGroup(group: GroupEntity) {
     const localGroups: GroupEntity[] =

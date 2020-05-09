@@ -1,10 +1,10 @@
 import { Action } from '@ngrx/store';
+
 import { Schedule } from '../reducers/schedule-header.reducer';
 
 const emptySchedule = {
   scheduleHeaders: undefined,
 };
-
 
 export const UPDATE_SCHEDULE_HEADERS = '[schedulerFeature] update  scheduleHeaders';
 export class ScheduleHeadersUpdated implements Action {

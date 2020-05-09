@@ -1,20 +1,21 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subject, combineLatest } from 'rxjs';
-import { Group, PlayerContact, GroupPlayer } from '../../models';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import {
-  selectGroupEntities, PlayerContactState, selectGroupPlayerEntities, selectGroupPlayerSelectedGroup,
-  selectGroupPlayerSelectedGroupPlayer, selectAvailablePlayerContactEntities, selectGroupPlayerEnabledGroupPlayer
-} from '../../reducers';
-import { GroupPlayerAdded, GroupPlayerRemoved } from '../../actions/group-player.actions';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { take, takeUntil, tap } from 'rxjs/operators';
+
 import { GroupPlayerSelectedGroupUpdated } from '../../actions/group-player-settings.actions';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { tap, take, takeUntil, filter, map, switchMap } from 'rxjs/operators';
+import { GroupPlayerAdded, GroupPlayerRemoved } from '../../actions/group-player.actions';
+import { Group, GroupPlayer, PlayerContact } from '../../models';
+import {
+  PlayerContactState, selectAvailablePlayerContactEntities, selectGroupEntities, selectGroupPlayerEnabledGroupPlayer,
+  selectGroupPlayerEntities, selectGroupPlayerSelectedGroup, selectGroupPlayerSelectedGroupPlayer,
+} from '../../reducers';
 
 @Component({
   selector: 'app-group-player-manager',
   templateUrl: './group-player-manager.component.html',
-  styleUrls: ['./group-player-manager.component.css']
+  styleUrls: ['./group-player-manager.component.css'],
 })
 export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
   availablePlayerContacts$: Observable<PlayerContact[]>;
@@ -30,7 +31,7 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<PlayerContactState>, fb: FormBuilder) {
     this.groupPlayerManagerForm = fb.group({
-      groupSelector: new FormControl(null, Validators.required)
+      groupSelector: new FormControl(null, Validators.required),
     });
   }
 
@@ -42,10 +43,10 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
 
     combineLatest([this.groups$, this.selectedGroup$]).subscribe(
       ([grp, selGrp]) => {
-        grp.forEach(aGrp => {
+        grp.forEach((aGrp) => {
           if (aGrp.groupId === selGrp?.groupId) { this.selectedGroup = aGrp; }
         });
-      }
+      },
     );
 
     this.groupPlayerManagerForm.controls.groupSelector.setValue(this.selectedGroup);
@@ -65,10 +66,10 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
     this.enabledGroupPlayers$
       .pipe(
         take(1),
-        takeUntil(this.unsubscribe$),
-        tap(ep => {
+        tap((ep) => {
           result = ep.playerContacts;
-        })
+        }),
+        takeUntil(this.unsubscribe$),
       ).subscribe();
     return result;
   }
@@ -78,30 +79,30 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
     this.selectedGroupPlayer$
       .pipe(
         take(1),
-        takeUntil(this.unsubscribe$),
-        tap(ep => {
+        tap((ep) => {
           result = ep.playerContacts;
-        })
+        }),
+        takeUntil(this.unsubscribe$),
       ).subscribe();
     return result;
   }
 
-  sortedGroupPlayers(groupPlayer: GroupPlayer) {
+  sortedGroupPlayers(groupPlayer: GroupPlayer): PlayerContact[] {
     if (!!groupPlayer) {
       const result = this.sortedPlayerContacts(groupPlayer.playerContacts);
       return result;
-    } else {
-      return [];
     }
+    return [];
+
   }
 
-  sortedPlayerContacts(playerContacts: PlayerContact[]) {
+  sortedPlayerContacts(playerContacts: PlayerContact[]): PlayerContact[] {
     if (!!playerContacts) {
       const result = playerContacts.slice().sort((a, b) => b.name < a.name ? 1 : -1);
       return result;
-    } else {
-      return [];
     }
+    return [];
+
   }
 
   groupSelected() {
@@ -150,6 +151,5 @@ export class GroupPlayerManagerComponent implements OnInit, OnDestroy {
     this.store.dispatch(new GroupPlayerRemoved(this.selectedGroup.groupPlayerId, players));
     this.disablePlayer(player);
   }
-
 
 }

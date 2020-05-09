@@ -1,23 +1,24 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Match, ScheduleBye, ScheduleRound, ScheduleMatch, RoundData, SchedulerSettings } from '../../models';
-import { Store } from '@ngrx/store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ModalDismissReasons, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngrx/store';
+import { combineLatest, Observable, of, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
+
+import { Match, RoundData, ScheduleBye, ScheduleMatch, ScheduleRound, SchedulerSettings } from '../../models';
+import { ScheduleMatchUpdated } from '../../store/actions/schedule-match.actions';
 import {
-  SchedulerState, selectScheduleHeaders, selectSchedulerPlayerType,
-  selectSchedulerNbrOfPlayers, selectSchedulerNbrOfCourts, selectSchedulerNbrOfPlayersPerCourt,
-  selectSchedulerNbrOfByePlayers, selectSchedulerType, selectScheduleByeEntities, selectScheduleRoundEntities,
-  selectScheduleMatchEntities, selectSchedulerSettings
+  SchedulerState, selectScheduleByeEntities, selectScheduleHeaders,
+  selectScheduleMatchEntities, selectSchedulerNbrOfByePlayers, selectSchedulerNbrOfCourts,
+  selectSchedulerNbrOfPlayers, selectSchedulerNbrOfPlayersPerCourt, selectScheduleRoundEntities, selectSchedulerPlayerType,
+  selectSchedulerSettings, selectSchedulerType,
 } from '../../store/reducers';
-import { Observable, Subject, of, combineLatest } from 'rxjs';
-import { takeUntil, map, switchMap } from 'rxjs/operators';
-import { NgbModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { ScheduleMatchCreated, ScheduleMatchUpdated } from '../../store/actions/schedule-match.actions';
-import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-schedule-display',
   templateUrl: './schedule-display.component.html',
-  styleUrls: ['./schedule-display.component.css']
+  styleUrls: ['./schedule-display.component.css'],
 })
 export class ScheduleDisplayComponent implements OnInit, OnDestroy {
 
@@ -44,18 +45,17 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
   totalRounds = 0;
 
   closeResult = '';
-
+  selectedMatch: Match;
   scheduleDisplayForm: FormGroup;
   private unsubscribe$: Subject<boolean> = new Subject<boolean>();
-  selectedMatch: Match;
 
   constructor(
     private store: Store<SchedulerState>,
     private router: Router,
     private modalService: NgbModal,
     fb: FormBuilder) {
-      this.scheduleDisplayForm = fb.group({});
-     }
+    this.scheduleDisplayForm = fb.group({});
+  }
 
   ngOnInit(): void {
     this.headers$ = this.store.select(selectScheduleHeaders);
@@ -74,9 +74,9 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     });
 
     this.scheduleRounds$.pipe(
-      takeUntil(this.unsubscribe$)
+      takeUntil(this.unsubscribe$),
     )
-      .subscribe(aRound => {
+      .subscribe((aRound) => {
         this.totalRounds = aRound.length;
         if (aRound.length === 0) {
           this.router.navigate(['/scheduler']);
@@ -88,7 +88,7 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
         map(([myScheduleRounds, myScheduleMatches]) => {
           const result: RoundData[] = [];
           myScheduleRounds
-            .forEach(aScheduleRound => {
+            .forEach((aScheduleRound) => {
               const aRound: RoundData = { roundId: undefined, matches: [], byeId: undefined };
               aRound.roundId = aScheduleRound.roundId;
               aRound.byeId = aScheduleRound.byeId;
@@ -96,7 +96,7 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
               result.push(aRound);
             });
           return result;
-        })
+        }),
       );
     this.updateDisplay();
   }
@@ -141,9 +141,9 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
       this.displayRounds$ = this.roundData$;
     } else {
       this.roundData$.pipe(
-        takeUntil(this.unsubscribe$)
+        takeUntil(this.unsubscribe$),
       )
-        .subscribe(aRound => {
+        .subscribe((aRound) => {
           this.displayRounds$ = of(aRound.slice(this.currentRoundIndex, this.currentRoundIndex + 1));
         });
     }
@@ -153,7 +153,7 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     let result: ScheduleBye[];
     this.scheduleByes$.pipe(
       map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId)),
-      takeUntil(this.unsubscribe$)
+      takeUntil(this.unsubscribe$),
     ).subscribe();
     return (result.length > 0) ? result[0].byePlayers ? result[0].byePlayers.length > 0 : false : false;
   }
@@ -172,20 +172,11 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     return (result.length > 0) ? result[0].match : null;
   }
 
-  getMatchForId(aMatchId: number): Match {
-    let result: ScheduleMatch[];
-    this.scheduleMatches$.pipe(
-      map(aMatchArray => result = aMatchArray.filter(aMatch => aMatch.matchId === aMatchId)),
-      takeUntil(this.unsubscribe$)
-    ).subscribe();
-    return (result.length > 0) ? result[0].match : null;
-  }
-
   formattedByes(aByeId: number): string {
     let result: ScheduleBye[];
     this.scheduleByes$.pipe(
       map(aByeArray => result = aByeArray.filter(aBye => aBye.byeId === aByeId)),
-      takeUntil(this.unsubscribe$)
+      takeUntil(this.unsubscribe$),
     ).subscribe();
     return (result.length > 0) ? this.formatByeOutput(result[0]) : null;
   }
@@ -193,11 +184,11 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
   formatByeOutput(aScheduleBye: ScheduleBye): string {
     let output = ' ';
     if (!!this.useNamesForMatches) {
-      aScheduleBye.byePlayers.sort((a, b) => a.playerName < b.playerName ? -1 : 1).forEach(aByePlayer => {
+      aScheduleBye.byePlayers.sort((a, b) => a.playerName < b.playerName ? -1 : 1).forEach((aByePlayer) => {
         output += (aByePlayer.playerName + ', ');
       });
     } else {
-      aScheduleBye.byePlayers.sort((a, b) => a.playerId - b.playerId).forEach(aByePlayer => {
+      aScheduleBye.byePlayers.sort((a, b) => a.playerId - b.playerId).forEach((aByePlayer) => {
         output += (aByePlayer.playerId + ', ');
       });
     }
@@ -205,23 +196,18 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     return output;
   }
 
-  addScore(content: any, match: Match) {
-    this.selectedMatch = match;
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  performAnalysis() {
+    this.router.navigate(['/scheduleAnalysis']);
   }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return `with: ${reason}`;
-    }
+  addScore(content: any, match: Match) {
+    this.selectedMatch = match;
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.
+      then((result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },   (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      });
   }
 
   updateTeamScore(modal: NgbModalRef, team1Score: string, team2Score: string) {
@@ -230,6 +216,18 @@ export class ScheduleDisplayComponent implements OnInit, OnDestroy {
     this.store.dispatch(new ScheduleMatchUpdated(this.selectedMatch.matchId, this.selectedMatch));
     modal.close('Scores Updated');
     this.updateDisplay();
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else {
+      if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+        return 'by clicking on a backdrop';
+      } else {
+        return `with: ${reason}`;
+      }
+    }
   }
 
 }

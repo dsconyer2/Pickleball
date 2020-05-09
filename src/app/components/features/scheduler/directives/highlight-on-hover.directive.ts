@@ -1,15 +1,15 @@
 import {
   Directive,
   ElementRef,
-  Renderer2,
-  OnInit,
-  HostListener,
   HostBinding,
-  Input
+  HostListener,
+  Input,
+  OnInit,
+  Renderer2,
 } from '@angular/core';
 
 @Directive({
-  selector: '[pbsHighlightOnHover]'
+  selector: '[pbsHighlightOnHover]',
 })
 export class HighlightOnHoverDirective implements OnInit {
 
