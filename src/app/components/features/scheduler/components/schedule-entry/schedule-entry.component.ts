@@ -173,8 +173,8 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
           tap(groupPlayers => selectedGroupPlayer = groupPlayers.find(gp => gp.groupPlayerId === groupToLoad.enabledPlayerId)),
         ).subscribe();
         // load players
-        selectedGroupPlayer.playerContacts.forEach((aPlayer) => {
-          this.store.dispatch(new PlayerAdded(aPlayer.playerContactId, aPlayer.name, true, true, 0, {}, {}));
+        selectedGroupPlayer.playerContacts.forEach((aPlayer, index) => {
+          this.store.dispatch(new PlayerAdded(index + 1, aPlayer.playerContactId, aPlayer.name, true, true, 0, {}, {}));
         });
         this.scheduleEntryForm.controls.nbrOfPlayersInput.setValue(selectedGroupPlayer.playerContacts.length);
         this.scheduleEntryForm.controls.nbrOfPlayersInput.updateValueAndValidity();
@@ -183,7 +183,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
       this.scheduleEntryForm.controls.useNamesForMatches.setValue(false);
       this.scheduleEntryForm.controls.useNamesForMatches.updateValueAndValidity();
       for (let index = 0; index < this.scheduleEntryForm.controls.nbrOfPlayersInput.value; index++) {
-        this.store.dispatch(new PlayerAdded(index + 1, (index + 1).toString(), true, true, 0, {}, {}));
+        this.store.dispatch(new PlayerAdded(index + 1, 0, (index + 1).toString(), true, true, 0, {}, {}));
       }
     }
   }

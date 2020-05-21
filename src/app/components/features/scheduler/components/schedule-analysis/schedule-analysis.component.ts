@@ -175,7 +175,7 @@ export class ScheduleAnalysisComponent implements OnInit, OnDestroy {
   }
 
   addToPlayedAgainst(aMatch: Match) {
-    if (aMatch.team1.length > 1) {
+    if (aMatch.team1.length > 0) {
       aMatch.team1.forEach((firstPlayer) => {
         aMatch.team2.forEach((secondPlayer) => {
           if (firstPlayer.playerId !== secondPlayer.playerId) {
@@ -187,7 +187,7 @@ export class ScheduleAnalysisComponent implements OnInit, OnDestroy {
       });
     }
 
-    if (aMatch.team2.length > 1) {
+    if (aMatch.team2.length > 0) {
       aMatch.team2.forEach((firstPlayer) => {
         aMatch.team1.forEach((secondPlayer) => {
           if (firstPlayer.playerId !== secondPlayer.playerId) {
