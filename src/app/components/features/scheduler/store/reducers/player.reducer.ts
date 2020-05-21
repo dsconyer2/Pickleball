@@ -5,6 +5,7 @@ import * as actions from '../actions/scheduler.actions';
 export interface PlayerEntity {
   id: number;
   playerId: number;
+  playerContactId: number;
   playerName: string;
   isPlayerAvailable: boolean;
   isByeAvailable: boolean;

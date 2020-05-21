@@ -22,10 +22,11 @@ export const ADD_PLAYER = '[schedulerFeature] add  player';
 export class PlayerAdded implements Action {
   readonly type = ADD_PLAYER;
   payload: PlayerEntity;
-  constructor(playerId: number, playerName: string, isPlayerAvailable: boolean, isByeAvailable: boolean,
-              byeRound: number, playedAgainst: {}, courtsPlayed: {}) {
+  constructor(playerId: number, playerContactId: number, playerName: string, isPlayerAvailable: boolean,
+              isByeAvailable: boolean, byeRound: number, playedAgainst: {}, courtsPlayed: {}) {
     this.payload = {
       playerId,
+      playerContactId,
       playerName,
       isPlayerAvailable,
       isByeAvailable,
@@ -148,28 +149,28 @@ export class SelectedGroupUpdated implements Action {
 export const LOAD_SCHEDULER_SETTINGS = '[schedulerFeature] load  schedulerSettings';
 export class SchedulerSettingsLoad implements Action {
   readonly type = LOAD_SCHEDULER_SETTINGS;
-  constructor() {}
+  constructor() { }
 }
 
 export const LOAD_SCHEDULER_SETTINGS_SUCCESS = '[schedulerFeature] load  schedulerSettings succeeded';
 export class SchedulerSettingsLoadedSuccessfully implements Action {
   readonly type = LOAD_SCHEDULER_SETTINGS_SUCCESS;
-  constructor(public payload: SchedulerSettings) {}
+  constructor(public payload: SchedulerSettings) { }
 }
 
 // Discriminated Union Type  http://www.typescriptlang.org/docs/handbook/advanced-types.html
 export type All =
-PlayerAdded
-| PlayerRemoveAll
-| SchedulerPlayerTypeUpdated
-| SchedulerTypeUpdated
-| NbrOfPlayersUpdated
-| NbrOfByePlayersUpdated
-| NbrOfCourtsUpdated
-| NbrOfPlayersPerCourtUpdated
-| RandomizeOrderUpdated
-| UseNamesForMatchesUpdated
-| LoadFromGroupUpdated
-| SelectedGroupUpdated
-| SchedulerSettingsLoad
-| SchedulerSettingsLoadedSuccessfully;
+  PlayerAdded
+  | PlayerRemoveAll
+  | SchedulerPlayerTypeUpdated
+  | SchedulerTypeUpdated
+  | NbrOfPlayersUpdated
+  | NbrOfByePlayersUpdated
+  | NbrOfCourtsUpdated
+  | NbrOfPlayersPerCourtUpdated
+  | RandomizeOrderUpdated
+  | UseNamesForMatchesUpdated
+  | LoadFromGroupUpdated
+  | SelectedGroupUpdated
+  | SchedulerSettingsLoad
+  | SchedulerSettingsLoadedSuccessfully;

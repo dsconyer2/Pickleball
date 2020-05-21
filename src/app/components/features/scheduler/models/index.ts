@@ -2,6 +2,7 @@ import { Group } from '../../player-contact/models';
 
 export interface Player {
   playerId: number;
+  playerContactId: number;
   playerName: string;
   isPlayerAvailable: boolean;
   isByeAvailable: boolean;
