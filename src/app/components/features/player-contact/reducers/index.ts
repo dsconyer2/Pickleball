@@ -60,6 +60,9 @@ export const selectHighestGroupId =
       },      initGroup));
 
 export const selectGroupPlayerEntities = createSelector(selectGroupPlayerEntityArray, t => t.map(x => x as GroupPlayer));
+export const selectEnabledGroupPlayer = (id: number) =>
+  createSelector(selectGroupPlayerEntityArray,
+                 t => t.map(x => x as GroupPlayer).find(gp => gp.groupPlayerId === id));
 const initGroupPlayer: GroupPlayer = { groupPlayerId: 0 };
 export const selectHighestGroupPlayerId =
   createSelector(selectGroupPlayerEntityArray,
