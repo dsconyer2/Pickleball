@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { combineLatest, Observable, Subject, Subscription } from 'rxjs';
 import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import { Group, GroupPlayer } from 'src/app/components/features/player-contact/models';
-import { selectGroupEntities, selectGroupPlayerEntities } from 'src/app/components/features/player-contact/reducers';
+import { selectGroupEntities, selectGroupPlayerEntities, selectEnabledGroupPlayer } from 'src/app/components/features/player-contact/reducers';
 
 import {
   LoadFromGroupUpdated, NbrOfCourtsUpdated, NbrOfPlayersPerCourtUpdated, NbrOfPlayersUpdated,
@@ -17,6 +17,7 @@ import {
   selectSchedulerNbrOfPlayersPerCourt, selectSchedulerPlayerType, selectSchedulerRandomizeOrder,
   selectSchedulerSelectedGroup, selectSchedulerType, selectSchedulerUseNamesForMatches,
 } from '../../store/reducers';
+import { async } from 'rxjs/internal/scheduler/async';
 
 @Component({
   selector: 'app-schedule-entry',
@@ -46,6 +47,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
   validPlayerCount = true;
   minPlayers: number;
   maxCourts: number;
+  nbrOfPlayersValue = 0;
 
   scheduleEntryForm: FormGroup;
   private unsubscribe$: Subject<boolean> = new Subject<boolean>();
@@ -138,6 +140,33 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
     this.minPlayers = this.scheduleEntryForm.controls.playerType.value === 'Individuals for Doubles' ? 4 : 2;
     this.scheduleEntryForm.controls.nbrOfPlayersInput.setValidators([Validators.required, Validators.min(this.minPlayers)]);
     this.scheduleEntryForm.controls.nbrOfPlayersInput.updateValueAndValidity();
+
+    // LoadFromGroup turns off nbrOfPlayersInput
+    if (this.scheduleEntryForm.controls.loadFromGroup.value) {
+      const groupToLoad: Group = this.scheduleEntryForm.controls.groupToLoad.value;
+      if (!!groupToLoad) {
+        let playerCount = 0;
+        this.store.select(selectEnabledGroupPlayer(groupToLoad.enabledPlayerId))
+        .pipe(
+          take(1),
+          tap(groupPlayers => playerCount = groupPlayers.playerContacts.length),
+        ).subscribe();
+        this.scheduleEntryForm.controls.nbrOfPlayersInput.setValue(playerCount);
+        this.scheduleEntryForm.controls.nbrOfPlayersInput.updateValueAndValidity();
+      }
+
+      this.scheduleEntryForm.controls.groupToLoad.setValidators([Validators.required, Validators.minLength(1)]);
+      this.scheduleEntryForm.controls.groupToLoad.updateValueAndValidity();
+    } else {
+      this.scheduleEntryForm.controls.groupToLoad.setValidators([]);
+      this.scheduleEntryForm.controls.groupToLoad.updateValueAndValidity();
+    }
+
+    this.nbrOfPlayersInputChanged();
+
+  }
+
+  nbrOfPlayersInputChanged() {
     // King of the court requires nbrOfCourtsInput
     // Tournament does not
     if (this.scheduleEntryForm.controls.scheduleType.value === 'King of the Court') {
@@ -145,18 +174,10 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
       this.scheduleEntryForm.controls.nbrOfCourtsInput
         .setValidators([Validators.required, Validators.min(1), Validators.max(this.maxCourts)]);
       this.scheduleEntryForm.controls.nbrOfCourtsInput.updateValueAndValidity();
+      this.scheduleEntryForm.controls.nbrOfCourtsInput.markAsDirty();
     } else {
       this.scheduleEntryForm.controls.nbrOfCourtsInput.setValidators([]);
       this.scheduleEntryForm.controls.nbrOfCourtsInput.updateValueAndValidity();
-    }
-
-    // LoadFromGroup turns off nbrOfPlayersInput
-    if (this.scheduleEntryForm.controls.loadFromGroup.value) {
-      this.scheduleEntryForm.controls.groupToLoad.setValidators([Validators.required, Validators.minLength(1)]);
-      this.scheduleEntryForm.controls.groupToLoad.updateValueAndValidity();
-    } else {
-      this.scheduleEntryForm.controls.groupToLoad.setValidators([]);
-      this.scheduleEntryForm.controls.groupToLoad.updateValueAndValidity();
     }
   }
 
@@ -228,7 +249,7 @@ export class ScheduleEntryComponent implements OnInit, OnDestroy {
   }
 
   groupToLoadChanged() {
-    this.loadPlayers();
+    this.setValidators();
   }
 
 }

@@ -106,6 +106,7 @@
         <input type="number"
                class="form-control"
                formControlName="nbrOfPlayersInput"
+               (change)="nbrOfPlayersInputChanged()"
                autofocus>
         <div *ngIf="sePlayerType !== 'Teams'">
           <div *ngIf="scheduleEntryForm.controls.nbrOfPlayersInput.errors?.required
@@ -151,8 +152,8 @@
       <div *ngIf="scheduleEntryForm.controls.nbrOfCourtsInput.errors?.max
       && (scheduleEntryForm.controls.nbrOfCourtsInput.touched || scheduleEntryForm.controls.nbrOfCourtsInput.dirty)"
            class="alert alert-danger">
-        You need {{maxCourts}} courts or less for the Schedule Type and
-        Player Type selected.
+        You need {{maxCourts}} courts or less for the Schedule Type,
+        Player Type, and Number of Players selected.
       </div>
       <br>
     </div>
